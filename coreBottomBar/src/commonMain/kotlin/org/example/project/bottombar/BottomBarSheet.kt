@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun BottomBarSheet(onIconClick: (BottomBarItem) -> Unit) {
+fun BottomBarSheet(bottomBarItems: List<BottomBarItem>, onIconClick: (BottomBarItem) -> Unit) {
     val selectedIndex = remember { mutableStateOf(0) }
     val itemWidth = 50.dp
 
