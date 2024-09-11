@@ -1,0 +1,4 @@
+actual open class PlatformSpecific {
+
+
+}
