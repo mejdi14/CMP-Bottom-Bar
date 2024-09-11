@@ -33,7 +33,7 @@ import org.example.core.bottombar.ShapeType
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun BottomBarSheet(bottomBarItems: List<BottomBarItem>, onIconClick: (BottomBarItem) -> Unit) {
+fun ExpandableBottomBar(bottomBarItems: List<BottomBarItem>, parentModifier : Modifier, onIconClick: (BottomBarItem) -> Unit) {
     val selectedIndex = remember { mutableStateOf(0) }
     val itemWidth = 50.dp
 
@@ -41,15 +41,16 @@ fun BottomBarSheet(bottomBarItems: List<BottomBarItem>, onIconClick: (BottomBarI
 
     var parentWidth by remember { mutableStateOf(0.dp) }
     val density = LocalDensity.current
+    val bottomBarWidth = itemWidth * bottomBarItems.size + 10.dp
 
     val animatedOffset = animateDpAsState(
         targetValue = (selectedIndex.value * itemWidth.value).dp
     )
     Box(
-        Modifier.fillMaxWidth().padding(5.dp)
+        parentModifier.width(300.dp).padding(5.dp)
             .background(color = Color.Black, shape = RoundedCornerShape(10.dp))
     ) {
-        Column {
+        Column(Modifier.align(Alignment.Center)) {
             Box(
                 modifier = Modifier
                     .width(300.dp)
