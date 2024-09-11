@@ -1,7 +1,7 @@
-package org.example.core
+package org.example.project
 
 class Greeting {
-    private val platform = getPlatform()
+    private val platform = org.example.project.getPlatform()
 
     fun greet(): String {
         return "Hello, ${platform.name}!"

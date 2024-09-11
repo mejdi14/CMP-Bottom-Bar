@@ -1,4 +1,4 @@
-package org.example.core
+package org.example.project
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,7 +14,7 @@ import kmp_bottom_bar.composeapp.generated.resources.open_reader
 import kmp_bottom_bar.composeapp.generated.resources.papers
 import org.example.core.bottombar.BottomBarIdentifier
 import org.example.core.bottombar.BottomBarItem
-import ui.BottomBarSheet
+import org.example.expandable.bottombar.BottomBarSheet
 
 @Composable
 @Preview

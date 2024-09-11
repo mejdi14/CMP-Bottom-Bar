@@ -31,3 +31,4 @@ dependencyResolutionManagement {
 include(":composeApp")
 include(":coreBottomBar")
 include(":tinyGlideBottomBar")
+include(":expandableBottomBar")
