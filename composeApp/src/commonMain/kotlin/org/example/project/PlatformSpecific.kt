@@ -1,4 +1,0 @@
-expect open class PlatformSpecific {
-
-
-}

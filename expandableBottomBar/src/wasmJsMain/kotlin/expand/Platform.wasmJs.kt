@@ -1,6 +1,6 @@
-package org
+package expand
 
-import org.example.core.Platform
+import expand.Platform
 
 actual fun getPlatform(): Platform {
     TODO("Not yet implemented")

@@ -6,16 +6,18 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import org.jetbrains.compose.ui.tooling.preview.Preview
-
+import expand.example.expandable.bottombar.ExpandableBottomBar
 import kmp_bottom_bar.composeapp.generated.resources.Res
 import kmp_bottom_bar.composeapp.generated.resources.home_line
 import kmp_bottom_bar.composeapp.generated.resources.menu_meatballs
 import kmp_bottom_bar.composeapp.generated.resources.open_reader
 import kmp_bottom_bar.composeapp.generated.resources.papers
+import org.jetbrains.compose.ui.tooling.preview.Preview
+
+
 import org.example.core.bottombar.BottomBarIdentifier
 import org.example.core.bottombar.BottomBarItem
-import org.example.expandable.bottombar.ExpandableBottomBar
+
 
 @Composable
 @Preview

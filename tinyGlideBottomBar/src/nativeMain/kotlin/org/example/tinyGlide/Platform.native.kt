@@ -1,4 +1,4 @@
-package org
+package org.example.tinyGlide
 
 import org.example.core.Platform
 
