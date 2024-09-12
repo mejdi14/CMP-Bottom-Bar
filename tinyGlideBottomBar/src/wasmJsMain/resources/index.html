@@ -8,5 +8,14 @@
     <script type="application/javascript" src="composeApp.js"></script>
 </head>
 <body>
+<script>
+    function addHoverListeners(elementId, onEnter, onLeave) {
+      const element = document.getElementById(elementId);
+      if (element) {
+        element.addEventListener('mouseenter', onEnter);
+        element.addEventListener('mouseleave', onLeave);
+      }
+    }
+</script>
 </body>
 </html>

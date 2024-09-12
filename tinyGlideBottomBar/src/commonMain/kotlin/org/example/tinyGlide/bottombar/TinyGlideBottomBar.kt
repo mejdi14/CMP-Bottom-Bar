@@ -23,11 +23,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import org.example.core.bottombar.BottomBarItem
 import org.example.tinyGlide.data.TinyGlideItem
 import org.jetbrains.compose.resources.painterResource
+
+expect fun Modifier.hoverEffect(onHover: (Boolean) -> Unit): Modifier
 
 @Composable
 fun TinyGlideBottomBar(
@@ -40,7 +44,6 @@ fun TinyGlideBottomBar(
 
     val lazyListState = rememberLazyListState()
 
-    var parentWidth by remember { mutableStateOf(0.dp) }
     val density = LocalDensity.current
 
     val animatedOffset = animateDpAsState(
@@ -57,14 +60,23 @@ fun TinyGlideBottomBar(
             modifier = Modifier.fillMaxWidth()
         ) {
             itemsIndexed(bottomBarItems) { index, item ->
-                Box(Modifier.width(10.dp))
+                var parentWidth by remember { mutableStateOf(50.dp) }
+                Box(
+                    Modifier.width(10.dp)
+                )
                 IconButton(
                     onClick = {
                         selectedIndex.value = index
                         onIconClick(item)
                     },
-                    modifier = Modifier.size(50.dp).align(Alignment.Center)
-                        .background(color = Color.Black, shape = RoundedCornerShape(10.dp))
+                    modifier = Modifier.size(parentWidth).align(Alignment.Center)
+                        .background(
+                            color = Color.Black, shape = RoundedCornerShape(10.dp)
+                        )
+                        .hoverEffect { onHover ->
+                            parentWidth = if (onHover) 70.dp else 50.dp
+                        }
+
                 ) {
                     Icon(
                         painter = painterResource(item.icon),
