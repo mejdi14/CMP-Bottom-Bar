@@ -26,11 +26,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import org.example.core.bottombar.BottomBarItem
+import org.example.tinyGlide.data.TinyGlideItem
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun TinyGlideBottomBar(
-    bottomBarItems: List<BottomBarItem>,
+    bottomBarItems: List<TinyGlideItem>,
     parentModifier: Modifier,
     onIconClick: (BottomBarItem) -> Unit
 ) {
@@ -46,7 +47,7 @@ fun TinyGlideBottomBar(
         targetValue = (selectedIndex.value * itemWidth.value).dp
     )
     Box(
-        Modifier.fillMaxWidth().padding(5.dp)
+        parentModifier.fillMaxWidth().padding(5.dp)
 
     ) {
         LazyRow(

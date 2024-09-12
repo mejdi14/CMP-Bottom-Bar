@@ -17,6 +17,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 import org.example.core.bottombar.BottomBarIdentifier
 import org.example.core.bottombar.BottomBarItem
+import org.example.tinyGlide.data.TinyGlideItem
 import ui.TinyGlideBottomBar
 
 
@@ -27,10 +28,10 @@ fun App() {
       Box(Modifier.fillMaxSize()){
           val bottomBarItems =
               listOf(
-                  BottomBarItem(BottomBarIdentifier.Home, Res.drawable.home_line, "Home"),
-                  BottomBarItem(BottomBarIdentifier.Papers, Res.drawable.papers, "Papers"),
-                  BottomBarItem(BottomBarIdentifier.Mosque, Res.drawable.open_reader, "Mosque"),
-                  BottomBarItem(BottomBarIdentifier.Menu, Res.drawable.menu_meatballs, "Menu"),
+                  TinyGlideItem(BottomBarIdentifier.Home, Res.drawable.home_line, "Home"),
+                  TinyGlideItem(BottomBarIdentifier.Papers, Res.drawable.papers, "Papers"),
+                  TinyGlideItem(BottomBarIdentifier.Mosque, Res.drawable.open_reader, "Mosque"),
+                  TinyGlideItem(BottomBarIdentifier.Menu, Res.drawable.menu_meatballs, "Menu"),
               )
           TinyGlideBottomBar(bottomBarItems, Modifier.align(Alignment.BottomCenter)){
 
