@@ -1,11 +1,13 @@
 package org.example.core.bottombar
 
+import androidx.compose.ui.unit.Dp
 import org.jetbrains.compose.resources.DrawableResource
 
-data class BottomBarItem(
-    val identifier: BottomBarIdentifier,
-    val icon: DrawableResource,
-    val title: String,
-    val contentDescription: String = ""
-)
+abstract class BottomBarItem{
+    abstract val identifier: BottomBarIdentifier
+    abstract val icon: DrawableResource
+    abstract val title: String
+    abstract val size : Dp
+    abstract val contentDescription: String
+}
 

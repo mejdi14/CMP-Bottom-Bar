@@ -17,6 +17,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 import org.example.core.bottombar.BottomBarIdentifier
 import org.example.core.bottombar.BottomBarItem
+import ui.TinyGlideBottomBar
 
 
 @Composable
@@ -31,7 +32,7 @@ fun App() {
                   BottomBarItem(BottomBarIdentifier.Mosque, Res.drawable.open_reader, "Mosque"),
                   BottomBarItem(BottomBarIdentifier.Menu, Res.drawable.menu_meatballs, "Menu"),
               )
-          ExpandableBottomBar(bottomBarItems, Modifier.align(Alignment.BottomCenter)){
+          TinyGlideBottomBar(bottomBarItems, Modifier.align(Alignment.BottomCenter)){
 
           }
       }
