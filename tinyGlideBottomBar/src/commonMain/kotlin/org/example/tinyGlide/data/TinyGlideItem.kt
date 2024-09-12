@@ -9,10 +9,10 @@ import org.jetbrains.compose.resources.DrawableResource
 
 data class TinyGlideItem(
     override val identifier: BottomBarIdentifier,
-    override val size: Dp = 50.dp,
     override val icon: DrawableResource,
-    override val title: String,
     override val contentDescription: String,
-    val radius: Dp,
-    val backgroundColor: Color
+    override val size: Dp = 50.dp,
+    override val title: String = "options",
+    val radius: Dp = 10.dp,
+    val backgroundColor: Color = Color.Blue
 ) : BottomBarItem()
