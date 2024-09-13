@@ -6,7 +6,6 @@ import androidx.compose.ui.unit.dp
 import org.example.core.bottombar.BottomBarIdentifier
 import org.example.core.bottombar.BottomBarItem
 import org.jetbrains.compose.resources.DrawableResource
-import kotlin.time.Duration
 
 data class TinyGlideItem(
     override val identifier: BottomBarIdentifier,

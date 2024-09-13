@@ -12,9 +12,9 @@ import kmp_bottom_bar.composeapp.generated.resources.menu_meatballs
 import kmp_bottom_bar.composeapp.generated.resources.open_reader
 import kmp_bottom_bar.composeapp.generated.resources.papers
 import org.example.core.bottombar.BottomBarIdentifier
+import org.example.tinyGlide.bottombar.TinyGlideBottomBar
 import org.example.tinyGlide.data.TinyGlideItem
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import org.example.tinyGlide.bottombar.TinyGlideBottomBar
 
 
 @Composable

@@ -5,8 +5,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -16,10 +14,8 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,7 +33,6 @@ import androidx.compose.ui.unit.dp
 import org.example.core.bottombar.BottomBarItem
 import org.example.tinyGlide.data.TinyGlideItem
 import org.jetbrains.compose.resources.painterResource
-import kotlin.math.roundToInt
 
 
 @Composable
@@ -46,9 +41,7 @@ fun TinyGlideBottomBar(
     parentModifier: Modifier,
     onIconClick: (BottomBarItem) -> Unit
 ) {
-    val items = listOf("Item 1", "Item 2", "Item 3", "Item 4")
     val selectedIndex = remember { mutableStateOf(0) }
-    val itemWidth = 80.dp
     val lazyListState = rememberLazyListState()
     var itemPositions = remember { mutableMapOf<Int, Offset>() }
     var selectedItem by remember { mutableStateOf<Int?>(null) }
@@ -115,7 +108,7 @@ fun TinyGlideBottomBar(
                         )
                 ) {
                     itemsIndexed(bottomBarItems) { index, item ->
-                        var parentItemDynamicSize by remember { mutableStateOf(item.size) }
+                        val parentItemDynamicSize by remember { mutableStateOf(item.size) }
                         val animatedParentWidth by animateDpAsState(
                             targetValue = parentItemDynamicSize,
                             animationSpec = tween(durationMillis = item.onSelectItemSizeChangeDurationMillis)
