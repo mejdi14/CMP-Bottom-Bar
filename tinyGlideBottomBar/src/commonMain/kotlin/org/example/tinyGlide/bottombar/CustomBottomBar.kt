@@ -1,4 +1,4 @@
-package ui
+package org.example.tinyGlide.bottombar
 
 import  androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

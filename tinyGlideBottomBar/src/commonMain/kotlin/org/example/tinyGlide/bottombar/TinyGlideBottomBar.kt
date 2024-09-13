@@ -1,6 +1,7 @@
-package ui
+package org.example.tinyGlide.bottombar
 
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,7 +23,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import org.example.core.bottombar.BottomBarItem
 import org.example.tinyGlide.data.TinyGlideItem
@@ -37,18 +37,11 @@ fun TinyGlideBottomBar(
     onIconClick: (BottomBarItem) -> Unit
 ) {
     val selectedIndex = remember { mutableStateOf(0) }
-    val itemWidth = 50.dp
 
     val lazyListState = rememberLazyListState()
 
-    val density = LocalDensity.current
-
-    val animatedOffset = animateDpAsState(
-        targetValue = (selectedIndex.value * itemWidth.value).dp
-    )
     Box(
         parentModifier.fillMaxWidth().padding(5.dp)
-
     ) {
         LazyRow(
             state = lazyListState,
@@ -57,21 +50,26 @@ fun TinyGlideBottomBar(
             modifier = Modifier.fillMaxWidth()
         ) {
             itemsIndexed(bottomBarItems) { index, item ->
-                var parentWidth by remember { mutableStateOf(50.dp) }
+                var parentItemDynamicSize by remember { mutableStateOf(item.size) }
+                val animatedParentWidth by animateDpAsState(
+                    targetValue = parentItemDynamicSize,
+                    animationSpec = tween(durationMillis = item.onSelectItemSizeChangeDurationMillis)
+                )
                 Box(
-                    Modifier.width(10.dp)
+                    Modifier.width(item.itemSeparationSpace)
                 )
                 IconButton(
                     onClick = {
                         selectedIndex.value = index
                         onIconClick(item)
                     },
-                    modifier = Modifier.size(parentWidth).align(Alignment.Center)
+                    modifier = Modifier.size(animatedParentWidth).align(Alignment.Center)
                         .background(
                             color = Color.Black, shape = RoundedCornerShape(10.dp)
                         )
                         .hoverEffect { onHover ->
-                            parentWidth = if (onHover) 70.dp else 50.dp
+                            parentItemDynamicSize =
+                                if (onHover) item.size * item.onSelectItemSizeChangeFriction else item.size
                         }
 
                 ) {
@@ -82,7 +80,7 @@ fun TinyGlideBottomBar(
                         modifier = Modifier.align(Alignment.Center)
                     )
                 }
-                Box(Modifier.width(10.dp))
+                Box(Modifier.width(item.itemSeparationSpace))
             }
         }
     }
