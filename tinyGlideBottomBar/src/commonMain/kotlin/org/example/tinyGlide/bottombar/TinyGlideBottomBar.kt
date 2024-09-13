@@ -51,7 +51,7 @@ fun TinyGlideBottomBar(
     val itemWidth = 80.dp
     val lazyListState = rememberLazyListState()
     var itemPositions = remember { mutableMapOf<Int, Offset>() }
-                var selectedItem by remember { mutableStateOf<Int?>(null) }
+    var selectedItem by remember { mutableStateOf<Int?>(null) }
     Box(
         parentModifier.fillMaxWidth().padding(5.dp)
     ) {
@@ -104,13 +104,46 @@ fun TinyGlideBottomBar(
             itemPositions[index]?.let { position ->
                 val density = LocalDensity.current.density
 
-                // Overlay Row positioned dynamically based on the selected item's global position
-                Row(
-                    modifier = Modifier
-                        .offset(x = (position.x / density).dp, y = -60.dp)
+                LazyRow(
+                    state = lazyListState,
+                    horizontalArrangement = Arrangement.Start,
+                    verticalAlignment = Alignment.Bottom,
+                    modifier = Modifier.align(Alignment.TopStart)
+                        .offset(
+                            x = (position.x / density).dp - ((30.dp + (50.dp * 3) + (50.dp * 1.3f)) / 2),
+                            y = (-60).dp
+                        )
                 ) {
-                    Button(onClick = { /* Handle click */ }) {
-                        Text("Details for ${items[index]}")
+                    itemsIndexed(bottomBarItems) { index, item ->
+                        var parentItemDynamicSize by remember { mutableStateOf(item.size) }
+                        val animatedParentWidth by animateDpAsState(
+                            targetValue = parentItemDynamicSize,
+                            animationSpec = tween(durationMillis = item.onSelectItemSizeChangeDurationMillis)
+                        )
+                        Box(
+                            Modifier.width(item.itemSeparationSpace)
+                        )
+                        IconButton(
+                            onClick = {
+                                selectedIndex.value = index
+                                onIconClick(item)
+                            },
+                            modifier = Modifier.size(animatedParentWidth).align(Alignment.Center)
+
+                                .background(
+                                    color = Color.Black, shape = RoundedCornerShape(10.dp)
+                                )
+
+
+                        ) {
+                            Icon(
+                                painter = painterResource(item.icon),
+                                contentDescription = item.contentDescription,
+                                tint = Color.White,
+                                modifier = Modifier.align(Alignment.Center)
+                            )
+                        }
+                        Box(Modifier.width(item.itemSeparationSpace))
                     }
                 }
             }
@@ -118,21 +151,5 @@ fun TinyGlideBottomBar(
     }
 }
 
-@Composable
-fun Submenu(modifier: Modifier = Modifier) {
-    // Replace with your submenu content
-    Row(
-        modifier = modifier
-            .background(Color.Gray, shape = RoundedCornerShape(8.dp))
-            .padding(8.dp)
-    ) {
-        // Example submenu items
-        Text("Sub Item 1", color = Color.White)
-        Spacer(modifier = Modifier.width(8.dp))
-        Text("Sub Item 2", color = Color.White)
-        Spacer(modifier = Modifier.width(8.dp))
-        Text("Sub Item 3", color = Color.White)
-    }
-}
 @Composable
 private fun Dp.toPx() = this.value * LocalDensity.current.density
