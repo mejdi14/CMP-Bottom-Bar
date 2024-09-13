@@ -1,4 +1,4 @@
-package ui
+package org.example.tinyGlide.bottombar
 
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier

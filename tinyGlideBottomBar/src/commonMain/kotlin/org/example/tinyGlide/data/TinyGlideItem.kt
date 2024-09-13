@@ -16,8 +16,9 @@ data class TinyGlideItem(
     override val title: String = "options",
     val radius: Dp = 10.dp,
     val backgroundColor: Color = Color.Blue,
-    val onSelectItemSizeChangeFriction : Float = 1.2f,
+    val onSelectItemSizeChangeFriction : Float = 1.3f,
     val onSelectItemSizeChangeDurationMillis: Int = 300,
     val itemSeparationSpace: Dp = 10.dp,
+    val subTinyGlideItems : List<TinyGlideItem> = listOf()
 
 ) : BottomBarItem()

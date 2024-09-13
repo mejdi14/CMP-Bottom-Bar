@@ -5,7 +5,10 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -13,8 +16,10 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -22,13 +27,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInWindow
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.example.core.bottombar.BottomBarItem
 import org.example.tinyGlide.data.TinyGlideItem
 import org.jetbrains.compose.resources.painterResource
+import kotlin.math.roundToInt
 
-expect fun Modifier.hoverEffect(onHover: (Boolean) -> Unit): Modifier
 
 @Composable
 fun TinyGlideBottomBar(
@@ -36,10 +46,12 @@ fun TinyGlideBottomBar(
     parentModifier: Modifier,
     onIconClick: (BottomBarItem) -> Unit
 ) {
+    val items = listOf("Item 1", "Item 2", "Item 3", "Item 4")
     val selectedIndex = remember { mutableStateOf(0) }
-
+    val itemWidth = 80.dp
     val lazyListState = rememberLazyListState()
-
+    var itemPositions = remember { mutableMapOf<Int, Offset>() }
+                var selectedItem by remember { mutableStateOf<Int?>(null) }
     Box(
         parentModifier.fillMaxWidth().padding(5.dp)
     ) {
@@ -64,12 +76,17 @@ fun TinyGlideBottomBar(
                         onIconClick(item)
                     },
                     modifier = Modifier.size(animatedParentWidth).align(Alignment.Center)
+                        .onGloballyPositioned { layoutCoordinates ->
+                            // Store the position of each item
+                            itemPositions[index] = layoutCoordinates.positionInWindow()
+                        }
                         .background(
                             color = Color.Black, shape = RoundedCornerShape(10.dp)
                         )
                         .hoverEffect { onHover ->
                             parentItemDynamicSize =
                                 if (onHover) item.size * item.onSelectItemSizeChangeFriction else item.size
+                            selectedItem = index
                         }
 
                 ) {
@@ -83,5 +100,39 @@ fun TinyGlideBottomBar(
                 Box(Modifier.width(item.itemSeparationSpace))
             }
         }
+        selectedItem?.let { index ->
+            itemPositions[index]?.let { position ->
+                val density = LocalDensity.current.density
+
+                // Overlay Row positioned dynamically based on the selected item's global position
+                Row(
+                    modifier = Modifier
+                        .offset(x = (position.x / density).dp, y = -60.dp)
+                ) {
+                    Button(onClick = { /* Handle click */ }) {
+                        Text("Details for ${items[index]}")
+                    }
+                }
+            }
+        }
     }
 }
+
+@Composable
+fun Submenu(modifier: Modifier = Modifier) {
+    // Replace with your submenu content
+    Row(
+        modifier = modifier
+            .background(Color.Gray, shape = RoundedCornerShape(8.dp))
+            .padding(8.dp)
+    ) {
+        // Example submenu items
+        Text("Sub Item 1", color = Color.White)
+        Spacer(modifier = Modifier.width(8.dp))
+        Text("Sub Item 2", color = Color.White)
+        Spacer(modifier = Modifier.width(8.dp))
+        Text("Sub Item 3", color = Color.White)
+    }
+}
+@Composable
+private fun Dp.toPx() = this.value * LocalDensity.current.density
