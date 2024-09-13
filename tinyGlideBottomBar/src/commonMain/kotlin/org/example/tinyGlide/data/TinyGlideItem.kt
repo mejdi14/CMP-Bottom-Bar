@@ -1,5 +1,6 @@
 package org.example.tinyGlide.data
 
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -18,6 +19,7 @@ data class TinyGlideItem(
     val onSelectItemSizeChangeFriction : Float = 1.3f,
     val onSelectItemSizeChangeDurationMillis: Int = 300,
     val itemSeparationSpace: Dp = 10.dp,
-    val subTinyGlideItems : List<TinyGlideItem> = listOf()
+    val subTinyGlideItems : List<TinyGlideItem> = listOf(),
+    var itemCoordinatesOffset : Offset = Offset(x = 0f, y = 0f)
 
 ) : BottomBarItem()

@@ -43,8 +43,7 @@ fun TinyGlideBottomBar(
 ) {
     val selectedIndex = remember { mutableStateOf(0) }
     val lazyListState = rememberLazyListState()
-    var itemPositions = remember { mutableMapOf<Int, Offset>() }
-    var selectedItem by remember { mutableStateOf<Int?>(null) }
+    var selectedItem by remember { mutableStateOf<TinyGlideItem?>(null) }
     Box(
         parentModifier.fillMaxWidth().padding(5.dp)
     ) {
@@ -71,7 +70,7 @@ fun TinyGlideBottomBar(
                     modifier = Modifier.size(animatedParentWidth).align(Alignment.Center)
                         .onGloballyPositioned { layoutCoordinates ->
                             // Store the position of each item
-                            itemPositions[index] = layoutCoordinates.positionInWindow()
+                            item.itemCoordinatesOffset = layoutCoordinates.positionInWindow()
                         }
                         .background(
                             color = Color.Black, shape = RoundedCornerShape(10.dp)
@@ -79,7 +78,7 @@ fun TinyGlideBottomBar(
                         .hoverEffect { onHover ->
                             parentItemDynamicSize =
                                 if (onHover) item.size * item.onSelectItemSizeChangeFriction else item.size
-                            selectedItem = index
+                            selectedItem = if(onHover) item else null
                         }
 
                 ) {
@@ -93,8 +92,7 @@ fun TinyGlideBottomBar(
                 Box(Modifier.width(item.itemSeparationSpace))
             }
         }
-        selectedItem?.let { index ->
-            itemPositions[index]?.let { position ->
+        selectedItem?.let { currentItem ->
                 val density = LocalDensity.current.density
 
                 LazyRow(
@@ -103,7 +101,7 @@ fun TinyGlideBottomBar(
                     verticalAlignment = Alignment.Bottom,
                     modifier = Modifier.align(Alignment.TopStart)
                         .offset(
-                            x = (position.x / density).dp - ((30.dp + (50.dp * 3) + (50.dp * 1.3f)) / 2),
+                            x = (currentItem.itemCoordinatesOffset.x / density).dp - ((30.dp + (50.dp * 3) + (50.dp * 1.3f)) / 2),
                             y = (-60).dp
                         )
                 ) {
@@ -139,7 +137,6 @@ fun TinyGlideBottomBar(
                         Box(Modifier.width(item.itemSeparationSpace))
                     }
                 }
-            }
         }
     }
 }
