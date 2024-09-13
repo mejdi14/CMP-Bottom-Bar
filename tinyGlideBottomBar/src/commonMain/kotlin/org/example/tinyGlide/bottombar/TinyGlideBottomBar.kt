@@ -53,7 +53,7 @@ fun TinyGlideBottomBar(
         LazyRow(
             state = lazyListState,
             horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.Bottom,
             modifier = Modifier.fillMaxWidth()
         ) {
             itemsIndexed(bottomBarItems) { index, item ->
