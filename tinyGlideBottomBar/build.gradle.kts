@@ -66,6 +66,7 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.runtime.compose)
             api(project(":coreBottomBar"))
+            implementation("co.touchlab:kermit:2.0.4")
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

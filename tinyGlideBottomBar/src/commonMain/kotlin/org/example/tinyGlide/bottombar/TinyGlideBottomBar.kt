@@ -30,6 +30,7 @@ import androidx.compose.ui.layout.positionInWindow
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import co.touchlab.kermit.Logger
 import org.example.core.bottombar.BottomBarItem
 import org.example.tinyGlide.data.TinyGlideItem
 import org.jetbrains.compose.resources.painterResource
@@ -41,7 +42,7 @@ fun TinyGlideBottomBar(
     parentModifier: Modifier,
     onIconClick: (BottomBarItem) -> Unit
 ) {
-    val selectedIndex = remember { mutableStateOf(0) }
+    val selectedIndex = remember { mutableStateOf<Int?>(null) }
     val lazyListState = rememberLazyListState()
     var selectedItem by remember { mutableStateOf<TinyGlideItem?>(null) }
     Box(
@@ -64,13 +65,14 @@ fun TinyGlideBottomBar(
                 )
                 IconButton(
                     onClick = {
-                        selectedIndex.value = index
+                        selectedIndex.value = if (selectedIndex.value == null) index else null
                         onIconClick(item)
+                        selectedItem = if (selectedIndex.value == null) item else null
                     },
                     modifier = Modifier.size(animatedParentWidth).align(Alignment.Center)
                         .onGloballyPositioned { layoutCoordinates ->
-                            // Store the position of each item
-                            item.itemCoordinatesOffset = layoutCoordinates.positionInWindow()
+                           // if (item.itemCoordinatesOffset == null)
+                                item.itemCoordinatesOffset = layoutCoordinates.positionInWindow()
                         }
                         .background(
                             color = Color.Black, shape = RoundedCornerShape(10.dp)
@@ -78,7 +80,7 @@ fun TinyGlideBottomBar(
                         .hoverEffect { onHover ->
                             parentItemDynamicSize =
                                 if (onHover) item.size * item.onSelectItemSizeChangeFriction else item.size
-                            selectedItem = if(onHover) item else null
+                            selectedItem = if (onHover) item else null
                         }
 
                 ) {
@@ -93,53 +95,52 @@ fun TinyGlideBottomBar(
             }
         }
         selectedItem?.let { currentItem ->
-                val density = LocalDensity.current.density
+            val density = LocalDensity.current.density
+            Logger.i("item $selectedIndex = ${currentItem.itemCoordinatesOffset}")
+            LazyRow(
+                state = lazyListState,
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.Bottom,
+                modifier = Modifier.align(Alignment.TopStart)
+                    .offset(
+                        x = ((currentItem.itemCoordinatesOffset?.x
+                            ?: 0f) / density).dp - ((30.dp + (50.dp * 3) + (50.dp * 1.3f)) / 2),
+                        y = (-60).dp
+                    )
+            ) {
+                itemsIndexed(bottomBarItems) { index, item ->
+                    val parentItemDynamicSize by remember { mutableStateOf(item.size) }
+                    val animatedParentWidth by animateDpAsState(
+                        targetValue = parentItemDynamicSize,
+                        animationSpec = tween(durationMillis = item.onSelectItemSizeChangeDurationMillis)
+                    )
+                    Box(
+                        Modifier.width(item.itemSeparationSpace)
+                    )
+                    IconButton(
+                        onClick = {
+                            selectedIndex.value = index
+                            onIconClick(item)
+                        },
+                        modifier = Modifier.size(animatedParentWidth).align(Alignment.Center)
 
-                LazyRow(
-                    state = lazyListState,
-                    horizontalArrangement = Arrangement.Start,
-                    verticalAlignment = Alignment.Bottom,
-                    modifier = Modifier.align(Alignment.TopStart)
-                        .offset(
-                            x = (currentItem.itemCoordinatesOffset.x / density).dp - ((30.dp + (50.dp * 3) + (50.dp * 1.3f)) / 2),
-                            y = (-60).dp
-                        )
-                ) {
-                    itemsIndexed(bottomBarItems) { index, item ->
-                        val parentItemDynamicSize by remember { mutableStateOf(item.size) }
-                        val animatedParentWidth by animateDpAsState(
-                            targetValue = parentItemDynamicSize,
-                            animationSpec = tween(durationMillis = item.onSelectItemSizeChangeDurationMillis)
-                        )
-                        Box(
-                            Modifier.width(item.itemSeparationSpace)
-                        )
-                        IconButton(
-                            onClick = {
-                                selectedIndex.value = index
-                                onIconClick(item)
-                            },
-                            modifier = Modifier.size(animatedParentWidth).align(Alignment.Center)
-
-                                .background(
-                                    color = Color.Black, shape = RoundedCornerShape(10.dp)
-                                )
-
-
-                        ) {
-                            Icon(
-                                painter = painterResource(item.icon),
-                                contentDescription = item.contentDescription,
-                                tint = Color.White,
-                                modifier = Modifier.align(Alignment.Center)
+                            .background(
+                                color = Color.Black, shape = RoundedCornerShape(10.dp)
                             )
-                        }
-                        Box(Modifier.width(item.itemSeparationSpace))
+
+
+                    ) {
+                        Icon(
+                            painter = painterResource(item.icon),
+                            contentDescription = item.contentDescription,
+                            tint = Color.White,
+                            modifier = Modifier.align(Alignment.Center)
+                        )
                     }
+                    Box(Modifier.width(item.itemSeparationSpace))
                 }
+            }
         }
     }
 }
 
-@Composable
-private fun Dp.toPx() = this.value * LocalDensity.current.density
