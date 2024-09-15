@@ -71,8 +71,8 @@ fun TinyGlideBottomBar(
                     },
                     modifier = Modifier.size(animatedParentWidth).align(Alignment.Center)
                         .onGloballyPositioned { layoutCoordinates ->
-                           // if (item.itemCoordinatesOffset == null)
-                                item.itemCoordinatesOffset = layoutCoordinates.positionInWindow()
+                            // if (item.itemCoordinatesOffset == null)
+                            item.itemCoordinatesOffset = layoutCoordinates.positionInWindow()
                         }
                         .background(
                             color = Color.Black, shape = RoundedCornerShape(10.dp)
@@ -104,8 +104,8 @@ fun TinyGlideBottomBar(
                 modifier = Modifier.align(Alignment.TopStart)
                     .offset(
                         x = ((currentItem.itemCoordinatesOffset?.x
-                            ?: 0f) / density).dp - ((30.dp + (50.dp * 3) + (50.dp * 1.3f)) / 2),
-                        y = (-60).dp
+                            ?: 0f) / density).dp - (((currentItem.itemSeparationSpace * (bottomBarItems.size - 1)) + (currentItem.size * (bottomBarItems.size - 1)) + (currentItem.size * currentItem.onSelectItemSizeChangeFriction)) / 2),
+                        y = -(currentItem.size + currentItem.parentAndSubVerticalSeparationSpace)
                     )
             ) {
                 itemsIndexed(bottomBarItems) { index, item ->

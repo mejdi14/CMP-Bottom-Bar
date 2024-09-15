@@ -24,7 +24,11 @@ fun App() {
       Box(Modifier.fillMaxSize()){
           val bottomBarItems =
               listOf(
-                  TinyGlideItem(BottomBarIdentifier.Home, Res.drawable.home_line, "Home"),
+                  TinyGlideItem(BottomBarIdentifier.Home, Res.drawable.home_line, "Home", subTinyGlideItems = listOf(
+                      TinyGlideItem(BottomBarIdentifier.Papers, Res.drawable.papers, "Papers"),
+                      TinyGlideItem(BottomBarIdentifier.Papers, Res.drawable.papers, "Papers"),
+                  )
+                  ),
                   TinyGlideItem(BottomBarIdentifier.Papers, Res.drawable.papers, "Papers"),
                   TinyGlideItem(BottomBarIdentifier.Mosque, Res.drawable.open_reader, "Mosque"),
                   TinyGlideItem(BottomBarIdentifier.Menu, Res.drawable.menu_meatballs, "Menu"),
