@@ -1,10 +1,12 @@
 package org.example.tinyGlide.data
 
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.example.core.bottombar.BottomBarIdentifier
@@ -17,8 +19,9 @@ data class TinyGlideItem(
     override val contentDescription: String,
     override val size: Dp = 50.dp,
     override val title: String = "options",
+    override val backgroundColor: Color = Color.Blue,
+    override val itemShape: Shape = RoundedCornerShape(10.dp),
     val radius: Dp = 10.dp,
-    val backgroundColor: Color = Color.Blue,
     val onSelectItemSizeChangeFriction : Float = 1.3f,
     val onSelectItemSizeChangeDurationMillis: Int = 300,
     val itemSeparationSpace: Dp = 10.dp,
@@ -26,4 +29,4 @@ data class TinyGlideItem(
     var itemCoordinatesOffset : Offset? = null,
     var parentAndSubVerticalSeparationSpace : Dp = 10.dp,
 
-) : BottomBarItem()
+    ) : BottomBarItem()
