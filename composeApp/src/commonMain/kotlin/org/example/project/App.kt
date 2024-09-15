@@ -37,9 +37,15 @@ fun App() {
                       TinyGlideItem(BottomBarIdentifier.Papers, Res.drawable.papers, "Papers"),
                       TinyGlideItem(BottomBarIdentifier.Papers, Res.drawable.papers, "Papers"),
                       TinyGlideItem(BottomBarIdentifier.Papers, Res.drawable.papers, "Papers"),
+                      TinyGlideItem(BottomBarIdentifier.Papers, Res.drawable.papers, "Papers"),
                   )),
-                  TinyGlideItem(BottomBarIdentifier.Mosque, Res.drawable.open_reader, "Mosque"),
-                  TinyGlideItem(BottomBarIdentifier.Menu, Res.drawable.menu_meatballs, "Menu"),
+                  TinyGlideItem(BottomBarIdentifier.Mosque, Res.drawable.open_reader, "Mosque", subTinyGlideItems = listOf(
+                      TinyGlideItem(BottomBarIdentifier.Papers, Res.drawable.papers, "Papers"),
+                  )),
+                  TinyGlideItem(BottomBarIdentifier.Menu, Res.drawable.menu_meatballs, "Menu", subTinyGlideItems = listOf(
+                      TinyGlideItem(BottomBarIdentifier.Papers, Res.drawable.papers, "Papers"),
+                      TinyGlideItem(BottomBarIdentifier.Papers, Res.drawable.papers, "Papers"),
+                  )),
               )
           TinyGlideBottomBar(bottomBarItems, Modifier.align(Alignment.BottomCenter)){
 

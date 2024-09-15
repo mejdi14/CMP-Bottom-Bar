@@ -96,7 +96,7 @@ fun TinyGlideBottomBar(
                 Box(Modifier.width(item.itemSeparationSpace))
             }
         }
-        SubItemsComposable(Modifier.align(Alignment.TopStart), selectedItem, selectedIndex, lazyListState, bottomBarItems, onIconClick)
+        SubItemsComposable(Modifier.align(Alignment.TopStart), selectedItem, selectedIndex, lazyListState, onIconClick)
     }
 }
 

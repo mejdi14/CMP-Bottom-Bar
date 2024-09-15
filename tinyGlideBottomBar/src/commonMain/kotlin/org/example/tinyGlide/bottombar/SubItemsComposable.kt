@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
+import co.touchlab.kermit.Logger
 import org.example.core.bottombar.BottomBarItem
 import org.example.tinyGlide.data.TinyGlideItem
 import org.jetbrains.compose.resources.painterResource
@@ -37,6 +38,13 @@ internal fun SubItemsComposable(
 ) {
     selectedItem?.let { currentItem ->
         val density = LocalDensity.current.density
+        Logger.i("coordinates: ${currentItem.itemCoordinatesOffset?.x}")
+        Logger.i(
+            "calculation: ${
+                ((currentItem.itemCoordinatesOffset?.x
+                    ?: 0f) / density).dp - (((currentItem.size * (currentItem.subTinyGlideItems.size))) / 2)
+            }"
+        )
         LazyRow(
             state = lazyListState,
             horizontalArrangement = Arrangement.Start,
@@ -44,7 +52,7 @@ internal fun SubItemsComposable(
             modifier = modifier
                 .offset(
                     x = ((currentItem.itemCoordinatesOffset?.x
-                        ?: 0f) / density).dp - (((currentItem.itemSeparationSpace * (currentItem.subTinyGlideItems.size - 1)) + (currentItem.size * (currentItem.subTinyGlideItems.size - 1)) + (currentItem.size * currentItem.onSelectItemSizeChangeFriction)) / 2),
+                        ?: 0f) / density).dp - (((currentItem.itemSeparationSpace * (currentItem.subTinyGlideItems.size * 2)) + (currentItem.size * (currentItem.subTinyGlideItems.size))) / 2) + ((currentItem.size - (currentItem.itemSeparationSpace)) / 2),
                     y = -(currentItem.size + currentItem.parentAndSubVerticalSeparationSpace)
                 )
         ) {
