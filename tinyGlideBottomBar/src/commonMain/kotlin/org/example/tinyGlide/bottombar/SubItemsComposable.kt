@@ -33,7 +33,6 @@ internal fun SubItemsComposable(
     selectedItem: TinyGlideItem?,
     selectedIndex: MutableState<Int?>,
     lazyListState: LazyListState,
-    bottomBarItems: List<TinyGlideItem>,
     onIconClick: (BottomBarItem) -> Unit
 ) {
     selectedItem?.let { currentItem ->
@@ -45,11 +44,11 @@ internal fun SubItemsComposable(
             modifier = modifier
                 .offset(
                     x = ((currentItem.itemCoordinatesOffset?.x
-                        ?: 0f) / density).dp - (((currentItem.itemSeparationSpace * (bottomBarItems.size - 1)) + (currentItem.size * (bottomBarItems.size - 1)) + (currentItem.size * currentItem.onSelectItemSizeChangeFriction)) / 2),
+                        ?: 0f) / density).dp - (((currentItem.itemSeparationSpace * (currentItem.subTinyGlideItems.size - 1)) + (currentItem.size * (currentItem.subTinyGlideItems.size - 1)) + (currentItem.size * currentItem.onSelectItemSizeChangeFriction)) / 2),
                     y = -(currentItem.size + currentItem.parentAndSubVerticalSeparationSpace)
                 )
         ) {
-            itemsIndexed(bottomBarItems) { index, item ->
+            itemsIndexed(currentItem.subTinyGlideItems) { index, item ->
                 val parentItemDynamicSize by remember { mutableStateOf(item.size) }
                 val animatedParentWidth by animateDpAsState(
                     targetValue = parentItemDynamicSize,
