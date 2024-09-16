@@ -23,7 +23,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
-import co.touchlab.kermit.Logger
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.example.core.bottombar.BottomBarItem
 import org.example.tinyGlide.data.TinyGlideItem
 import org.jetbrains.compose.resources.painterResource
@@ -34,6 +37,9 @@ internal fun SubItemsComposable(
     selectedItem: TinyGlideItem?,
     selectedIndex: MutableState<Int?>,
     lazyListState: LazyListState,
+    hoverExitJob: MutableState<Job?>,
+    isHovering: MutableState<Boolean>,
+    scope: CoroutineScope,
     onIconClick: (BottomBarItem) -> Unit
 ) {
     selectedItem?.let { currentItem ->
@@ -51,6 +57,22 @@ internal fun SubItemsComposable(
                             + ((currentItem.size - (currentItem.itemSeparationSpace)) / 2),
                     y = -(currentItem.size + currentItem.parentAndSubVerticalSeparationSpace)
                 )
+                .hoverEffect { onHover ->
+                    isHovering.value = onHover
+                    if (onHover) {
+                        hoverExitJob.value?.cancel()
+                        hoverExitJob.value = null
+                    } else {
+                        hoverExitJob.value = scope.launch {
+                            delay(2000)
+                            if (!isHovering.value) {
+                                //selectedItem = null
+                                // Reset any additional states if needed
+                            }
+                        }
+                    }
+                }
+
         ) {
             itemsIndexed(currentItem.subTinyGlideItems) { index, item ->
                 val parentItemDynamicSize by remember { mutableStateOf(item.size) }
