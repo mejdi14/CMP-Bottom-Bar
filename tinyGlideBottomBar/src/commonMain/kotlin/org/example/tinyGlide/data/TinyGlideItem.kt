@@ -15,7 +15,6 @@ import org.example.core.bottombar.BottomBarItem
 import org.jetbrains.compose.resources.DrawableResource
 
 data class TinyGlideItem(
-    override val identifier: BottomBarIdentifier,
     override val icon: BottomBarIcon,
     override val contentDescription: String,
     override val size: Dp = 50.dp,
