@@ -87,7 +87,7 @@ fun TinyGlideBottomBar(
 
                 ) {
                     Icon(
-                        painter = painterResource(item.icon),
+                        painter = painterResource(item.icon.selectedIconDrawable),
                         contentDescription = item.contentDescription,
                         tint = Color.White,
                         modifier = Modifier.align(Alignment.Center)

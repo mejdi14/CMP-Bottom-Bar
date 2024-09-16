@@ -52,7 +52,10 @@ internal fun SubItemsComposable(
             modifier = modifier
                 .offset(
                     x = ((currentItem.itemCoordinatesOffset?.x
-                        ?: 0f) / density).dp - (((currentItem.itemSeparationSpace * (currentItem.subTinyGlideItems.size * 2)) + (currentItem.size * (currentItem.subTinyGlideItems.size))) / 2) + ((currentItem.size - (currentItem.itemSeparationSpace)) / 2),
+                        ?: 0f) / density).dp
+                            - (((currentItem.itemSeparationSpace * (currentItem.subTinyGlideItems.size * 2))
+                            + (currentItem.size * (currentItem.subTinyGlideItems.size))) / 2)
+                            + ((currentItem.size - (currentItem.itemSeparationSpace)) / 2),
                     y = -(currentItem.size + currentItem.parentAndSubVerticalSeparationSpace)
                 )
         ) {
@@ -77,7 +80,7 @@ internal fun SubItemsComposable(
                         )
                 ) {
                     Icon(
-                        painter = painterResource(item.icon),
+                        painter = painterResource(item.selectedIconDrawable),
                         contentDescription = item.contentDescription,
                         tint = Color.White,
                         modifier = Modifier

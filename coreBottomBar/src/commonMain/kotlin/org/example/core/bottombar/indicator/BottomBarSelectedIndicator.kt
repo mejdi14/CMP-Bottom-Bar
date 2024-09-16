@@ -1,10 +1,10 @@
-package org.example.core.bottombar
+package org.example.core.bottombar.indicator
 
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 
-data class BottomBarConfig(
+data class BottomBarSelectedIndicator(
     val shapeType: ShapeType = ShapeType.Square,
     val positionType: PositionType = PositionType.Bottom,
     val size: Dp = 60.dp,

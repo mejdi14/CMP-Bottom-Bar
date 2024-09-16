@@ -16,12 +16,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import org.example.core.bottombar.BottomBarConfig
-import org.example.core.bottombar.ShapeType
+import org.example.core.bottombar.indicator.BottomBarSelectedIndicator
+import org.example.core.bottombar.indicator.ShapeType
 
 @Composable
 fun CustomBottomBar(
-    config: BottomBarConfig,
+    config: BottomBarSelectedIndicator,
     color: Color = Color.Blue,
     animatedOffset: State<Dp>,
     spaceBetween: Dp,

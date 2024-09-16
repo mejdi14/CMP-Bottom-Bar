@@ -11,6 +11,7 @@ import kmp_bottom_bar.composeapp.generated.resources.home_line
 import kmp_bottom_bar.composeapp.generated.resources.menu_meatballs
 import kmp_bottom_bar.composeapp.generated.resources.open_reader
 import kmp_bottom_bar.composeapp.generated.resources.papers
+import org.example.core.bottombar.BottomBarIcon
 import org.example.core.bottombar.BottomBarIdentifier
 import org.example.tinyGlide.bottombar.TinyGlideBottomBar
 import org.example.tinyGlide.data.TinyGlideItem
@@ -24,27 +25,19 @@ fun App() {
       Box(Modifier.fillMaxSize()){
           val bottomBarItems =
               listOf(
-                  TinyGlideItem(BottomBarIdentifier.Home, Res.drawable.home_line, "Home", subTinyGlideItems = listOf(
-                      TinyGlideItem(BottomBarIdentifier.Papers, Res.drawable.papers, "Papers"),
-                      TinyGlideItem(BottomBarIdentifier.Papers, Res.drawable.papers, "Papers"),
-                      TinyGlideItem(BottomBarIdentifier.Papers, Res.drawable.papers, "Papers"),
-                      TinyGlideItem(BottomBarIdentifier.Papers, Res.drawable.papers, "Papers"),
-                      TinyGlideItem(BottomBarIdentifier.Papers, Res.drawable.papers, "Papers"),
-                      TinyGlideItem(BottomBarIdentifier.Papers, Res.drawable.papers, "Papers"),
-                  )
-                  ),
-                  TinyGlideItem(BottomBarIdentifier.Papers, Res.drawable.papers, "Papers", subTinyGlideItems = listOf(
-                      TinyGlideItem(BottomBarIdentifier.Papers, Res.drawable.papers, "Papers"),
-                      TinyGlideItem(BottomBarIdentifier.Papers, Res.drawable.papers, "Papers"),
-                      TinyGlideItem(BottomBarIdentifier.Papers, Res.drawable.papers, "Papers"),
-                      TinyGlideItem(BottomBarIdentifier.Papers, Res.drawable.papers, "Papers"),
+                  ,
+                  TinyGlideItem(BottomBarIdentifier.Papers, BottomBarIcon(Res.drawable.home_line), "Papers", subTinyGlideItems = listOf(
+                      TinyGlideItem(BottomBarIdentifier.Papers, BottomBarIcon(Res.drawable.home_line), "Papers"),
+                      TinyGlideItem(BottomBarIdentifier.Papers, BottomBarIcon(Res.drawable.home_line), "Papers"),
+                      TinyGlideItem(BottomBarIdentifier.Papers, BottomBarIcon(Res.drawable.home_line), "Papers"),
+                      TinyGlideItem(BottomBarIdentifier.Papers, BottomBarIcon(Res.drawable.home_line), "Papers"),
                   )),
-                  TinyGlideItem(BottomBarIdentifier.Mosque, Res.drawable.open_reader, "Mosque", subTinyGlideItems = listOf(
-                      TinyGlideItem(BottomBarIdentifier.Papers, Res.drawable.papers, "Papers"),
+                  TinyGlideItem(BottomBarIdentifier.Mosque, BottomBarIcon(Res.drawable.home_line), "Mosque", subTinyGlideItems = listOf(
+                      TinyGlideItem(BottomBarIdentifier.Papers, BottomBarIcon(Res.drawable.home_line), "Papers"),
                   )),
-                  TinyGlideItem(BottomBarIdentifier.Menu, Res.drawable.menu_meatballs, "Menu", subTinyGlideItems = listOf(
-                      TinyGlideItem(BottomBarIdentifier.Papers, Res.drawable.papers, "Papers"),
-                      TinyGlideItem(BottomBarIdentifier.Papers, Res.drawable.papers, "Papers"),
+                  TinyGlideItem(BottomBarIdentifier.Menu, BottomBarIcon(Res.drawable.home_line), "Menu", subTinyGlideItems = listOf(
+                      TinyGlideItem(BottomBarIdentifier.Papers, BottomBarIcon(Res.drawable.home_line), "Papers"),
+                      TinyGlideItem(BottomBarIdentifier.Papers, BottomBarIcon(Res.drawable.home_line), "Papers"),
                   )),
               )
           TinyGlideBottomBar(bottomBarItems, Modifier.align(Alignment.BottomCenter)){
