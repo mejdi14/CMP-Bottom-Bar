@@ -73,8 +73,12 @@ fun TinyGlideBottomBar(
                     },
                     modifier = Modifier.size(animatedParentWidth).align(Alignment.Center)
                         .onGloballyPositioned { layoutCoordinates ->
-                            // if (item.itemCoordinatesOffset == null)
-                            item.itemCoordinatesOffset = layoutCoordinates.positionInWindow()
+                            if (item.itemCoordinatesOffset == null || (kotlin.math.abs(
+                                    (item.itemCoordinatesOffset?.x
+                                        ?: 0f) - layoutCoordinates.positionInWindow().x
+                                ) > item.marginForScreenSizeChanges)
+                            )
+                                item.itemCoordinatesOffset = layoutCoordinates.positionInWindow()
                         }
                         .background(
                             color = item.backgroundColor, shape = item.itemShape
@@ -88,15 +92,21 @@ fun TinyGlideBottomBar(
                 ) {
                     Icon(
                         painter = painterResource(item.icon.selectedIconDrawable),
-                        contentDescription = item.contentDescription,
+                        contentDescription = item.icon.contentDescription,
                         tint = Color.White,
-                        modifier = Modifier.align(Alignment.Center)
+                        modifier = item.icon.modifier.align(Alignment.Center)
                     )
                 }
                 Box(Modifier.width(item.itemSeparationSpace))
             }
         }
-        SubItemsComposable(Modifier.align(Alignment.TopStart), selectedItem, selectedIndex, lazyListState, onIconClick)
+        SubItemsComposable(
+            Modifier.align(Alignment.TopStart),
+            selectedItem,
+            selectedIndex,
+            lazyListState,
+            onIconClick
+        )
     }
 }
 

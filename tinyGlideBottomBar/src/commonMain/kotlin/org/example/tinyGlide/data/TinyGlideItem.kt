@@ -27,6 +27,7 @@ data class TinyGlideItem(
     val itemSeparationSpace: Dp = 10.dp,
     val subTinyGlideItems : List<TinyGlideItem> = listOf(),
     var itemCoordinatesOffset : Offset? = null,
-    var parentAndSubVerticalSeparationSpace : Dp = 10.dp,
+    val parentAndSubVerticalSeparationSpace : Dp = 10.dp,
+    val marginForScreenSizeChanges : Float = 10f,
 
     ) : BottomBarItem()

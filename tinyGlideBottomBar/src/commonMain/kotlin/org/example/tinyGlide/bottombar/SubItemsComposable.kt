@@ -38,13 +38,6 @@ internal fun SubItemsComposable(
 ) {
     selectedItem?.let { currentItem ->
         val density = LocalDensity.current.density
-        Logger.i("coordinates: ${currentItem.itemCoordinatesOffset?.x}")
-        Logger.i(
-            "calculation: ${
-                ((currentItem.itemCoordinatesOffset?.x
-                    ?: 0f) / density).dp - (((currentItem.size * (currentItem.subTinyGlideItems.size))) / 2)
-            }"
-        )
         LazyRow(
             state = lazyListState,
             horizontalArrangement = Arrangement.Start,
@@ -80,7 +73,7 @@ internal fun SubItemsComposable(
                         )
                 ) {
                     Icon(
-                        painter = painterResource(item.selectedIconDrawable),
+                        painter = painterResource(item.icon.selectedIconDrawable),
                         contentDescription = item.contentDescription,
                         tint = Color.White,
                         modifier = Modifier

@@ -87,7 +87,7 @@ fun ExpandableBottomBar(bottomBarItems: List<BottomBarItem>, parentModifier : Mo
                             modifier = Modifier.size(50.dp).align(Alignment.Center)
                         ) {
                             Icon(
-                                painter = painterResource(item.icon),
+                                painter = painterResource(item.icon.selectedIconDrawable),
                                 contentDescription = item.contentDescription,
                                 tint = Color.White,
                                 modifier = Modifier.align(Alignment.Center)
@@ -133,7 +133,7 @@ fun ExpandableBottomBar(bottomBarItems: List<BottomBarItem>, parentModifier : Mo
                             modifier = Modifier.size(50.dp).align(Alignment.Center)
                         ) {
                             Icon(
-                                painter = painterResource(item.icon),
+                                painter = painterResource(item.icon.selectedIconDrawable),
                                 contentDescription = item.contentDescription,
                                 tint = Color.White,
                                 modifier = Modifier.align(Alignment.Center)
