@@ -34,7 +34,7 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 internal fun SubItemsComposable(
     modifier: Modifier,
-    selectedItem: TinyGlideItem?,
+    selectedItem: MutableState<TinyGlideItem?>,
     selectedIndex: MutableState<Int?>,
     lazyListState: LazyListState,
     hoverExitJob: MutableState<Job?>,
@@ -42,7 +42,7 @@ internal fun SubItemsComposable(
     scope: CoroutineScope,
     onIconClick: (BottomBarItem) -> Unit
 ) {
-    selectedItem?.let { currentItem ->
+    selectedItem.value?.let { currentItem ->
         val density = LocalDensity.current.density
         LazyRow(
             state = lazyListState,
@@ -64,10 +64,10 @@ internal fun SubItemsComposable(
                         hoverExitJob.value = null
                     } else {
                         hoverExitJob.value = scope.launch {
-                            delay(2000)
+                            delay(400)
                             if (!isHovering.value) {
-                                //selectedItem = null
-                                // Reset any additional states if needed
+                                selectedItem.value = null
+                                currentItem.parentItemDynamicSize.value = currentItem.size
                             }
                         }
                     }

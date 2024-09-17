@@ -42,7 +42,7 @@ fun TinyGlideBottomBar(
 ) {
     val selectedIndex = remember { mutableStateOf<Int?>(null) }
     val lazyListState = rememberLazyListState()
-    var selectedItem by remember { mutableStateOf<TinyGlideItem?>(null) }
+    var selectedItem = remember { mutableStateOf<TinyGlideItem?>(null) }
     val scope = rememberCoroutineScope()
     val hoverExitJob = remember { mutableStateOf<Job?>(null) }
     val isHovering = remember { mutableStateOf(false) }
@@ -56,9 +56,8 @@ fun TinyGlideBottomBar(
             modifier = Modifier.fillMaxWidth()
         ) {
             itemsIndexed(bottomBarItems) { index, item ->
-                var parentItemDynamicSize by remember { mutableStateOf(item.size) }
                 val animatedParentWidth by animateDpAsState(
-                    targetValue = parentItemDynamicSize,
+                    targetValue = item.parentItemDynamicSize.value,
                     animationSpec = tween(durationMillis = item.onSelectItemSizeChangeDurationMillis)
                 )
                 Box(
@@ -68,7 +67,7 @@ fun TinyGlideBottomBar(
                     onClick = {
                         selectedIndex.value = if (selectedIndex.value == null) index else null
                         onIconClick(item)
-                        selectedItem = if (selectedIndex.value == null) item else null
+                        selectedItem.value = if (selectedIndex.value == null) item else null
                     },
                     modifier = Modifier.size(animatedParentWidth).align(Alignment.Center)
                         .onGloballyPositioned { layoutCoordinates ->
@@ -88,13 +87,13 @@ fun TinyGlideBottomBar(
                                 hoverExitJob.value?.cancel()
                                 hoverExitJob.value = null
 
-                                parentItemDynamicSize = item.size * item.onSelectItemSizeChangeFriction
-                                selectedItem = item
+                                item.parentItemDynamicSize.value = item.size * item.onSelectItemSizeChangeFriction
+                                selectedItem.value = item
                             } else {
                                 hoverExitJob.value = scope.launch {
-                                    delay(2000) // Delay for 0.5 seconds
-                                    selectedItem = null
-                                    parentItemDynamicSize = item.size
+                                    delay(500) // Delay for 0.5 seconds
+                                    selectedItem.value = null
+                                    item.parentItemDynamicSize.value = item.size
                                 }
                             }
                         }

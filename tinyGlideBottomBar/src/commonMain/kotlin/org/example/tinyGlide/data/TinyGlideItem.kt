@@ -29,5 +29,6 @@ data class TinyGlideItem(
     var itemCoordinatesOffset : Offset? = null,
     val parentAndSubVerticalSeparationSpace : Dp = 10.dp,
     val marginForScreenSizeChanges : Float = 10f,
+    var parentItemDynamicSize: MutableState<Dp> = mutableStateOf(size)
 
     ) : BottomBarItem()
