@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyListState
@@ -55,7 +56,7 @@ internal fun SubItemsComposable(
                             - (((currentItem.itemSeparationSpace * (currentItem.subTinyGlideItems.size * 2))
                             + (currentItem.size * (currentItem.subTinyGlideItems.size))) / 2)
                             + ((currentItem.size - (currentItem.itemSeparationSpace)) / 2),
-                    y = -(currentItem.size + currentItem.parentAndSubVerticalSeparationSpace)
+                    y = -(currentItem.size) - currentItem.parentAndSubVerticalSeparationSpace
                 )
                 .hoverEffect { onHover ->
                     isHovering.value = onHover
@@ -64,7 +65,7 @@ internal fun SubItemsComposable(
                         hoverExitJob.value = null
                     } else {
                         hoverExitJob.value = scope.launch {
-                            delay(400)
+                            delay(20)
                             if (!isHovering.value) {
                                 selectedItem.value = null
                                 currentItem.parentItemDynamicSize.value = currentItem.size

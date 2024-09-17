@@ -43,8 +43,8 @@ fun TinyGlideBottomBar(
     val selectedIndex = remember { mutableStateOf<Int?>(null) }
     val lazyListState = rememberLazyListState()
     var selectedItem = remember { mutableStateOf<TinyGlideItem?>(null) }
-    val scope = rememberCoroutineScope()
     val hoverExitJob = remember { mutableStateOf<Job?>(null) }
+    val scope = rememberCoroutineScope()
     val isHovering = remember { mutableStateOf(false) }
     Box(
         parentModifier.fillMaxWidth().padding(5.dp)
@@ -84,14 +84,18 @@ fun TinyGlideBottomBar(
                         .hoverEffect { onHover ->
                             isHovering.value = onHover
                             if (onHover) {
-                                hoverExitJob.value?.cancel()
-                                hoverExitJob.value = null
+                                if(item == selectedItem.value){
+                                    hoverExitJob.value?.cancel()
+                                    hoverExitJob.value = null
+                                }
 
-                                item.parentItemDynamicSize.value = item.size * item.onSelectItemSizeChangeFriction
+
                                 selectedItem.value = item
+                                item.parentItemDynamicSize.value = if(item != (selectedItem.value)) item.size else
+                                    item.size * item.onSelectItemSizeChangeFriction
                             } else {
                                 hoverExitJob.value = scope.launch {
-                                    delay(500) // Delay for 0.5 seconds
+                                    delay(item.hoverCancelDurationMillis)
                                     selectedItem.value = null
                                     item.parentItemDynamicSize.value = item.size
                                 }

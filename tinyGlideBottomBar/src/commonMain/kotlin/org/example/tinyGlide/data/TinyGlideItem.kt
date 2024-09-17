@@ -24,6 +24,7 @@ data class TinyGlideItem(
     val radius: Dp = 10.dp,
     val onSelectItemSizeChangeFriction : Float = 1.3f,
     val onSelectItemSizeChangeDurationMillis: Int = 300,
+    val hoverCancelDurationMillis: Long = 10,
     val itemSeparationSpace: Dp = 10.dp,
     val subTinyGlideItems : List<TinyGlideItem> = listOf(),
     var itemCoordinatesOffset : Offset? = null,
