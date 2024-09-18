@@ -21,6 +21,7 @@ data class TinyGlideItem(
     override val title: String = "options",
     override val backgroundColor: Color = Color.Blue,
     override val itemShape: Shape = RoundedCornerShape(10.dp),
+    override var index: Int = -1,
     val radius: Dp = 10.dp,
     val onSelectItemSizeChangeFriction : Float = 1.3f,
     val onSelectItemSizeChangeDurationMillis: Int = 300,

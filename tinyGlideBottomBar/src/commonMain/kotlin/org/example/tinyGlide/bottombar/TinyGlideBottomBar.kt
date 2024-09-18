@@ -42,7 +42,7 @@ fun TinyGlideBottomBar(
 ) {
     val selectedIndex = remember { mutableStateOf<Int?>(null) }
     val lazyListState = rememberLazyListState()
-    var selectedItem = remember { mutableStateOf<TinyGlideItem?>(null) }
+    val selectedItem = remember { mutableStateOf<TinyGlideItem?>(null) }
     val hoverExitJob = remember { mutableStateOf<Job?>(null) }
     val scope = rememberCoroutineScope()
     val isHovering = remember { mutableStateOf(false) }
@@ -60,6 +60,7 @@ fun TinyGlideBottomBar(
                     targetValue = item.parentItemDynamicSize.value,
                     animationSpec = tween(durationMillis = item.onSelectItemSizeChangeDurationMillis)
                 )
+                item.index = index
                 Box(
                     Modifier.width(item.itemSeparationSpace)
                 )
@@ -84,18 +85,18 @@ fun TinyGlideBottomBar(
                         .hoverEffect { onHover ->
                             isHovering.value = onHover
                             if (onHover) {
-                                if(item == selectedItem.value){
+                                if (item == selectedItem.value) {
                                     hoverExitJob.value?.cancel()
                                     hoverExitJob.value = null
                                 }
 
 
                                 selectedItem.value = item
-                                item.parentItemDynamicSize.value = if(item != (selectedItem.value)) item.size else
-                                    item.size * item.onSelectItemSizeChangeFriction
+                                item.parentItemDynamicSize.value =
+                                    if (item != (selectedItem.value)) item.size else
+                                        item.size * item.onSelectItemSizeChangeFriction
                             } else {
                                 hoverExitJob.value = scope.launch {
-                                    delay(item.hoverCancelDurationMillis)
                                     selectedItem.value = null
                                     item.parentItemDynamicSize.value = item.size
                                 }

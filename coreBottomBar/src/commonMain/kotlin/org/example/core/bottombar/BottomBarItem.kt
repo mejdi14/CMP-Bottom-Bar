@@ -12,5 +12,6 @@ abstract class BottomBarItem{
     abstract val backgroundColor: Color
     abstract val itemShape: Shape
     abstract val icon: BottomBarIcon
+    abstract val index: Int
 }
 
