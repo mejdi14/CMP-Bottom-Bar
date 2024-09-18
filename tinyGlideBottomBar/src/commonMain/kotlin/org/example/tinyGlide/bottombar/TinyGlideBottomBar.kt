@@ -15,22 +15,21 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInWindow
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.example.core.bottombar.BottomBarItem
 import org.example.tinyGlide.data.TinyGlideItem
+import org.example.tinyGlide.data.isSelectedItem
 import org.jetbrains.compose.resources.painterResource
 
 
@@ -80,20 +79,21 @@ fun TinyGlideBottomBar(
                                 item.itemCoordinatesOffset = layoutCoordinates.positionInWindow()
                         }
                         .background(
-                            color = item.backgroundColor, shape = item.itemShape
+                            color = if (item.isSelectedItem(selectedItem.value))
+                                item.selectedBackgroundColor
+                            else item.unselectedBackgroundColor,
+                            shape = item.itemShape
                         )
                         .hoverEffect { onHover ->
                             isHovering.value = onHover
                             if (onHover) {
-                                if (item == selectedItem.value) {
+                                if (item.isSelectedItem(selectedItem.value)) {
                                     hoverExitJob.value?.cancel()
                                     hoverExitJob.value = null
                                 }
-
-
                                 selectedItem.value = item
                                 item.parentItemDynamicSize.value =
-                                    if (item != (selectedItem.value)) item.size else
+                                    if (!item.isSelectedItem(selectedItem.value)) item.size else
                                         item.size * item.onSelectItemSizeChangeFriction
                             } else {
                                 hoverExitJob.value = scope.launch {
@@ -103,12 +103,7 @@ fun TinyGlideBottomBar(
                             }
                         }
                 ) {
-                    Icon(
-                        painter = painterResource(item.icon.selectedIconDrawable),
-                        contentDescription = item.icon.contentDescription,
-                        tint = Color.White,
-                        modifier = item.icon.modifier.align(Alignment.Center)
-                    )
+                    TinyGlideIcon(item, selectedItem, Modifier.align(Alignment.Center))
                 }
                 Box(Modifier.width(item.itemSeparationSpace))
             }
@@ -125,4 +120,3 @@ fun TinyGlideBottomBar(
         )
     }
 }
-

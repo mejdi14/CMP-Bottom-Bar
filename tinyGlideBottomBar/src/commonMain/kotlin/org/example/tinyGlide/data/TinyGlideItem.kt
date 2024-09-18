@@ -19,18 +19,23 @@ data class TinyGlideItem(
     override val contentDescription: String,
     override val size: Dp = 50.dp,
     override val title: String = "options",
-    override val backgroundColor: Color = Color.Blue,
+    override val unselectedBackgroundColor: Color = Color.Blue,
+    override val selectedBackgroundColor: Color = unselectedBackgroundColor,
     override val itemShape: Shape = RoundedCornerShape(10.dp),
     override var index: Int = -1,
     val radius: Dp = 10.dp,
-    val onSelectItemSizeChangeFriction : Float = 1.3f,
+    val onSelectItemSizeChangeFriction: Float = 1.3f,
     val onSelectItemSizeChangeDurationMillis: Int = 300,
     val hoverCancelDurationMillis: Long = 8,
     val itemSeparationSpace: Dp = 10.dp,
-    val subTinyGlideItems : List<TinyGlideItem> = listOf(),
-    var itemCoordinatesOffset : Offset? = null,
-    val parentAndSubVerticalSeparationSpace : Dp = 10.dp,
-    val marginForScreenSizeChanges : Float = 10f,
+    val subTinyGlideItems: List<TinyGlideItem> = listOf(),
+    var itemCoordinatesOffset: Offset? = null,
+    val parentAndSubVerticalSeparationSpace: Dp = 10.dp,
+    val marginForScreenSizeChanges: Float = 10f,
     var parentItemDynamicSize: MutableState<Dp> = mutableStateOf(size)
 
-    ) : BottomBarItem()
+) : BottomBarItem()
+
+fun TinyGlideItem.isSelectedItem(selectedItem: TinyGlideItem?): Boolean {
+    return this == selectedItem
+}

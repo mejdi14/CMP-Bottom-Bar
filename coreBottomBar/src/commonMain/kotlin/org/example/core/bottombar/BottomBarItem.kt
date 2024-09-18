@@ -9,7 +9,8 @@ abstract class BottomBarItem{
     abstract val title: String
     abstract val size : Dp
     abstract val contentDescription: String
-    abstract val backgroundColor: Color
+    abstract val unselectedBackgroundColor: Color
+    abstract val selectedBackgroundColor: Color
     abstract val itemShape: Shape
     abstract val icon: BottomBarIcon
     abstract val index: Int
