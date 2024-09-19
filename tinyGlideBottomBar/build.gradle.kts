@@ -76,7 +76,7 @@ kotlin {
 }
 
 android {
-    namespace = "org.example.project"
+    namespace = "org.example.tinyGlide"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")

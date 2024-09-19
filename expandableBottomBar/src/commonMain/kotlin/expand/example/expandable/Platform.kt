@@ -1,4 +1,4 @@
-package expand
+package expand.example.expandable
 
 interface Platform {
     val name: String

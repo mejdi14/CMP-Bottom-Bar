@@ -75,7 +75,7 @@ kotlin {
 }
 
 android {
-    namespace = "org.example.project"
+    namespace = "expand.example.expandable"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
