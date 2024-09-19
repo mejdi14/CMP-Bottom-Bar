@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import org.example.core.bottombar.BottomBarIcon
 import org.example.core.bottombar.BottomBarIdentifier
 import org.example.core.bottombar.BottomBarItem
+import org.example.tinyGlide.listeners.HoverActionListener
 import org.jetbrains.compose.resources.DrawableResource
 
 data class TinyGlideItem(
@@ -32,10 +33,29 @@ data class TinyGlideItem(
     var itemCoordinatesOffset: Offset? = null,
     val parentAndSubVerticalSeparationSpace: Dp = 10.dp,
     val marginForScreenSizeChanges: Float = 10f,
-    var parentItemDynamicSize: MutableState<Dp> = mutableStateOf(size)
+    var parentItemDynamicSize: MutableState<Dp> = mutableStateOf(size),
+    val hoverActionListener: HoverActionListener = EmptyHoverActionListener
 
 ) : BottomBarItem()
 
 fun TinyGlideItem.isSelectedItem(selectedItem: TinyGlideItem?): Boolean {
     return this == selectedItem
+}
+
+val EmptyHoverActionListener = object : HoverActionListener {
+    override fun onHoverEnter(tinyGlideItem: TinyGlideItem) {
+        // Do nothing
+    }
+
+    override fun onHoverExit(tinyGlideItem: TinyGlideItem) {
+        // Do nothing
+    }
+
+    override fun onHoverParentItem(tinyGlideItem: TinyGlideItem) {
+        // Do nothing
+    }
+
+    override fun onHoverSubItem(tinyGlideItem: TinyGlideItem) {
+        // Do nothing
+    }
 }

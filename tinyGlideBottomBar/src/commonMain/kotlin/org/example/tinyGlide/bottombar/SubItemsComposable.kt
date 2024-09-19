@@ -60,13 +60,16 @@ internal fun SubItemsComposable(
                 )
                 .hoverEffect { onHover ->
                     isHovering.value = onHover
+                    currentItem.hoverActionListener.onHoverEnter(currentItem)
                     if (onHover) {
                         hoverExitJob.value?.cancel()
                         hoverExitJob.value = null
+                        currentItem.hoverActionListener.onHoverSubItem(currentItem)
                     } else {
                         hoverExitJob.value = scope.launch {
                             delay(currentItem.hoverCancelDurationMillis)
                             if (!isHovering.value) {
+                                currentItem.hoverActionListener.onHoverExit(currentItem)
                                 selectedItem.value = null
                                 currentItem.parentItemDynamicSize.value = currentItem.size
                             }

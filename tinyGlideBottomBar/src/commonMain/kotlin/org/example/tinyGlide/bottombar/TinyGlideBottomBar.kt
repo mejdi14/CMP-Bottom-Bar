@@ -86,12 +86,14 @@ fun TinyGlideBottomBar(
                         )
                         .hoverEffect { onHover ->
                             isHovering.value = onHover
+                            item.hoverActionListener.onHoverEnter(item)
                             if (onHover) {
                                 if (item.isSelectedItem(selectedItem.value)) {
                                     hoverExitJob.value?.cancel()
                                     hoverExitJob.value = null
                                 }
                                 selectedItem.value = item
+                                item.hoverActionListener.onHoverParentItem(item)
                                 item.parentItemDynamicSize.value =
                                     if (!item.isSelectedItem(selectedItem.value)) item.size else
                                         item.size * item.onSelectItemSizeChangeFriction
@@ -99,6 +101,7 @@ fun TinyGlideBottomBar(
                                 hoverExitJob.value = scope.launch {
                                     selectedItem.value = null
                                     item.parentItemDynamicSize.value = item.size
+                                    item.hoverActionListener.onHoverExit(item)
                                 }
                             }
                         }
