@@ -12,10 +12,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,22 +23,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInWindow
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import org.example.core.bottombar.BottomBarItem
 import org.example.tinyGlide.data.TinyGlideItem
 import org.example.tinyGlide.data.isSelectedItem
 import org.example.tinyGlide.helper.handleHoverAction
-import org.example.tinyGlide.listeners.ClickActionListener
-import org.jetbrains.compose.resources.painterResource
+import org.example.tinyGlide.listeners.TinyGlideActionListener
 
 
 @Composable
 fun TinyGlideBottomBar(
     bottomBarItems: List<TinyGlideItem>,
     parentModifier: Modifier,
-    onIconClick: (BottomBarItem) -> Unit
+    tinyGlideActionListener: TinyGlideActionListener
 ) {
     val selectedIndex = remember { mutableStateOf<Int?>(null) }
     val lazyListState = rememberLazyListState()
@@ -69,6 +63,7 @@ fun TinyGlideBottomBar(
                 IconButton(
                     onClick = {
                         item.clickActionListener.onItemClickListener()
+                        tinyGlideActionListener.onTinyGlideItemClickListener(item, index)
                         selectedIndex.value = index
                         selectedItem.value = if (selectedItem.value == item) null else item
                     },
@@ -111,7 +106,7 @@ fun TinyGlideBottomBar(
             hoverExitJob,
             isHovering,
             scope,
-            onIconClick
+            tinyGlideActionListener
         )
     }
 }

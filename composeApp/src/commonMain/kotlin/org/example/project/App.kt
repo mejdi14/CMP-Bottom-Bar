@@ -16,6 +16,7 @@ import org.example.core.bottombar.BottomBarIdentifier
 import org.example.project.items.homeItem
 import org.example.tinyGlide.bottombar.TinyGlideBottomBar
 import org.example.tinyGlide.data.TinyGlideItem
+import org.example.tinyGlide.listeners.TinyGlideActionListener
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 
@@ -41,9 +42,16 @@ fun App() {
                       TinyGlideItem( BottomBarIcon(Res.drawable.home_line), "Papers"),
                   )),
               )
-          TinyGlideBottomBar(bottomBarItems, Modifier.align(Alignment.BottomCenter)){
+          TinyGlideBottomBar(bottomBarItems, Modifier.align(Alignment.BottomCenter), tinyGlideActionListener = object : TinyGlideActionListener{
+              override fun onTinyGlideItemClickListener(item: TinyGlideItem, index: Int) {
+                  TODO("Not yet implemented")
+              }
 
-          }
+              override fun onSubItemClickListener(item: TinyGlideItem, index: Pair<Int, Int>) {
+                  TODO("Not yet implemented")
+              }
+
+          })
       }
     }
 }

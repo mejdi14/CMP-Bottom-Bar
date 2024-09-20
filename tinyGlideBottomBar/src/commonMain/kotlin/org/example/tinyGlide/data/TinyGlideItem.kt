@@ -67,6 +67,6 @@ val EmptyClickActionListener =
     object : ClickActionListener {
         override fun onItemClickListener(
         ) {
-
+            // Do nothing
         }
     }

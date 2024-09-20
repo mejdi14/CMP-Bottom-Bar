@@ -1,22 +1,13 @@
 package org.example.tinyGlide.bottombar
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyListState
@@ -38,12 +29,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.example.core.bottombar.BottomBarItem
 import org.example.tinyGlide.animation.getEnterTransition
 import org.example.tinyGlide.animation.getExitTransition
 import org.example.tinyGlide.data.TinyGlideItem
 import org.example.tinyGlide.data.isSelectedItem
 import org.example.tinyGlide.enum.AnimationType
+import org.example.tinyGlide.listeners.TinyGlideActionListener
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -55,7 +46,7 @@ internal fun SubItemsComposable(
     hoverExitJob: MutableState<Job?>,
     isHovering: MutableState<Boolean>,
     scope: CoroutineScope,
-    onIconClick: (BottomBarItem) -> Unit,
+    tinyGlideActionListener: TinyGlideActionListener,
     animationType: AnimationType = AnimationType.SCALE
 ) {
     val density = LocalDensity.current.density
@@ -113,8 +104,12 @@ internal fun SubItemsComposable(
                         )
                         IconButton(
                             onClick = {
+                                currentItem.clickActionListener.onItemClickListener()
                                 selectedIndex.value = index
-                                onIconClick(item)
+                                tinyGlideActionListener.onSubItemClickListener(
+                                    item,
+                                    Pair(selectedIndex.value ?: 0, index)
+                                )
                             },
                             modifier = Modifier
                                 .size(animatedParentWidth)
