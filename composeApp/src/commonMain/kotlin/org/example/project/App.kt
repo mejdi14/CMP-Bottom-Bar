@@ -44,11 +44,11 @@ fun App() {
               )
           TinyGlideBottomBar(bottomBarItems, Modifier.align(Alignment.BottomCenter), tinyGlideActionListener = object : TinyGlideActionListener{
               override fun onTinyGlideItemClickListener(item: TinyGlideItem, index: Int) {
-                  TODO("Not yet implemented")
+                  // nothing
               }
 
               override fun onSubItemClickListener(item: TinyGlideItem, index: Pair<Int, Int>) {
-                  TODO("Not yet implemented")
+
               }
 
           })
