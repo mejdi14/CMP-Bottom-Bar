@@ -25,11 +25,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInWindow
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.example.core.bottombar.BottomBarItem
 import org.example.tinyGlide.data.TinyGlideItem
 import org.example.tinyGlide.data.isSelectedItem
+import org.example.tinyGlide.helper.handleHoverAction
+import org.example.tinyGlide.listeners.ClickActionListener
 import org.jetbrains.compose.resources.painterResource
 
 
@@ -65,9 +68,9 @@ fun TinyGlideBottomBar(
                 )
                 IconButton(
                     onClick = {
-                        selectedIndex.value = if (selectedIndex.value == null) index else null
-                        onIconClick(item)
-                        selectedItem.value = if (selectedIndex.value == null) item else null
+                        item.clickActionListener.onItemClickListener()
+                        selectedIndex.value = index
+                        selectedItem.value = if (selectedItem.value == item) null else item
                     },
                     modifier = Modifier.size(animatedParentWidth).align(Alignment.Center)
                         .onGloballyPositioned { layoutCoordinates ->
@@ -85,25 +88,14 @@ fun TinyGlideBottomBar(
                             shape = item.itemShape
                         )
                         .hoverEffect { onHover ->
-                            isHovering.value = onHover
-                            item.hoverActionListener.onHoverEnter(item)
-                            if (onHover) {
-                                if (item.isSelectedItem(selectedItem.value)) {
-                                    hoverExitJob.value?.cancel()
-                                    hoverExitJob.value = null
-                                }
-                                selectedItem.value = item
-                                item.hoverActionListener.onHoverParentItem(item)
-                                item.parentItemDynamicSize.value =
-                                    if (!item.isSelectedItem(selectedItem.value)) item.size else
-                                        item.size * item.onSelectItemSizeChangeFriction
-                            } else {
-                                hoverExitJob.value = scope.launch {
-                                    selectedItem.value = null
-                                    item.parentItemDynamicSize.value = item.size
-                                    item.hoverActionListener.onHoverExit(item)
-                                }
-                            }
+                            handleHoverAction(
+                                isHovering,
+                                onHover,
+                                item,
+                                selectedItem,
+                                hoverExitJob,
+                                scope
+                            )
                         }
                 ) {
                     TinyGlideIcon(item, selectedItem, Modifier.align(Alignment.Center))
@@ -123,3 +115,6 @@ fun TinyGlideBottomBar(
         )
     }
 }
+
+
+

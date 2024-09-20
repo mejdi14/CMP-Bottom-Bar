@@ -14,5 +14,6 @@ abstract class BottomBarItem{
     abstract val itemShape: Shape
     abstract val icon: BottomBarIcon
     abstract val index: Int
+    abstract val disableClickIfAlreadySelected : Boolean
 }
 

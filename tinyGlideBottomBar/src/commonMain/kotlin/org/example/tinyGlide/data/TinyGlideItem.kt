@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import org.example.core.bottombar.BottomBarIcon
 import org.example.core.bottombar.BottomBarIdentifier
 import org.example.core.bottombar.BottomBarItem
+import org.example.tinyGlide.listeners.ClickActionListener
 import org.example.tinyGlide.listeners.HoverActionListener
 import org.jetbrains.compose.resources.DrawableResource
 
@@ -24,6 +25,7 @@ data class TinyGlideItem(
     override val selectedBackgroundColor: Color = unselectedBackgroundColor,
     override val itemShape: Shape = RoundedCornerShape(10.dp),
     override var index: Int = -1,
+    override val disableClickIfAlreadySelected: Boolean = true,
     val radius: Dp = 10.dp,
     val onSelectItemSizeChangeFriction: Float = 1.3f,
     val onSelectItemSizeChangeDurationMillis: Int = 300,
@@ -34,8 +36,8 @@ data class TinyGlideItem(
     val parentAndSubVerticalSeparationSpace: Dp = 10.dp,
     val marginForScreenSizeChanges: Float = 10f,
     var parentItemDynamicSize: MutableState<Dp> = mutableStateOf(size),
-    val hoverActionListener: HoverActionListener = EmptyHoverActionListener
-
+    val hoverActionListener: HoverActionListener = EmptyHoverActionListener,
+    val clickActionListener: ClickActionListener = EmptyClickActionListener
 ) : BottomBarItem()
 
 fun TinyGlideItem.isSelectedItem(selectedItem: TinyGlideItem?): Boolean {
@@ -59,3 +61,12 @@ val EmptyHoverActionListener = object : HoverActionListener {
         // Do nothing
     }
 }
+
+val EmptyClickActionListener =
+
+    object : ClickActionListener {
+        override fun onItemClickListener(
+        ) {
+
+        }
+    }
