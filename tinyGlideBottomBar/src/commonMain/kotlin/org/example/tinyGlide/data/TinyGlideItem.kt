@@ -3,18 +3,15 @@ package org.example.tinyGlide.data
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.example.core.bottombar.BottomBarIcon
-import org.example.core.bottombar.BottomBarIdentifier
 import org.example.core.bottombar.BottomBarItem
 import org.example.tinyGlide.listeners.ClickActionListener
 import org.example.tinyGlide.listeners.HoverActionListener
-import org.jetbrains.compose.resources.DrawableResource
 
 data class TinyGlideItem(
     override val icon: BottomBarIcon,

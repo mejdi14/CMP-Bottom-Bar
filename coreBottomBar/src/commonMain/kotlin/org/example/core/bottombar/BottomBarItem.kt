@@ -3,7 +3,6 @@ package org.example.core.bottombar
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
-import org.jetbrains.compose.resources.DrawableResource
 
 abstract class BottomBarItem{
     abstract val title: String

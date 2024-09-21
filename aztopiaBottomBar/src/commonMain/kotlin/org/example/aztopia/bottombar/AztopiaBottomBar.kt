@@ -24,7 +24,6 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInWindow
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Job
-import org.example.aztopia.bottombar.hoverEffect
 import org.example.aztopia.data.TinyGlideItem
 import org.example.aztopia.data.isSelectedItem
 import org.example.aztopia.helper.handleHoverAction
@@ -32,7 +31,7 @@ import org.example.aztopia.listeners.TinyGlideActionListener
 
 
 @Composable
-fun TinyGlideBottomBar(
+fun AztopiaBottomBar(
     bottomBarItems: List<TinyGlideItem>,
     parentModifier: Modifier,
     tinyGlideActionListener: TinyGlideActionListener
@@ -99,16 +98,7 @@ fun TinyGlideBottomBar(
                 Box(Modifier.width(item.itemSeparationSpace))
             }
         }
-        SubItemsComposable(
-            Modifier.align(Alignment.TopStart),
-            selectedItem,
-            selectedIndex,
-            lazyListState,
-            hoverExitJob,
-            isHovering,
-            scope,
-            tinyGlideActionListener
-        )
+      
     }
 }
 

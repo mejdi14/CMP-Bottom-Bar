@@ -4,7 +4,6 @@ import kmp_bottom_bar.composeapp.generated.resources.Res
 import kmp_bottom_bar.composeapp.generated.resources.home_line
 import kmp_bottom_bar.composeapp.generated.resources.papers
 import org.example.core.bottombar.BottomBarIcon
-import org.example.core.bottombar.BottomBarIdentifier
 import org.example.tinyGlide.data.TinyGlideItem
 
 val homeItem = TinyGlideItem(
