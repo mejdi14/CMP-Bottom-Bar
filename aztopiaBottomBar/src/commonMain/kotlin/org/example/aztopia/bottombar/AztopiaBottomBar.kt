@@ -98,9 +98,5 @@ fun AztopiaBottomBar(
                 Box(Modifier.width(item.itemSeparationSpace))
             }
         }
-      
     }
 }
-
-
-
