@@ -2,7 +2,9 @@ package org.example.tinyGlide.bottombar
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,7 +24,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
@@ -51,14 +55,12 @@ internal fun SubItemsComposable(
 ) {
     val density = LocalDensity.current.density
 
-    AnimatedVisibility(
-        visible = selectedItem.value != null,
-        enter = getEnterTransition(animationType),
-        exit = getExitTransition(animationType)
-    ) {
-        selectedItem.value?.let { currentItem ->
+
+    val currentItem = selectedItem.value
+
+
             Column(
-                modifier = Modifier
+                modifier = if(currentItem != null) Modifier
                     .offset(
                         x = ((currentItem.itemCoordinatesOffset?.x ?: 0f) / density).dp
                                 - (((currentItem.itemSeparationSpace * (currentItem.subTinyGlideItems.size * 2))
@@ -82,18 +84,25 @@ internal fun SubItemsComposable(
                                 }
                             }
                         }
-                    }
+                    } else Modifier
             ) {
+                AnimatedVisibility(
+                    visible = selectedItem.value != null,
+                    enter = getEnterTransition(animationType),
+                    exit = getExitTransition(animationType)
+                ) {
                 LazyRow(
                     state = lazyListState,
                     horizontalArrangement = Arrangement.Start,
                     verticalAlignment = Alignment.Bottom,
                     modifier = modifier
                         .offset(
-                            y = -currentItem.parentAndSubVerticalSeparationSpace
+                            y = -(currentItem?.parentAndSubVerticalSeparationSpace ?: 0.dp)
                         )
+
                 ) {
-                    itemsIndexed(currentItem.subTinyGlideItems) { index, item ->
+
+                    itemsIndexed(currentItem?.subTinyGlideItems ?: listOf()) { index, item ->
                         val parentItemDynamicSize by remember { mutableStateOf(item.size) }
                         val animatedParentWidth by animateDpAsState(
                             targetValue = parentItemDynamicSize,
@@ -102,35 +111,36 @@ internal fun SubItemsComposable(
                         Box(
                             Modifier.width(item.itemSeparationSpace)
                         )
-                        IconButton(
-                            onClick = {
-                                currentItem.clickActionListener.onItemClickListener()
-                                selectedIndex.value = index
-                                tinyGlideActionListener.onSubItemClickListener(
-                                    item,
-                                    Pair(selectedIndex.value ?: 0, index)
+
+                            IconButton(
+                                onClick = {
+                                    currentItem?.clickActionListener?.onItemClickListener()
+                                    selectedIndex.value = index
+                                    tinyGlideActionListener.onSubItemClickListener(
+                                        item,
+                                        Pair(selectedIndex.value ?: 0, index)
+                                    )
+                                },
+                                modifier = if(currentItem != null) Modifier
+                                    .size(animatedParentWidth)
+                                    .background(
+                                        color = if (currentItem.isSelectedItem(selectedItem.value))
+                                            currentItem.selectedBackgroundColor
+                                        else currentItem.unselectedBackgroundColor,
+                                        shape = currentItem.itemShape
+                                    ) else Modifier
+                            ) {
+                                Icon(
+                                    painter = painterResource(item.icon.selectedIconDrawable),
+                                    contentDescription = item.contentDescription,
+                                    tint = Color.White,
+                                    modifier = Modifier
                                 )
-                            },
-                            modifier = Modifier
-                                .size(animatedParentWidth)
-                                .background(
-                                    color = if (currentItem.isSelectedItem(selectedItem.value))
-                                        currentItem.selectedBackgroundColor
-                                    else currentItem.unselectedBackgroundColor,
-                                    shape = currentItem.itemShape
-                                )
-                        ) {
-                            Icon(
-                                painter = painterResource(item.icon.selectedIconDrawable),
-                                contentDescription = item.contentDescription,
-                                tint = Color.White,
-                                modifier = Modifier
-                            )
-                        }
+                            }
                         Box(Modifier.width(item.itemSeparationSpace))
                     }
                 }
             }
         }
     }
-}
+

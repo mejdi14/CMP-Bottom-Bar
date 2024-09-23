@@ -18,13 +18,15 @@ fun getEnterTransition(animationType: AnimationType): EnterTransition {
         AnimationType.FADE -> fadeIn(
             animationSpec = tween(durationMillis = 500)
         )
+
         AnimationType.SLIDE -> slideInVertically(
             initialOffsetY = { it },
             animationSpec = tween(durationMillis = 500)
         )
+
         AnimationType.SCALE -> scaleIn(
-            initialScale = 0.8f,
-            animationSpec = tween(durationMillis = 500)
+            initialScale = 0.4f,
+            animationSpec = tween(durationMillis = 300)
         )
     }
 }
@@ -35,13 +37,15 @@ fun getExitTransition(animationType: AnimationType): ExitTransition {
         AnimationType.FADE -> fadeOut(
             animationSpec = tween(durationMillis = 500)
         )
+
         AnimationType.SLIDE -> slideOutVertically(
             targetOffsetY = { it },
             animationSpec = tween(durationMillis = 500)
         )
+
         AnimationType.SCALE -> scaleOut(
-            targetScale = 0.8f,
-            animationSpec = tween(durationMillis = 500)
+            targetScale = 0.4f,
+            animationSpec = tween(durationMillis = 0)
         )
     }
 }
