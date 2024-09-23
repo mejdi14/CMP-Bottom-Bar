@@ -1,9 +1,11 @@
 package org.example.tinyGlide.bottombar
 
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import org.example.tinyGlide.data.TinyGlideItem
 import org.example.tinyGlide.data.isSelectedItem
 import org.jetbrains.compose.resources.painterResource
@@ -20,7 +22,7 @@ internal fun TinyGlideIcon(
                 painter = painterResource(item.icon.selectedIconDrawable),
                 contentDescription = item.icon.contentDescription,
                 tint = item.icon.selectedIconTint,
-                modifier = item.icon.modifier.then(modifier)
+                modifier = item.icon.modifier.then(modifier.size(item.size - item.icon.sizeDifferenceComparedToParent))
             )
         }
 
@@ -29,7 +31,7 @@ internal fun TinyGlideIcon(
                 painter = painterResource(item.icon.unselectedIconDrawable),
                 contentDescription = item.icon.contentDescription,
                 tint = item.icon.unselectedIconTint,
-                modifier = item.icon.modifier.then(modifier)
+                modifier = item.icon.modifier.then(modifier.size(item.size - item.icon.sizeDifferenceComparedToParent))
             )
         }
     }

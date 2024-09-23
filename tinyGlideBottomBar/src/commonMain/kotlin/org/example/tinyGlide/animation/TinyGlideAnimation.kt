@@ -25,7 +25,7 @@ fun getEnterTransition(animationType: AnimationType): EnterTransition {
         )
 
         AnimationType.SCALE -> scaleIn(
-            initialScale = 0.4f,
+            initialScale = 0.2f,
             animationSpec = tween(durationMillis = 300)
         )
     }

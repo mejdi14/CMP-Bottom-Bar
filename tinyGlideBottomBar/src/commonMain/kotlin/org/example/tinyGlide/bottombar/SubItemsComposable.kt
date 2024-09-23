@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyListState
@@ -54,93 +55,90 @@ internal fun SubItemsComposable(
     animationType: AnimationType = AnimationType.SCALE
 ) {
     val density = LocalDensity.current.density
-
-
     val currentItem = selectedItem.value
-
-
-            Column(
-                modifier = if(currentItem != null) Modifier
-                    .offset(
-                        x = ((currentItem.itemCoordinatesOffset?.x ?: 0f) / density).dp
-                                - (((currentItem.itemSeparationSpace * (currentItem.subTinyGlideItems.size * 2))
-                                + (currentItem.size * (currentItem.subTinyGlideItems.size))) / 2)
-                                + ((currentItem.size - (currentItem.itemSeparationSpace)) / 2),
-                        y = -currentItem.size
-                    )
-                    .hoverEffect { onHover ->
-                        isHovering.value = onHover
-                        if (onHover) {
-                            hoverExitJob.value?.cancel()
-                            hoverExitJob.value = null
-                            currentItem.hoverActionListener.onHoverEnter(currentItem)
-                        } else {
-                            hoverExitJob.value = scope.launch {
-                                delay(currentItem.hoverCancelDurationMillis)
-                                if (!isHovering.value) {
-                                    currentItem.hoverActionListener.onHoverExit(currentItem)
-                                    selectedItem.value = null
-                                    currentItem.parentItemDynamicSize.value = currentItem.size
-                                }
-                            }
+    Column(
+        modifier = if (currentItem != null) Modifier
+            .offset(
+                x = ((currentItem.itemCoordinatesOffset?.x ?: 0f) / density).dp
+                        - (((currentItem.itemSeparationSpace * (currentItem.subTinyGlideItems.size * 2))
+                        + (currentItem.size * (currentItem.subTinyGlideItems.size))) / 2)
+                        + ((currentItem.size - (currentItem.itemSeparationSpace)) / 2),
+                y = -currentItem.size
+            )
+            .hoverEffect { onHover ->
+                isHovering.value = onHover
+                if (onHover) {
+                    hoverExitJob.value?.cancel()
+                    hoverExitJob.value = null
+                    currentItem.hoverActionListener.onHoverEnter(currentItem)
+                } else {
+                    hoverExitJob.value = scope.launch {
+                        delay(currentItem.hoverCancelDurationMillis)
+                        if (!isHovering.value) {
+                            currentItem.hoverActionListener.onHoverExit(currentItem)
+                            selectedItem.value = null
+                            currentItem.parentItemDynamicSize.value = currentItem.size
                         }
-                    } else Modifier
-            ) {
-                AnimatedVisibility(
-                    visible = selectedItem.value != null,
-                    enter = getEnterTransition(animationType),
-                    exit = getExitTransition(animationType)
-                ) {
-                LazyRow(
-                    state = lazyListState,
-                    horizontalArrangement = Arrangement.Start,
-                    verticalAlignment = Alignment.Bottom,
-                    modifier = modifier
-                        .offset(
-                            y = -(currentItem?.parentAndSubVerticalSeparationSpace ?: 0.dp)
-                        )
-
-                ) {
-
-                    itemsIndexed(currentItem?.subTinyGlideItems ?: listOf()) { index, item ->
-                        val parentItemDynamicSize by remember { mutableStateOf(item.size) }
-                        val animatedParentWidth by animateDpAsState(
-                            targetValue = parentItemDynamicSize,
-                            animationSpec = tween(durationMillis = item.onSelectItemSizeChangeDurationMillis)
-                        )
-                        Box(
-                            Modifier.width(item.itemSeparationSpace)
-                        )
-
-                            IconButton(
-                                onClick = {
-                                    currentItem?.clickActionListener?.onItemClickListener()
-                                    selectedIndex.value = index
-                                    tinyGlideActionListener.onSubItemClickListener(
-                                        item,
-                                        Pair(selectedIndex.value ?: 0, index)
-                                    )
-                                },
-                                modifier = if(currentItem != null) Modifier
-                                    .size(animatedParentWidth)
-                                    .background(
-                                        color = if (currentItem.isSelectedItem(selectedItem.value))
-                                            currentItem.selectedBackgroundColor
-                                        else currentItem.unselectedBackgroundColor,
-                                        shape = currentItem.itemShape
-                                    ) else Modifier
-                            ) {
-                                Icon(
-                                    painter = painterResource(item.icon.selectedIconDrawable),
-                                    contentDescription = item.contentDescription,
-                                    tint = Color.White,
-                                    modifier = Modifier
-                                )
-                            }
-                        Box(Modifier.width(item.itemSeparationSpace))
                     }
+                }
+            } else Modifier
+    ) {
+        AnimatedVisibility(
+            visible = selectedItem.value != null,
+            enter = getEnterTransition(animationType),
+            exit = getExitTransition(animationType)
+        ) {
+            LazyRow(
+                state = lazyListState,
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.Bottom,
+                modifier = modifier
+                    .offset(
+                        y = -(currentItem?.parentAndSubVerticalSeparationSpace ?: 0.dp)
+                    )
+
+            ) {
+
+                itemsIndexed(currentItem?.subTinyGlideItems ?: listOf()) { index, item ->
+                    val parentItemDynamicSize by remember { mutableStateOf(item.size) }
+                    val animatedParentWidth by animateDpAsState(
+                        targetValue = parentItemDynamicSize,
+                        animationSpec = tween(durationMillis = item.onSelectItemSizeChangeDurationMillis)
+                    )
+                    Box(
+                        Modifier.width(item.itemSeparationSpace)
+                    )
+
+                    IconButton(
+                        onClick = {
+                            currentItem?.clickActionListener?.onItemClickListener()
+                            selectedIndex.value = index
+                            tinyGlideActionListener.onSubItemClickListener(
+                                item,
+                                Pair(selectedIndex.value ?: 0, index)
+                            )
+                        },
+                        modifier = if (currentItem != null) Modifier
+                            .size(animatedParentWidth)
+                            .background(
+                                color = if (currentItem.isSelectedItem(selectedItem.value))
+                                    currentItem.selectedBackgroundColor
+                                else currentItem.unselectedBackgroundColor,
+                                shape = currentItem.itemShape
+                            ) else Modifier
+                    ) {
+                        Icon(
+                            painter = if (currentItem?.isSelectedItem(selectedItem.value) != false) painterResource(
+                                item.icon.selectedIconDrawable
+                            ) else painterResource(item.icon.unselectedIconDrawable),
+                            contentDescription = item.contentDescription,
+                            tint = if (currentItem?.isSelectedItem(selectedItem.value) != false) item.icon.selectedIconTint else item.icon.unselectedIconTint,
+                            modifier = item.icon.modifier.then(Modifier.size(item.size - item.icon.sizeDifferenceComparedToParent))
+                        )
+                    }
+                    Box(Modifier.width(item.itemSeparationSpace))
                 }
             }
         }
     }
-
+}
