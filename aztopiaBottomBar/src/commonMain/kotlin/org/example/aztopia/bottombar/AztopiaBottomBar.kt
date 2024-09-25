@@ -8,6 +8,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -49,7 +50,9 @@ fun AztopiaBottomBar(
     val hoverExitJob = remember { mutableStateOf<Job?>(null) }
     val scope = rememberCoroutineScope()
     val isHovering = remember { mutableStateOf(false) }
-    Box(modifier = parentModifier.fillMaxWidth().height(100.dp).background(Color.Red)) {
+    BoxWithConstraints(modifier = parentModifier.fillMaxWidth().height(100.dp).background(Color.Red)) {
+        val parentMaxWidth = maxWidth
+        val parentMaxHeight = maxHeight
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = parentModifier.fillMaxWidth().height(70.dp)
@@ -80,43 +83,20 @@ fun AztopiaBottomBar(
         val density = LocalDensity.current
         val scope = rememberCoroutineScope()
 
-        val initialAngle = (PI / 2).toFloat()  // 90 degrees, 6 o'clock position
-        // Make sure Animatable values are not re-created on each recomposition
+        val initialAngle = (PI / 2).toFloat()
         val angles = remember {
             List(4) { Animatable(initialAngle) }
         }
 
         val circleSize: Dp = 60.dp
-        val radius: Float = with(density) { 60.dp.toPx() }
+        val radius: Float = with(density) { 20.dp.toPx() }
 
         val colors = listOf(Color.Black, Color.Green, Color.Yellow, Color.Magenta)
 
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
-                .clickable {
 
-                        // Flip the spreadOut state immediately to ensure the animation triggers on first click
-                        spreadOut.value = !spreadOut.value
-                        val targetAngles = if (spreadOut.value) {
-                            listOf(
-                                initialAngle,  // Black stays at 6 o'clock
-                                PI.toFloat(),  // Green moves to 9 o'clock
-                                (3 * PI / 2).toFloat(),  // Yellow moves to 12 o'clock
-                                (2 * PI).toFloat()  // Magenta moves to 3 o'clock
-                            )
-                        } else {
-                            List(4) { initialAngle }  // All return to 6 o'clock
-                        }
-                        angles.forEachIndexed { index, animatable ->
-                            scope.launch {
-                            animatable.animateTo(
-                                targetAngles[index],
-                                animationSpec = TweenSpec(durationMillis = 1000)
-                            )
-                        }
-                    }
-                }
         ) {
             angles.forEachIndexed { index, animatable ->
                 with(density) {
@@ -124,13 +104,35 @@ fun AztopiaBottomBar(
                     val y = sin(animatable.value) * radius
                     val offset = Offset(x, y)
                     Box(
-                        modifier = Modifier
+                        modifier = Modifier.align(Alignment.TopCenter)
                             .size(circleSize)
                             .offset(
-                                x = (offset.x.dp - circleSize / 2) + 100.dp,
-                                y = (offset.y.dp - circleSize / 2) -  100.dp
+                                x = (offset.x.dp - circleSize / 2) + (parentMaxWidth / 2),
+                                y = (offset.y.dp - circleSize / 2) - (parentMaxHeight / 2)
                             )
                             .background(colors[index], CircleShape)
+                            .clickable {
+
+                                spreadOut.value = !spreadOut.value
+                                val targetAngles = if (spreadOut.value) {
+                                    listOf(
+                                        initialAngle,
+                                        PI.toFloat(),
+                                        (3 * PI / 2).toFloat(),
+                                        (2 * PI).toFloat()
+                                    )
+                                } else {
+                                    List(4) { initialAngle }
+                                }
+                                angles.forEachIndexed { index, animatable ->
+                                    scope.launch {
+                                        animatable.animateTo(
+                                            targetAngles[index],
+                                            animationSpec = TweenSpec(durationMillis = 1000)
+                                        )
+                                    }
+                                }
+                            }
                     )
                 }
             }
