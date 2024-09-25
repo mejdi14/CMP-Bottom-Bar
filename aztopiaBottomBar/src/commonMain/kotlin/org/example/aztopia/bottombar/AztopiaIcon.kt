@@ -4,15 +4,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
-import org.example.aztopia.data.TinyGlideItem
+import org.example.aztopia.data.AztopiaItem
 import org.example.aztopia.data.isSelectedItem
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-internal fun TinyGlideIcon(
-    item: TinyGlideItem,
-    selectedItem: MutableState<TinyGlideItem?>,
-    modifier: Modifier
+internal fun AztopiaIcon(
+    item: AztopiaItem,
+    selectedItem: MutableState<AztopiaItem?>,
 ) {
     when (item.isSelectedItem(selectedItem.value)) {
         true -> {
@@ -20,7 +19,7 @@ internal fun TinyGlideIcon(
                 painter = painterResource(item.icon.selectedIconDrawable),
                 contentDescription = item.icon.contentDescription,
                 tint = item.icon.selectedIconTint,
-                modifier = item.icon.modifier.then(modifier)
+                modifier = item.icon.modifier
             )
         }
 
@@ -29,7 +28,7 @@ internal fun TinyGlideIcon(
                 painter = painterResource(item.icon.unselectedIconDrawable),
                 contentDescription = item.icon.contentDescription,
                 tint = item.icon.unselectedIconTint,
-                modifier = item.icon.modifier.then(modifier)
+                modifier = item.icon.modifier
             )
         }
     }

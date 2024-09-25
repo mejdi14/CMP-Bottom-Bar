@@ -1,102 +1,59 @@
 package org.example.aztopia.bottombar
 
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.layout.positionInWindow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Job
-import org.example.aztopia.data.TinyGlideItem
-import org.example.aztopia.data.isSelectedItem
-import org.example.aztopia.helper.handleHoverAction
-import org.example.aztopia.listeners.TinyGlideActionListener
+import org.example.aztopia.data.AztopiaItem
+import org.example.aztopia.listeners.AztopiaActionListener
 
 
 @Composable
 fun AztopiaBottomBar(
-    bottomBarItems: List<TinyGlideItem>,
+    bottomBarItems: List<AztopiaItem>,
     parentModifier: Modifier,
-    tinyGlideActionListener: TinyGlideActionListener
+    aztopiaActionListener: AztopiaActionListener
 ) {
     val selectedIndex = remember { mutableStateOf<Int?>(null) }
     val lazyListState = rememberLazyListState()
-    val selectedItem = remember { mutableStateOf<TinyGlideItem?>(null) }
+    val selectedItem = remember { mutableStateOf<AztopiaItem?>(null) }
     val hoverExitJob = remember { mutableStateOf<Job?>(null) }
     val scope = rememberCoroutineScope()
     val isHovering = remember { mutableStateOf(false) }
-    Box(
-        parentModifier.fillMaxWidth().padding(5.dp)
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = parentModifier.fillMaxWidth().height(60.dp)
     ) {
-        LazyRow(
-            state = lazyListState,
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.Bottom,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            itemsIndexed(bottomBarItems) { index, item ->
-                val animatedParentWidth by animateDpAsState(
-                    targetValue = item.parentItemDynamicSize.value,
-                    animationSpec = tween(durationMillis = item.onSelectItemSizeChangeDurationMillis)
-                )
-                item.index = index
-                Box(
-                    Modifier.width(item.itemSeparationSpace)
-                )
-                IconButton(
-                    onClick = {
-                        item.clickActionListener.onItemClickListener()
-                        tinyGlideActionListener.onTinyGlideItemClickListener(item, index)
-                        selectedIndex.value = index
-                        selectedItem.value = if (selectedItem.value == item) null else item
-                    },
-                    modifier = Modifier.size(animatedParentWidth).align(Alignment.Center)
-                        .onGloballyPositioned { layoutCoordinates ->
-                            if (item.itemCoordinatesOffset == null || (kotlin.math.abs(
-                                    (item.itemCoordinatesOffset?.x
-                                        ?: 0f) - layoutCoordinates.positionInWindow().x
-                                ) > item.marginForScreenSizeChanges)
-                            )
-                                item.itemCoordinatesOffset = layoutCoordinates.positionInWindow()
-                        }
-                        .background(
-                            color = if (item.isSelectedItem(selectedItem.value))
-                                item.selectedBackgroundColor
-                            else item.unselectedBackgroundColor,
-                            shape = item.itemShape
-                        )
-                        .hoverEffect { onHover ->
-                            handleHoverAction(
-                                isHovering,
-                                onHover,
-                                item,
-                                selectedItem,
-                                hoverExitJob,
-                                scope
-                            )
-                        }
-                ) {
-                    TinyGlideIcon(item, selectedItem, Modifier.align(Alignment.Center))
+        Row (horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.weight(1f).background(Color.Blue).fillMaxHeight()){
+            bottomBarItems.filterIndexed { index, _ -> index % 2 == 0 }
+                .forEach { item ->
+                    AztopiaIcon(item, selectedItem)
                 }
-                Box(Modifier.width(item.itemSeparationSpace))
-            }
+        }
+
+        Row (horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.weight(1f).fillMaxHeight()){
+            bottomBarItems.filterIndexed { index, _ -> index % 2 != 0 }
+                .forEach { item ->
+                    AztopiaIcon(item, selectedItem)
+                }
         }
     }
 }

@@ -13,7 +13,7 @@ import org.example.aztopia.listeners.HoverActionListener
 import org.example.core.bottombar.BottomBarIcon
 import org.example.core.bottombar.BottomBarItem
 
-data class TinyGlideItem(
+data class AztopiaItem(
     override val icon: BottomBarIcon,
     override val contentDescription: String,
     override val size: Dp = 50.dp,
@@ -28,7 +28,7 @@ data class TinyGlideItem(
     val onSelectItemSizeChangeDurationMillis: Int = 300,
     val hoverCancelDurationMillis: Long = 8,
     val itemSeparationSpace: Dp = 10.dp,
-    val subTinyGlideItems: List<TinyGlideItem> = listOf(),
+    val subAztopiaItems: List<AztopiaItem> = listOf(),
     var itemCoordinatesOffset: Offset? = null,
     val parentAndSubVerticalSeparationSpace: Dp = 10.dp,
     val marginForScreenSizeChanges: Float = 10f,
@@ -37,24 +37,24 @@ data class TinyGlideItem(
     val clickActionListener: ClickActionListener = EmptyClickActionListener
 ) : BottomBarItem()
 
-fun TinyGlideItem.isSelectedItem(selectedItem: TinyGlideItem?): Boolean {
+fun AztopiaItem.isSelectedItem(selectedItem: AztopiaItem?): Boolean {
     return this == selectedItem
 }
 
 val EmptyHoverActionListener = object : HoverActionListener {
-    override fun onHoverEnter(tinyGlideItem: TinyGlideItem) {
+    override fun onHoverEnter(aztopiaItem: AztopiaItem) {
         // Do nothing
     }
 
-    override fun onHoverExit(tinyGlideItem: TinyGlideItem) {
+    override fun onHoverExit(aztopiaItem: AztopiaItem) {
         // Do nothing
     }
 
-    override fun onHoverParentItem(tinyGlideItem: TinyGlideItem) {
+    override fun onHoverParentItem(aztopiaItem: AztopiaItem) {
         // Do nothing
     }
 
-    override fun onHoverSubItem(tinyGlideItem: TinyGlideItem) {
+    override fun onHoverSubItem(aztopiaItem: AztopiaItem) {
         // Do nothing
     }
 }

@@ -4,14 +4,14 @@ import androidx.compose.runtime.MutableState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import org.example.aztopia.data.TinyGlideItem
+import org.example.aztopia.data.AztopiaItem
 import org.example.aztopia.data.isSelectedItem
 
 internal fun handleHoverAction(
     isHovering: MutableState<Boolean>,
     onHover: Boolean,
-    item: TinyGlideItem,
-    selectedItem: MutableState<TinyGlideItem?>,
+    item: AztopiaItem,
+    selectedItem: MutableState<AztopiaItem?>,
     hoverExitJob: MutableState<Job?>,
     scope: CoroutineScope
 ) {
