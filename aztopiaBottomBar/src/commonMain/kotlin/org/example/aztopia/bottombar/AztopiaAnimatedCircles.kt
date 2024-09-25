@@ -1,6 +1,8 @@
 package org.example.aztopia.bottombar
 
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.SpringSpec
 import androidx.compose.animation.core.TweenSpec
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -8,6 +10,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.remember
@@ -19,7 +23,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import kmp_bottom_bar.aztopiabottombar.generated.resources.Res
+import kmp_bottom_bar.aztopiabottombar.generated.resources.close_icon
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.painterResource
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
@@ -38,8 +45,8 @@ internal fun AztopiaAnimatedCircles(
         List(4) { Animatable(initialAngle) }
     }
 
-    val circleSize: Dp = 60.dp
-    val radius: Float = with(density) { 20.dp.toPx() }
+    val circleSize: Dp = 70.dp
+    val radius: Float = with(density) { 22.dp.toPx() }
 
     val colors = listOf(Color.Black, Color.Green, Color.Yellow, Color.Magenta)
 
@@ -61,30 +68,48 @@ internal fun AztopiaAnimatedCircles(
                             y = (offset.y.dp - circleSize / 2) - (parentMaxHeight / 2)
                         )
                         .background(colors[index], CircleShape)
-                        .clickable {
 
-                            spreadOut.value = !spreadOut.value
-                            val targetAngles = if (spreadOut.value) {
-                                listOf(
-                                    initialAngle,
-                                    PI.toFloat(),
-                                    (3 * PI / 2).toFloat(),
-                                    (2 * PI).toFloat()
-                                )
-                            } else {
-                                List(4) { initialAngle }
-                            }
-                            angles.forEachIndexed { index, animatable ->
-                                scope.launch {
-                                    animatable.animateTo(
-                                        targetAngles[index],
-                                        animationSpec = TweenSpec(durationMillis = 1000)
-                                    )
-                                }
-                            }
-                        }
                 )
             }
         }
+    }
+    IconButton(
+        onClick = {
+            spreadOut.value = !spreadOut.value
+            val targetAngles = if (spreadOut.value) {
+                listOf(
+                    initialAngle,
+                    PI.toFloat(),
+                    (3 * PI / 2).toFloat(),
+                    (2 * PI).toFloat()
+                )
+            } else {
+                List(4) { initialAngle }
+            }
+            angles.forEachIndexed { index, animatable ->
+                scope.launch {
+                    animatable.animateTo(
+                        targetAngles[index],
+                        animationSpec = SpringSpec(
+                            dampingRatio = Spring.DampingRatioLowBouncy,
+                            stiffness = Spring.StiffnessLow,
+
+                            )
+                    )
+                }
+            }
+        },
+        modifier = Modifier
+            .size(circleSize)
+            .offset(
+                x = (parentMaxWidth / 2),
+                y = -(parentMaxHeight / 2)
+            )
+            .background(Color.Red)
+    ) {
+        Icon(
+            painter = painterResource(Res.drawable.close_icon),
+            contentDescription = "close icon"
+        )
     }
 }
