@@ -79,15 +79,15 @@ fun AztopiaBottomBar(
         }
         val density = LocalDensity.current
         val scope = rememberCoroutineScope()
-        val spreadOut = remember { mutableStateOf(false) }
 
-        // All circles start at 6 o'clock (PI / 2 radians)
-        val initialAngle = (PI / 2).toFloat()  // 90 degrees
-        val angles =
-            remember { List(4) { Animatable(initialAngle) } }  // Four angles for four circles
+        val initialAngle = (PI / 2).toFloat()  // 90 degrees, 6 o'clock position
+        // Make sure Animatable values are not re-created on each recomposition
+        val angles = remember {
+            List(4) { Animatable(initialAngle) }
+        }
 
         val circleSize: Dp = 60.dp
-        val radius: Float = with(density) { 60.dp.toPx() } // Convert radius to px for direct use
+        val radius: Float = with(density) { 60.dp.toPx() }
 
         val colors = listOf(Color.Black, Color.Green, Color.Yellow, Color.Magenta)
 
@@ -95,24 +95,26 @@ fun AztopiaBottomBar(
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .clickable {
-                    scope.launch {
+
+                        // Flip the spreadOut state immediately to ensure the animation triggers on first click
+                        spreadOut.value = !spreadOut.value
                         val targetAngles = if (spreadOut.value) {
                             listOf(
                                 initialAngle,  // Black stays at 6 o'clock
-                                (PI).toFloat(),  // Green moves to 9 o'clock
+                                PI.toFloat(),  // Green moves to 9 o'clock
                                 (3 * PI / 2).toFloat(),  // Yellow moves to 12 o'clock
-                                (PI * 2).toFloat()
-                            )  // Magenta moves to 3 o'clock
+                                (2 * PI).toFloat()  // Magenta moves to 3 o'clock
+                            )
                         } else {
                             List(4) { initialAngle }  // All return to 6 o'clock
                         }
                         angles.forEachIndexed { index, animatable ->
+                            scope.launch {
                             animatable.animateTo(
                                 targetAngles[index],
                                 animationSpec = TweenSpec(durationMillis = 1000)
                             )
                         }
-                        spreadOut.value = !spreadOut.value
                     }
                 }
         ) {
