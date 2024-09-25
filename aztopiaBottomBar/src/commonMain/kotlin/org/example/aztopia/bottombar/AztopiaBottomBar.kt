@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -50,7 +51,9 @@ fun AztopiaBottomBar(
     val hoverExitJob = remember { mutableStateOf<Job?>(null) }
     val scope = rememberCoroutineScope()
     val isHovering = remember { mutableStateOf(false) }
-    BoxWithConstraints(modifier = parentModifier.fillMaxWidth().height(100.dp).background(Color.Red)) {
+    BoxWithConstraints(
+        modifier = parentModifier.fillMaxWidth().height(100.dp).background(Color.Red)
+    ) {
         val parentMaxWidth = maxWidth
         val parentMaxHeight = maxHeight
         Row(
@@ -80,62 +83,6 @@ fun AztopiaBottomBar(
                     }
             }
         }
-        val density = LocalDensity.current
-        val scope = rememberCoroutineScope()
-
-        val initialAngle = (PI / 2).toFloat()
-        val angles = remember {
-            List(4) { Animatable(initialAngle) }
-        }
-
-        val circleSize: Dp = 60.dp
-        val radius: Float = with(density) { 20.dp.toPx() }
-
-        val colors = listOf(Color.Black, Color.Green, Color.Yellow, Color.Magenta)
-
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-
-        ) {
-            angles.forEachIndexed { index, animatable ->
-                with(density) {
-                    val x = cos(animatable.value) * radius
-                    val y = sin(animatable.value) * radius
-                    val offset = Offset(x, y)
-                    Box(
-                        modifier = Modifier.align(Alignment.TopCenter)
-                            .size(circleSize)
-                            .offset(
-                                x = (offset.x.dp - circleSize / 2) + (parentMaxWidth / 2),
-                                y = (offset.y.dp - circleSize / 2) - (parentMaxHeight / 2)
-                            )
-                            .background(colors[index], CircleShape)
-                            .clickable {
-
-                                spreadOut.value = !spreadOut.value
-                                val targetAngles = if (spreadOut.value) {
-                                    listOf(
-                                        initialAngle,
-                                        PI.toFloat(),
-                                        (3 * PI / 2).toFloat(),
-                                        (2 * PI).toFloat()
-                                    )
-                                } else {
-                                    List(4) { initialAngle }
-                                }
-                                angles.forEachIndexed { index, animatable ->
-                                    scope.launch {
-                                        animatable.animateTo(
-                                            targetAngles[index],
-                                            animationSpec = TweenSpec(durationMillis = 1000)
-                                        )
-                                    }
-                                }
-                            }
-                    )
-                }
-            }
-        }
+        AztopiaAnimatedCircles(parentMaxWidth, parentMaxHeight, spreadOut)
     }
 }
