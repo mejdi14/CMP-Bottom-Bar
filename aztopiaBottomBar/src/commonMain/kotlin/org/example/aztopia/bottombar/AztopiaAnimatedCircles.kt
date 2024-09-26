@@ -65,7 +65,7 @@ internal fun AztopiaAnimatedCircles(
                         .size(circleSize)
                         .offset(
                             x = (offset.x.dp - circleSize / 2) + (parentMaxWidth / 2),
-                            y = (offset.y.dp - circleSize / 2) - (parentMaxHeight / 2)
+                            y = (offset.y.dp - circleSize / 2) - (parentMaxHeight / 2) + (if(index != 3 && index != 0) ((15 - (index * 5)).dp) else 0.dp)
                         )
                         .background(colors[index], CircleShape)
 
@@ -102,10 +102,9 @@ internal fun AztopiaAnimatedCircles(
         modifier = Modifier
             .size(circleSize)
             .offset(
-                x = (parentMaxWidth / 2),
-                y = -(parentMaxHeight / 2)
+                x = (parentMaxWidth / 2) - (circleSize / 2),
+                y = -(parentMaxHeight / 2) + 20.dp
             )
-            .background(Color.Red)
     ) {
         Icon(
             painter = painterResource(Res.drawable.close_icon),
