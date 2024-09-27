@@ -2,11 +2,9 @@ package org.example.project.items
 
 import androidx.compose.ui.graphics.Color
 import kmp_bottom_bar.composeapp.generated.resources.Res
-import kmp_bottom_bar.composeapp.generated.resources.home_line
 import kmp_bottom_bar.composeapp.generated.resources.icon1
 import kmp_bottom_bar.composeapp.generated.resources.icon13
 import kmp_bottom_bar.composeapp.generated.resources.icon2
-import kmp_bottom_bar.composeapp.generated.resources.papers
 import org.example.core.bottombar.BottomBarIcon
 import org.example.tinyGlide.data.TinyGlideItem
 

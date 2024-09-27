@@ -3,9 +3,7 @@ package org.example.aztopia.bottombar
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.SpringSpec
-import androidx.compose.animation.core.TweenSpec
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
@@ -60,12 +58,14 @@ internal fun AztopiaAnimatedCircles(
                 val x = cos(animatable.value) * radius
                 val y = sin(animatable.value) * radius
                 val offset = Offset(x, y)
+                val additionalVerticalOffset =
+                    (if (index != 3 && index != 0 && !spreadOut.value) ((15 - (index * 5)).dp) else 0.dp)
                 Box(
                     modifier = Modifier.align(Alignment.TopCenter)
                         .size(circleSize)
                         .offset(
                             x = (offset.x.dp - circleSize / 2) + (parentMaxWidth / 2),
-                            y = (offset.y.dp - circleSize / 2) - (parentMaxHeight / 2) + (if(index != 3 && index != 0) ((15 - (index * 5)).dp) else 0.dp)
+                            y = (offset.y.dp - circleSize / 2) - (parentMaxHeight / 2) + additionalVerticalOffset
                         )
                         .background(colors[index], CircleShape)
 
