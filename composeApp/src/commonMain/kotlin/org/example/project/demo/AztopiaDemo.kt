@@ -37,6 +37,5 @@ fun AztopiaDemo(alignModifier: Modifier) {
             ) {
                 //TODO("Not yet implemented")
             }
-
         })
 }
