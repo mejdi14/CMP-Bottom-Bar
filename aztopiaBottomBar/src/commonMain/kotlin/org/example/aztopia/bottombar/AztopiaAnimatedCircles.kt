@@ -53,24 +53,23 @@ internal fun AztopiaAnimatedCircles(
         modifier = Modifier
 
     ) {
-        angles.forEachIndexed { index, animatable ->
-            with(density) {
-                val x = cos(animatable.value) * radius
-                val y = sin(animatable.value) * radius
-                val offset = Offset(x, y)
-                val additionalVerticalOffset =
-                    (if (index != 3 && index != 0 && !spreadOut.value) ((15 - (index * 5)).dp) else 0.dp)
-                Box(
-                    modifier = Modifier.align(Alignment.TopCenter)
-                        .size(circleSize)
-                        .offset(
-                            x = (offset.x.dp - circleSize / 2) + (parentMaxWidth / 2),
-                            y = (offset.y.dp - circleSize / 2) - (parentMaxHeight / 2) + additionalVerticalOffset
-                        )
-                        .background(colors[index], CircleShape)
 
-                )
-            }
+        angles.forEachIndexed { index, animatable ->
+            val x = cos(animatable.value) * radius
+            val y = sin(animatable.value) * radius
+            val offset = Offset(x, y)
+            val additionalVerticalOffset =
+                (if (index != 3 && index != 0 && !spreadOut.value) ((15 - (index * 5)).dp) else 0.dp)
+            Box(
+                modifier = Modifier.align(Alignment.TopCenter)
+                    .size(circleSize)
+                    .offset(
+                        x = (offset.x.dp - circleSize / 2) + (parentMaxWidth / 2),
+                        y = (offset.y.dp - circleSize / 2) - (parentMaxHeight / 2) + additionalVerticalOffset
+                    )
+                    .background(colors[index], CircleShape)
+
+            )
         }
     }
     IconButton(
