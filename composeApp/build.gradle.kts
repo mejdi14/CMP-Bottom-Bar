@@ -69,6 +69,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(project(":expandableBottomBar"))
             implementation(project(":tinyGlideBottomBar"))
+            implementation(project(":aztopiaBottomBar"))
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

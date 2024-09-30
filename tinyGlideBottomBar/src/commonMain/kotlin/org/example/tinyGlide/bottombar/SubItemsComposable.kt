@@ -22,7 +22,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
@@ -50,85 +49,88 @@ internal fun SubItemsComposable(
     animationType: AnimationType = AnimationType.SCALE
 ) {
     val density = LocalDensity.current.density
-
-    AnimatedVisibility(
-        visible = selectedItem.value != null,
-        enter = getEnterTransition(animationType),
-        exit = getExitTransition(animationType)
+    val currentItem = selectedItem.value
+    Column(
+        modifier = if (currentItem != null) Modifier
+            .offset(
+                x = ((currentItem.itemCoordinatesOffset?.x ?: 0f) / density).dp
+                        - (((currentItem.itemSeparationSpace * (currentItem.subTinyGlideItems.size * 2))
+                        + (currentItem.size * (currentItem.subTinyGlideItems.size))) / 2)
+                        + ((currentItem.size - (currentItem.itemSeparationSpace)) / 2),
+                y = -currentItem.size
+            )
+            .hoverEffect { onHover ->
+                isHovering.value = onHover
+                if (onHover) {
+                    hoverExitJob.value?.cancel()
+                    hoverExitJob.value = null
+                    currentItem.hoverActionListener.onHoverEnter(currentItem)
+                } else {
+                    hoverExitJob.value = scope.launch {
+                        delay(currentItem.hoverCancelDurationMillis)
+                        if (!isHovering.value) {
+                            currentItem.hoverActionListener.onHoverExit(currentItem)
+                            selectedItem.value = null
+                            currentItem.parentItemDynamicSize.value = currentItem.size
+                        }
+                    }
+                }
+            } else Modifier
     ) {
-        selectedItem.value?.let { currentItem ->
-            Column(
-                modifier = Modifier
+        AnimatedVisibility(
+            visible = selectedItem.value != null,
+            enter = getEnterTransition(animationType),
+            exit = getExitTransition(animationType)
+        ) {
+            LazyRow(
+                state = lazyListState,
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.Bottom,
+                modifier = modifier
                     .offset(
-                        x = ((currentItem.itemCoordinatesOffset?.x ?: 0f) / density).dp
-                                - (((currentItem.itemSeparationSpace * (currentItem.subTinyGlideItems.size * 2))
-                                + (currentItem.size * (currentItem.subTinyGlideItems.size))) / 2)
-                                + ((currentItem.size - (currentItem.itemSeparationSpace)) / 2),
-                        y = -currentItem.size
+                        y = -(currentItem?.parentAndSubVerticalSeparationSpace ?: 0.dp)
                     )
-                    .hoverEffect { onHover ->
-                        isHovering.value = onHover
-                        if (onHover) {
-                            hoverExitJob.value?.cancel()
-                            hoverExitJob.value = null
-                            currentItem.hoverActionListener.onHoverEnter(currentItem)
-                        } else {
-                            hoverExitJob.value = scope.launch {
-                                delay(currentItem.hoverCancelDurationMillis)
-                                if (!isHovering.value) {
-                                    currentItem.hoverActionListener.onHoverExit(currentItem)
-                                    selectedItem.value = null
-                                    currentItem.parentItemDynamicSize.value = currentItem.size
-                                }
-                            }
-                        }
-                    }
+
             ) {
-                LazyRow(
-                    state = lazyListState,
-                    horizontalArrangement = Arrangement.Start,
-                    verticalAlignment = Alignment.Bottom,
-                    modifier = modifier
-                        .offset(
-                            y = -currentItem.parentAndSubVerticalSeparationSpace
-                        )
-                ) {
-                    itemsIndexed(currentItem.subTinyGlideItems) { index, item ->
-                        val parentItemDynamicSize by remember { mutableStateOf(item.size) }
-                        val animatedParentWidth by animateDpAsState(
-                            targetValue = parentItemDynamicSize,
-                            animationSpec = tween(durationMillis = item.onSelectItemSizeChangeDurationMillis)
-                        )
-                        Box(
-                            Modifier.width(item.itemSeparationSpace)
-                        )
-                        IconButton(
-                            onClick = {
-                                currentItem.clickActionListener.onItemClickListener()
-                                selectedIndex.value = index
-                                tinyGlideActionListener.onSubItemClickListener(
-                                    item,
-                                    Pair(selectedIndex.value ?: 0, index)
-                                )
-                            },
-                            modifier = Modifier
-                                .size(animatedParentWidth)
-                                .background(
-                                    color = if (currentItem.isSelectedItem(selectedItem.value))
-                                        currentItem.selectedBackgroundColor
-                                    else currentItem.unselectedBackgroundColor,
-                                    shape = currentItem.itemShape
-                                )
-                        ) {
-                            Icon(
-                                painter = painterResource(item.icon.selectedIconDrawable),
-                                contentDescription = item.contentDescription,
-                                tint = Color.White,
-                                modifier = Modifier
+
+                itemsIndexed(currentItem?.subTinyGlideItems ?: listOf()) { index, item ->
+                    val parentItemDynamicSize by remember { mutableStateOf(item.size) }
+                    val animatedParentWidth by animateDpAsState(
+                        targetValue = parentItemDynamicSize,
+                        animationSpec = tween(durationMillis = item.onSelectItemSizeChangeDurationMillis)
+                    )
+                    Box(
+                        Modifier.width(item.itemSeparationSpace)
+                    )
+
+                    IconButton(
+                        onClick = {
+                            currentItem?.clickActionListener?.onItemClickListener()
+                            selectedIndex.value = index
+                            tinyGlideActionListener.onSubItemClickListener(
+                                item,
+                                Pair(selectedIndex.value ?: 0, index)
                             )
-                        }
-                        Box(Modifier.width(item.itemSeparationSpace))
+                        },
+                        modifier = if (currentItem != null) Modifier
+                            .size(animatedParentWidth)
+                            .background(
+                                color = if (currentItem.isSelectedItem(selectedItem.value))
+                                    currentItem.selectedBackgroundColor
+                                else currentItem.unselectedBackgroundColor,
+                                shape = currentItem.itemShape
+                            ) else Modifier
+                    ) {
+                        Icon(
+                            painter = if (currentItem?.isSelectedItem(selectedItem.value) != false) painterResource(
+                                item.icon.selectedIconDrawable
+                            ) else painterResource(item.icon.unselectedIconDrawable),
+                            contentDescription = item.contentDescription,
+                            tint = if (currentItem?.isSelectedItem(selectedItem.value) != false) item.icon.selectedIconTint else item.icon.unselectedIconTint,
+                            modifier = item.icon.modifier.then(Modifier.size(item.size - item.icon.sizeDifferenceComparedToParent))
+                        )
                     }
+                    Box(Modifier.width(item.itemSeparationSpace))
                 }
             }
         }
