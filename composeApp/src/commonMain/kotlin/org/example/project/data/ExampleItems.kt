@@ -2,6 +2,7 @@ package org.example.project.data
 
 import androidx.compose.ui.graphics.Color
 import kmp_bottom_bar.composeapp.generated.resources.Res
+import kmp_bottom_bar.composeapp.generated.resources.home_line
 import kmp_bottom_bar.composeapp.generated.resources.icon10
 import kmp_bottom_bar.composeapp.generated.resources.icon11
 import kmp_bottom_bar.composeapp.generated.resources.icon12
@@ -51,7 +52,7 @@ val bottomBarItems =
 
 val aztopiaItems = listOf(
     AztopiaItem(
-        BottomBarIcon(Res.drawable.papers, unselectedIconTint = Color.Black), "Papers",
+        BottomBarIcon(Res.drawable.home_line, unselectedIconTint = Color.Black), "Papers",
         unselectedBackgroundColor = Color(0xFFE6D9A2),),
     AztopiaItem(
         BottomBarIcon(Res.drawable.menu_meatballs, unselectedIconTint = Color.Black), "Papers",

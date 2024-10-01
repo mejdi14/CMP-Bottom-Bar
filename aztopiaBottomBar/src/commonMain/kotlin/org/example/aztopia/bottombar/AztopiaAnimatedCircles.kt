@@ -7,6 +7,9 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.SpringSpec
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.indication
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
@@ -28,6 +31,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kmp_bottom_bar.aztopiabottombar.generated.resources.Res
+import kmp_bottom_bar.aztopiabottombar.generated.resources.calendar_day
 import kmp_bottom_bar.aztopiabottombar.generated.resources.close_icon
 import kmp_bottom_bar.aztopiabottombar.generated.resources.home_line
 import kmp_bottom_bar.aztopiabottombar.generated.resources.open_reader
@@ -69,7 +73,7 @@ internal fun AztopiaAnimatedCircles(
     val radius: Float = with(density) { 22.dp.toPx() }
 
     val colors = listOf(Color(0xFFFFFFFF), Color(0xFFEA686C), Color(0xFFC66CAD), Color(0xFF631beb))
-    val icons = listOf(null, Res.drawable.home_line, Res.drawable.papers, Res.drawable.open_reader)
+    val icons = listOf(null, Res.drawable.calendar_day, Res.drawable.papers, Res.drawable.open_reader)
 
     Box(
         contentAlignment = Alignment.Center,
@@ -109,23 +113,26 @@ internal fun AztopiaAnimatedCircles(
             }
         }
     }
-    IconButton(
-        onClick = {
-            handleSpreadOutAnimation(spreadOut, initialAngle, angles, scope)
-        },
+    Box(
         modifier = Modifier
             .size(circleSize + 10.dp)
             .offset(
                 x = (parentMaxWidth / 2) - (circleSize / 2),
                 y = -(parentMaxHeight / 2) + 20.dp
-            )
-    ) {
+            ),
+
+        ) {
         Icon(
             painter = painterResource(Res.drawable.the_plus_icon),
             tint = plusIconColorAnimation.value,
             contentDescription = "close icon",
             modifier = Modifier
+                .align(Alignment.Center)
                 .size(circleSize / 2)
+                .clickable(interactionSource = remember { MutableInteractionSource() },
+                    indication = null){
+                    handleSpreadOutAnimation(spreadOut, initialAngle, angles, scope)
+                }
                 .rotate(plusIconRotation.value)
 
         )
