@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,15 +30,12 @@ fun AztopiaBottomBar(
     parentModifier: Modifier,
     aztopiaActionListener: AztopiaActionListener
 ) {
-    var spreadOut = remember { mutableStateOf(false) }
-    val selectedIndex = remember { mutableStateOf<Int?>(null) }
-    val lazyListState = rememberLazyListState()
+    val spreadOut = remember { mutableStateOf(false) }
     val selectedItem = remember { mutableStateOf<AztopiaItem?>(null) }
-    val hoverExitJob = remember { mutableStateOf<Job?>(null) }
-    val scope = rememberCoroutineScope()
-    val isHovering = remember { mutableStateOf(false) }
     BoxWithConstraints(
-        modifier = parentModifier.fillMaxWidth().height(100.dp).background(Color.Red)
+        modifier = parentModifier.fillMaxWidth().height(100.dp)
+            .background(Color.Red, shape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
+
     ) {
         val parentMaxWidth = maxWidth
         val parentMaxHeight = maxHeight
