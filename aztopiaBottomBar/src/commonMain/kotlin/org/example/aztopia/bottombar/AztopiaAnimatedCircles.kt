@@ -59,7 +59,7 @@ internal fun AztopiaAnimatedCircles(
         if (spreadOut.value) 45f else 0f
     )
     val plusIconColorAnimation = animateColorAsState(
-        if (spreadOut.value) Color.White else Color.Black
+        if (spreadOut.value) Color.Black else Color.White
     )
     val bonusIconsScale = animateFloatAsState(
         if (spreadOut.value) 1f else 0f
@@ -68,7 +68,7 @@ internal fun AztopiaAnimatedCircles(
     val circleSize: Dp = 70.dp
     val radius: Float = with(density) { 22.dp.toPx() }
 
-    val colors = listOf(Color(0xFF000000), Color(0xFFEA686C), Color(0xFFC66CAD), Color(0xFF631beb))
+    val colors = listOf(Color(0xFFFFFFFF), Color(0xFFEA686C), Color(0xFFC66CAD), Color(0xFF631beb))
     val icons = listOf(null, Res.drawable.home_line, Res.drawable.papers, Res.drawable.open_reader)
 
     Box(

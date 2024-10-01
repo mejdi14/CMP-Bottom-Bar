@@ -34,7 +34,7 @@ fun AztopiaBottomBar(
     val selectedItem = remember { mutableStateOf<AztopiaItem?>(null) }
     BoxWithConstraints(
         modifier = parentModifier.fillMaxWidth().height(100.dp)
-            .background(Color.Red, shape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
+            .background(Color.White, shape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
 
     ) {
         val parentMaxWidth = maxWidth
@@ -45,8 +45,8 @@ fun AztopiaBottomBar(
         ) {
             Row(
                 horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.weight(1f).background(Color.Blue).fillMaxHeight()
+                verticalAlignment = Alignment.Top,
+                modifier = Modifier.weight(1f).fillMaxHeight()
             ) {
                 bottomBarItems.filterIndexed { index, _ -> index % 2 == 0 }
                     .forEach { item ->
@@ -57,7 +57,7 @@ fun AztopiaBottomBar(
             Spacer(Modifier.width(60.dp))
             Row(
                 horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically,
+                verticalAlignment = Alignment.Top,
                 modifier = Modifier.weight(1f).fillMaxHeight()
             ) {
                 bottomBarItems.filterIndexed { index, _ -> index % 2 != 0 }

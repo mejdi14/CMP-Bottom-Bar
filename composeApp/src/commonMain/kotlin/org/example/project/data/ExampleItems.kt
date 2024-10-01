@@ -12,6 +12,8 @@ import kmp_bottom_bar.composeapp.generated.resources.icon6
 import kmp_bottom_bar.composeapp.generated.resources.icon7
 import kmp_bottom_bar.composeapp.generated.resources.icon8
 import kmp_bottom_bar.composeapp.generated.resources.icon9
+import kmp_bottom_bar.composeapp.generated.resources.menu_meatballs
+import kmp_bottom_bar.composeapp.generated.resources.papers
 import org.example.aztopia.data.AztopiaItem
 import org.example.core.bottombar.BottomBarIcon
 import org.example.project.items.homeItem
@@ -49,15 +51,10 @@ val bottomBarItems =
 
 val aztopiaItems = listOf(
     AztopiaItem(
-        BottomBarIcon(Res.drawable.icon3), "Papers",
+        BottomBarIcon(Res.drawable.papers, unselectedIconTint = Color.Black), "Papers",
         unselectedBackgroundColor = Color(0xFFE6D9A2),),
     AztopiaItem(
-        BottomBarIcon(Res.drawable.icon3), "Papers",
+        BottomBarIcon(Res.drawable.menu_meatballs, unselectedIconTint = Color.Black), "Papers",
         unselectedBackgroundColor = Color(0xFFE6D9A2),),
-    AztopiaItem(
-        BottomBarIcon(Res.drawable.icon3), "Papers",
-        unselectedBackgroundColor = Color(0xFFE6D9A2),),
-    AztopiaItem(
-        BottomBarIcon(Res.drawable.icon3), "Papers",
-        unselectedBackgroundColor = Color(0xFFE6D9A2),),
+
 )
