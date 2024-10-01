@@ -55,21 +55,21 @@ internal fun AztopiaAnimatedCircles(
         List(4) { Animatable(initialAngle) }
     }
 
-   val plusIconRotation = animateFloatAsState(
-       if(spreadOut.value) 45f else 0f
-   )
+    val plusIconRotation = animateFloatAsState(
+        if (spreadOut.value) 45f else 0f
+    )
     val plusIconColorAnimation = animateColorAsState(
-        if(spreadOut.value) Color.White else Color.Black
+        if (spreadOut.value) Color.White else Color.Black
     )
     val bonusIconsScale = animateFloatAsState(
-        if(spreadOut.value) 1f else 0f
+        if (spreadOut.value) 1f else 0f
     )
 
     val circleSize: Dp = 70.dp
     val radius: Float = with(density) { 22.dp.toPx() }
 
     val colors = listOf(Color(0xFF000000), Color(0xFFEA686C), Color(0xFFC66CAD), Color(0xFF631beb))
-    val icons = listOf(Res.drawable.open_reader, Res.drawable.home_line, Res.drawable.papers, Res.drawable.open_reader,)
+    val icons = listOf(null, Res.drawable.home_line, Res.drawable.papers, Res.drawable.open_reader)
 
     Box(
         contentAlignment = Alignment.Center,
@@ -82,28 +82,30 @@ internal fun AztopiaAnimatedCircles(
             val y = sin(animatable.value) * radius
             val offset = Offset(x, y)
             val additionalVerticalOffset =
-                (if ( index != 0 && !spreadOut.value) ((20 - (index * 5)).dp) else 0.dp)
+                (if (index != 0 && !spreadOut.value) ((20 - (index * 5)).dp) else 0.dp)
             Box(
                 modifier = Modifier.align(Alignment.TopCenter)
-                    .size(if(index == 0) circleSize + 10.dp else circleSize)
+                    .size(if (index == 0) circleSize + 10.dp else circleSize)
                     .offset(
                         x = (offset.x.dp - circleSize / 2) + (parentMaxWidth / 2),
                         y = (offset.y.dp - circleSize / 2) - (parentMaxHeight / 2) + additionalVerticalOffset
                     )
                     .background(colors[index], CircleShape)
 
-            ){
-                Icon(
-                    painter = painterResource(icons[index]),
-                    contentDescription = "close icon",
-                    tint = Color.White,
-                    modifier = Modifier
-                        .align(Alignment.Center)
-                        .size(circleSize / 3)
-                        .scale(bonusIconsScale.value)
+            ) {
+                icons[index]?.let {
+                    Icon(
+                        painter = painterResource(it),
+                        contentDescription = "close icon",
+                        tint = Color.White,
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .size(circleSize / 3)
+                            .scale(bonusIconsScale.value)
 
 
-                )
+                    )
+                }
             }
         }
     }
