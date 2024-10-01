@@ -1,8 +1,10 @@
 package org.example.aztopia.bottombar
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.SpringSpec
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
@@ -16,13 +18,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kmp_bottom_bar.aztopiabottombar.generated.resources.Res
 import kmp_bottom_bar.aztopiabottombar.generated.resources.close_icon
+import kmp_bottom_bar.aztopiabottombar.generated.resources.home_line
+import kmp_bottom_bar.aztopiabottombar.generated.resources.open_reader
+import kmp_bottom_bar.aztopiabottombar.generated.resources.papers
+import kmp_bottom_bar.aztopiabottombar.generated.resources.the_plus_icon
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import kotlin.math.PI
@@ -43,10 +52,21 @@ internal fun AztopiaAnimatedCircles(
         List(4) { Animatable(initialAngle) }
     }
 
+   val plusIconRotation = animateFloatAsState(
+       if(spreadOut.value) 45f else 0f
+   )
+    val plusIconColorAnimation = animateColorAsState(
+        if(spreadOut.value) Color.White else Color.Black
+    )
+    val bonusIconsScale = animateFloatAsState(
+        if(spreadOut.value) 1f else 0f
+    )
+
     val circleSize: Dp = 70.dp
     val radius: Float = with(density) { 22.dp.toPx() }
 
     val colors = listOf(Color.Black, Color.Green, Color.Yellow, Color.Magenta)
+    val icons = listOf(Res.drawable.open_reader, Res.drawable.home_line, Res.drawable.papers, Res.drawable.open_reader,)
 
     Box(
         contentAlignment = Alignment.Center,
@@ -69,7 +89,18 @@ internal fun AztopiaAnimatedCircles(
                     )
                     .background(colors[index], CircleShape)
 
-            )
+            ){
+                Icon(
+                    painter = painterResource(icons[index]),
+                    contentDescription = "close icon",
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .size(circleSize / 3)
+                        .scale(bonusIconsScale.value)
+
+
+                )
+            }
         }
     }
     IconButton(
@@ -106,8 +137,13 @@ internal fun AztopiaAnimatedCircles(
             )
     ) {
         Icon(
-            painter = painterResource(Res.drawable.close_icon),
-            contentDescription = "close icon"
+            painter = painterResource(Res.drawable.the_plus_icon),
+            tint = plusIconColorAnimation.value,
+            contentDescription = "close icon",
+            modifier = Modifier
+                .size(circleSize / 2)
+                .rotate(plusIconRotation.value)
+
         )
     }
 }
