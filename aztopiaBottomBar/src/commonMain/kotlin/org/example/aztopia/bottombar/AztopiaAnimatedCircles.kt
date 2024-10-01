@@ -2,6 +2,7 @@ package org.example.aztopia.bottombar
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.SpringSpec
 import androidx.compose.animation.core.animateFloatAsState
@@ -32,7 +33,9 @@ import kmp_bottom_bar.aztopiabottombar.generated.resources.home_line
 import kmp_bottom_bar.aztopiabottombar.generated.resources.open_reader
 import kmp_bottom_bar.aztopiabottombar.generated.resources.papers
 import kmp_bottom_bar.aztopiabottombar.generated.resources.the_plus_icon
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.example.aztopia.animation.handleSpreadOutAnimation
 import org.jetbrains.compose.resources.painterResource
 import kotlin.math.PI
 import kotlin.math.cos
@@ -65,7 +68,7 @@ internal fun AztopiaAnimatedCircles(
     val circleSize: Dp = 70.dp
     val radius: Float = with(density) { 22.dp.toPx() }
 
-    val colors = listOf(Color.Black, Color.Green, Color.Yellow, Color.Magenta)
+    val colors = listOf(Color(0xFF000000), Color(0xFFEA686C), Color(0xFFC66CAD), Color(0xFF631beb))
     val icons = listOf(Res.drawable.open_reader, Res.drawable.home_line, Res.drawable.papers, Res.drawable.open_reader,)
 
     Box(
@@ -79,10 +82,10 @@ internal fun AztopiaAnimatedCircles(
             val y = sin(animatable.value) * radius
             val offset = Offset(x, y)
             val additionalVerticalOffset =
-                (if (index != 3 && index != 0 && !spreadOut.value) ((15 - (index * 5)).dp) else 0.dp)
+                (if ( index != 0 && !spreadOut.value) ((20 - (index * 5)).dp) else 0.dp)
             Box(
                 modifier = Modifier.align(Alignment.TopCenter)
-                    .size(circleSize)
+                    .size(if(index == 0) circleSize + 10.dp else circleSize)
                     .offset(
                         x = (offset.x.dp - circleSize / 2) + (parentMaxWidth / 2),
                         y = (offset.y.dp - circleSize / 2) - (parentMaxHeight / 2) + additionalVerticalOffset
@@ -93,6 +96,7 @@ internal fun AztopiaAnimatedCircles(
                 Icon(
                     painter = painterResource(icons[index]),
                     contentDescription = "close icon",
+                    tint = Color.White,
                     modifier = Modifier
                         .align(Alignment.Center)
                         .size(circleSize / 3)
@@ -105,32 +109,10 @@ internal fun AztopiaAnimatedCircles(
     }
     IconButton(
         onClick = {
-            spreadOut.value = !spreadOut.value
-            val targetAngles = if (spreadOut.value) {
-                listOf(
-                    initialAngle,
-                    PI.toFloat(),
-                    (3 * PI / 2).toFloat(),
-                    (2 * PI).toFloat()
-                )
-            } else {
-                List(4) { initialAngle }
-            }
-            angles.forEachIndexed { index, animatable ->
-                scope.launch {
-                    animatable.animateTo(
-                        targetAngles[index],
-                        animationSpec = SpringSpec(
-                            dampingRatio = Spring.DampingRatioLowBouncy,
-                            stiffness = Spring.StiffnessLow,
-
-                            )
-                    )
-                }
-            }
+            handleSpreadOutAnimation(spreadOut, initialAngle, angles, scope)
         },
         modifier = Modifier
-            .size(circleSize)
+            .size(circleSize + 10.dp)
             .offset(
                 x = (parentMaxWidth / 2) - (circleSize / 2),
                 y = -(parentMaxHeight / 2) + 20.dp
