@@ -5,7 +5,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 
 abstract class BottomBarItem{
-    abstract val title: String
+    abstract val title: BottomBarTitle
     abstract val size : Dp
     abstract val contentDescription: String
     abstract val unselectedBackgroundColor: Color
@@ -14,5 +14,6 @@ abstract class BottomBarItem{
     abstract val icon: BottomBarIcon
     abstract val index: Int
     abstract val disableClickIfAlreadySelected : Boolean
+    abstract val withTitleShown : Boolean
 }
 

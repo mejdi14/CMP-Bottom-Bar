@@ -24,21 +24,22 @@ import org.example.aztopia.listeners.AztopiaActionListener
 @Composable
 fun AztopiaBottomBar(
     bottomBarItems: List<AztopiaItem>,
-    parentModifier: Modifier,
+    baseModifier: Modifier,
     aztopiaActionListener: AztopiaActionListener
 ) {
     val spreadOut = remember { mutableStateOf(false) }
     val selectedItem = remember { mutableStateOf<AztopiaItem?>(null) }
     BoxWithConstraints(
-        modifier = parentModifier.fillMaxWidth().height(100.dp)
+        modifier = Modifier.fillMaxWidth().height(100.dp)
             .background(Color.White, shape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
+            .then(baseModifier)
 
     ) {
         val parentMaxWidth = maxWidth
         val parentMaxHeight = maxHeight
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = parentModifier.fillMaxWidth().height(70.dp)
+            modifier = baseModifier.fillMaxWidth().height(parentMaxHeight - 30.dp)
         ) {
             Row(
                 horizontalArrangement = Arrangement.SpaceEvenly,

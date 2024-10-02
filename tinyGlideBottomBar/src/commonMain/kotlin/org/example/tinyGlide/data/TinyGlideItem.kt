@@ -10,6 +10,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.example.core.bottombar.BottomBarIcon
 import org.example.core.bottombar.BottomBarItem
+import org.example.core.bottombar.BottomBarTitle
 import org.example.tinyGlide.listeners.ClickActionListener
 import org.example.tinyGlide.listeners.HoverActionListener
 
@@ -17,7 +18,7 @@ data class TinyGlideItem(
     override val icon: BottomBarIcon,
     override val contentDescription: String,
     override val size: Dp = 50.dp,
-    override val title: String = "options",
+    override val title: BottomBarTitle,
     override val unselectedBackgroundColor: Color = Color.Blue,
     override val selectedBackgroundColor: Color = unselectedBackgroundColor,
     override val itemShape: Shape = RoundedCornerShape(10.dp),
@@ -36,6 +37,9 @@ data class TinyGlideItem(
     val hoverActionListener: HoverActionListener = EmptyHoverActionListener,
     val clickActionListener: ClickActionListener = EmptyClickActionListener
 ) : BottomBarItem()
+{
+    override val withTitleShown: Boolean = false
+}
 
 fun TinyGlideItem.isSelectedItem(selectedItem: TinyGlideItem?): Boolean {
     return this == selectedItem

@@ -12,27 +12,22 @@ import org.example.aztopia.listeners.ClickActionListener
 import org.example.aztopia.listeners.HoverActionListener
 import org.example.core.bottombar.BottomBarIcon
 import org.example.core.bottombar.BottomBarItem
+import org.example.core.bottombar.BottomBarTitle
 
 data class AztopiaItem(
     override val icon: BottomBarIcon,
     override val contentDescription: String,
     override val size: Dp = 50.dp,
-    override val title: String = "options",
+    override val title: BottomBarTitle,
     override val unselectedBackgroundColor: Color = Color.Blue,
     override val selectedBackgroundColor: Color = unselectedBackgroundColor,
     override val itemShape: Shape = RoundedCornerShape(10.dp),
     override var index: Int = -1,
     override val disableClickIfAlreadySelected: Boolean = true,
+    override val withTitleShown: Boolean = false,
     val radius: Dp = 10.dp,
     val onSelectItemSizeChangeFriction: Float = 1.3f,
-    val onSelectItemSizeChangeDurationMillis: Int = 300,
-    val hoverCancelDurationMillis: Long = 8,
     val itemSeparationSpace: Dp = 10.dp,
-    val subAztopiaItems: List<AztopiaItem> = listOf(),
-    var itemCoordinatesOffset: Offset? = null,
-    val parentAndSubVerticalSeparationSpace: Dp = 10.dp,
-    val marginForScreenSizeChanges: Float = 10f,
-    var parentItemDynamicSize: MutableState<Dp> = mutableStateOf(size),
     val hoverActionListener: HoverActionListener = EmptyHoverActionListener,
     val clickActionListener: ClickActionListener = EmptyClickActionListener
 ) : BottomBarItem()

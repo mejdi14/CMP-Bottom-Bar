@@ -6,15 +6,26 @@ import kmp_bottom_bar.composeapp.generated.resources.icon1
 import kmp_bottom_bar.composeapp.generated.resources.icon13
 import kmp_bottom_bar.composeapp.generated.resources.icon2
 import org.example.core.bottombar.BottomBarIcon
+import org.example.core.bottombar.BottomBarTitle
 import org.example.tinyGlide.data.TinyGlideItem
 
 val homeItem = TinyGlideItem(
     icon = BottomBarIcon(Res.drawable.icon13),
     contentDescription = "Home Screen",
-    title = "Home",
+    title = BottomBarTitle("hello"),
     unselectedBackgroundColor = Color(0xFFCDC1FF),
     subTinyGlideItems = listOf(
-        TinyGlideItem(BottomBarIcon(Res.drawable.icon1), "Read Papers", title = "Papers", unselectedBackgroundColor = Color(0xFFCDC1FF)),
-        TinyGlideItem(BottomBarIcon(Res.drawable.icon2), "Visit Mosque", title = "Mosque", unselectedBackgroundColor = Color(0xFFCDC1FF))
+        TinyGlideItem(
+            BottomBarIcon(Res.drawable.icon1),
+            "Read Papers",
+            title = BottomBarTitle("hello"),
+            unselectedBackgroundColor = Color(0xFFCDC1FF)
+        ),
+        TinyGlideItem(
+            BottomBarIcon(Res.drawable.icon2),
+            "Visit Mosque",
+            title = BottomBarTitle("hello"),
+            unselectedBackgroundColor = Color(0xFFCDC1FF)
+        )
     )
 )
