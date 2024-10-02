@@ -1,7 +1,6 @@
 package org.example.project.demo
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import kmp_bottom_bar.composeapp.generated.resources.Res
 import kmp_bottom_bar.composeapp.generated.resources.open_reader

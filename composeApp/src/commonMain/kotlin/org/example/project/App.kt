@@ -6,11 +6,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import org.example.aztopia.bottombar.AztopiaBottomBar
-import org.example.aztopia.data.AztopiaAnimatedComposable
-import org.example.aztopia.data.AztopiaItem
-import org.example.aztopia.listeners.AztopiaActionListener
-import org.example.project.data.aztopiaItems
 import org.example.project.demo.AztopiaDemo
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
