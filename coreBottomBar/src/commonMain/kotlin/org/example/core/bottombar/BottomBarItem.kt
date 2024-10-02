@@ -8,7 +8,7 @@ abstract class BottomBarItem{
     abstract val title: BottomBarTitle
     abstract val size : Dp
     abstract val contentDescription: String
-    abstract val unselectedBackgroundColor: Color
+    abstract val backgroundColor: Color
     abstract val selectedBackgroundColor: Color
     abstract val itemShape: Shape
     abstract val icon: BottomBarIcon

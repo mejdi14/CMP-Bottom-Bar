@@ -117,7 +117,7 @@ internal fun SubItemsComposable(
                             .background(
                                 color = if (currentItem.isSelectedItem(selectedItem.value))
                                     currentItem.selectedBackgroundColor
-                                else currentItem.unselectedBackgroundColor,
+                                else currentItem.backgroundColor,
                                 shape = currentItem.itemShape
                             ) else Modifier
                     ) {

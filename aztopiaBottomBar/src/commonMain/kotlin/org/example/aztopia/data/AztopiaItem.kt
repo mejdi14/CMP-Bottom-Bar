@@ -10,7 +10,6 @@ import org.example.core.bottombar.listener.HoverActionListener
 import org.example.core.bottombar.BottomBarIcon
 import org.example.core.bottombar.BottomBarItem
 import org.example.core.bottombar.BottomBarTitle
-import org.example.core.bottombar.listener.EmptyHoverActionListener
 import org.example.core.bottombar.listener.emptyHoverActionListener
 
 data class AztopiaItem(
@@ -18,8 +17,8 @@ data class AztopiaItem(
     override val contentDescription: String,
     override val size: Dp = 50.dp,
     override val title: BottomBarTitle = BottomBarTitle("placeholder"),
-    override val unselectedBackgroundColor: Color = Color.Blue,
-    override val selectedBackgroundColor: Color = unselectedBackgroundColor,
+    override val backgroundColor: Color = Color.Blue,
+    override val selectedBackgroundColor: Color = backgroundColor,
     override val itemShape: Shape = RoundedCornerShape(10.dp),
     override var index: Int = -1,
     override val disableClickIfAlreadySelected: Boolean = true,

@@ -14,7 +14,7 @@ import org.example.tinyGlide.listeners.TinyGlideActionListener
         bottomBarItems,
         alignModifier,
         tinyGlideActionListener = object : TinyGlideActionListener {
-            override fun onTinyGlideItemClickListener(item: TinyGlideItem, index: Int) {
+            override fun onItemClickListener(item: TinyGlideItem, index: Int) {
                 // nothing
             }
 

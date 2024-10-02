@@ -79,7 +79,7 @@ fun TinyGlideBottomBar(
                         .background(
                             color = if (item.isSelectedItem(selectedItem.value))
                                 item.selectedBackgroundColor
-                            else item.unselectedBackgroundColor,
+                            else item.backgroundColor,
                             shape = item.itemShape
                         )
                         .hoverEffect { onHover ->

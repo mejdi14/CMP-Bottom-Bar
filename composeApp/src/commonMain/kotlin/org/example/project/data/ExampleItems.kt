@@ -26,7 +26,7 @@ val bottomBarItems =
         homeItem,
         TinyGlideItem(
             BottomBarIcon(Res.drawable.icon3), "Papers",
-            unselectedBackgroundColor = Color(0xFFE6D9A2),
+            backgroundColor = Color(0xFFE6D9A2),
             subTinyGlideItems = listOf(
                 TinyGlideItem(BottomBarIcon(Res.drawable.icon4), "Papers"),
                 TinyGlideItem(BottomBarIcon(Res.drawable.icon5), "Papers"),
@@ -54,14 +54,14 @@ val bottomBarItems =
         ),
         TinyGlideItem(
             BottomBarIcon(Res.drawable.icon8), "Mosque",
-            unselectedBackgroundColor = Color(0xFFAAB396),
+            backgroundColor = Color(0xFFAAB396),
             subTinyGlideItems = listOf(
                 TinyGlideItem(BottomBarIcon(Res.drawable.icon9), "Papers"),
             )
         ),
         TinyGlideItem(
             BottomBarIcon(Res.drawable.icon10), "Menu",
-            unselectedBackgroundColor = Color(0xFFFFAF00),
+            backgroundColor = Color(0xFFFFAF00),
             subTinyGlideItems = listOf(
                 TinyGlideItem(BottomBarIcon(Res.drawable.icon11), "Papers"),
                 TinyGlideItem(BottomBarIcon(Res.drawable.icon12), "Papers"),
@@ -73,11 +73,11 @@ val aztopiaItems = listOf(
     AztopiaItem(
         BottomBarIcon(Res.drawable.home_line, unselectedIconTint = Color.Black),
         "Papers",
-        unselectedBackgroundColor = Color(0xFFE6D9A2),
+        backgroundColor = Color(0xFFE6D9A2),
     ),
     AztopiaItem(
         BottomBarIcon(Res.drawable.menu_meatballs, unselectedIconTint = Color.Black),
         "Papers",
-        unselectedBackgroundColor = Color(0xFFE6D9A2),
+        backgroundColor = Color(0xFFE6D9A2),
     ),
 )

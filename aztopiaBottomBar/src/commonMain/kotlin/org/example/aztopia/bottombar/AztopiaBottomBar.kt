@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import org.example.aztopia.data.AztopiaAnimatedComposable
 import org.example.aztopia.data.AztopiaItem
 import org.example.aztopia.listeners.AztopiaActionListener
 
@@ -24,6 +25,7 @@ import org.example.aztopia.listeners.AztopiaActionListener
 @Composable
 fun AztopiaBottomBar(
     bottomBarItems: List<AztopiaItem>,
+    aztopiaAnimatedComposable: AztopiaAnimatedComposable,
     baseModifier: Modifier,
     aztopiaActionListener: AztopiaActionListener
 ) {
@@ -48,7 +50,7 @@ fun AztopiaBottomBar(
             ) {
                 bottomBarItems.filterIndexed { index, _ -> index % 2 == 0 }
                     .forEach { item ->
-                        AztopiaIcon(item, selectedItem)
+                        AztopiaIcon(item, selectedItem, aztopiaActionListener)
                     }
             }
 
@@ -60,10 +62,10 @@ fun AztopiaBottomBar(
             ) {
                 bottomBarItems.filterIndexed { index, _ -> index % 2 != 0 }
                     .forEach { item ->
-                        AztopiaIcon(item, selectedItem)
+                        AztopiaIcon(item, selectedItem, aztopiaActionListener)
                     }
             }
         }
-        AztopiaAnimatedCircles(parentMaxWidth, parentMaxHeight, spreadOut)
+        AztopiaAnimatedCircles(aztopiaAnimatedComposable, parentMaxWidth, parentMaxHeight, spreadOut)
     }
 }

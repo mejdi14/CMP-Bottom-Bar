@@ -30,6 +30,7 @@ import kmp_bottom_bar.aztopiabottombar.generated.resources.open_reader
 import kmp_bottom_bar.aztopiabottombar.generated.resources.papers
 import kmp_bottom_bar.aztopiabottombar.generated.resources.the_plus_icon
 import org.example.aztopia.animation.handleSpreadOutAnimation
+import org.example.aztopia.data.AztopiaAnimatedComposable
 import org.jetbrains.compose.resources.painterResource
 import kotlin.math.PI
 import kotlin.math.cos
@@ -37,6 +38,7 @@ import kotlin.math.sin
 
 @Composable
 internal fun AztopiaAnimatedCircles(
+    aztopiaAnimatedComposable: AztopiaAnimatedComposable,
     parentMaxWidth: Dp,
     parentMaxHeight: Dp,
     spreadOut: MutableState<Boolean>
@@ -59,11 +61,12 @@ internal fun AztopiaAnimatedCircles(
         if (spreadOut.value) 1f else 0f
     )
 
-    val circleSize: Dp = 70.dp
+    val circleSize: Dp = aztopiaAnimatedComposable.size
     val radius: Float = with(density) { 22.dp.toPx() }
 
     val colors = listOf(Color(0xFFFFFFFF), Color(0xFFEA686C), Color(0xFFC66CAD), Color(0xFF631beb))
-    val icons = listOf(null, Res.drawable.calendar_day, Res.drawable.papers, Res.drawable.open_reader)
+    val icons =
+        listOf(null, Res.drawable.calendar_day, Res.drawable.papers, Res.drawable.open_reader)
 
     Box(
         contentAlignment = Alignment.Center,
@@ -79,7 +82,7 @@ internal fun AztopiaAnimatedCircles(
                 (if (index != 0 && !spreadOut.value) ((20 - (index * 5)).dp) else 0.dp)
             Box(
                 modifier = Modifier.align(Alignment.TopCenter)
-                    .size(if (index == 0) circleSize + 10.dp else circleSize)
+                    .size(if (index == 0) circleSize else circleSize - aztopiaAnimatedComposable.sizeDifference)
                     .offset(
                         x = (offset.x.dp - circleSize / 2) + (parentMaxWidth / 2),
                         y = (offset.y.dp - circleSize / 2) - (parentMaxHeight / 2) + additionalVerticalOffset
@@ -119,8 +122,10 @@ internal fun AztopiaAnimatedCircles(
             modifier = Modifier
                 .align(Alignment.Center)
                 .size(circleSize / 2)
-                .clickable(interactionSource = remember { MutableInteractionSource() },
-                    indication = null){
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null
+                ) {
                     handleSpreadOutAnimation(spreadOut, initialAngle, angles, scope)
                 }
                 .rotate(plusIconRotation.value)

@@ -13,7 +13,6 @@ import org.example.core.bottombar.BottomBarItem
 import org.example.core.bottombar.BottomBarTitle
 import org.example.core.bottombar.listener.ClickActionListener
 import org.example.core.bottombar.listener.EmptyClickActionListener
-import org.example.core.bottombar.listener.EmptyHoverActionListener
 import org.example.core.bottombar.listener.HoverActionListener
 import org.example.core.bottombar.listener.emptyHoverActionListener
 
@@ -21,8 +20,8 @@ data class TinyGlideItem(
     override val icon: BottomBarIcon,
     override val contentDescription: String,
     override val size: Dp = 50.dp,
-    override val unselectedBackgroundColor: Color = Color.Blue,
-    override val selectedBackgroundColor: Color = unselectedBackgroundColor,
+    override val backgroundColor: Color = Color.Blue,
+    override val selectedBackgroundColor: Color = backgroundColor,
     override val itemShape: Shape = RoundedCornerShape(10.dp),
     override var index: Int = -1,
     override val disableClickIfAlreadySelected: Boolean = true,
