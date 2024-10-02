@@ -63,7 +63,7 @@ fun TinyGlideBottomBar(
                 IconButton(
                     onClick = {
                         item.clickActionListener.onItemClickListener()
-                        tinyGlideActionListener.onTinyGlideItemClickListener(item, index)
+                        tinyGlideActionListener.onItemClickListener(item, index)
                         selectedIndex.value = index
                         selectedItem.value = if (selectedItem.value == item) null else item
                     },

@@ -1,8 +1,8 @@
 package org.example.tinyGlide.listeners
 
+import org.example.core.bottombar.listener.GlobalClickActionListener
 import org.example.tinyGlide.data.TinyGlideItem
 
-interface TinyGlideActionListener {
-    fun onTinyGlideItemClickListener(item: TinyGlideItem, index: Int)
+interface TinyGlideActionListener : GlobalClickActionListener<TinyGlideItem> {
     fun onSubItemClickListener(item: TinyGlideItem, index: Pair<Int, Int>)
 }

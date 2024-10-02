@@ -11,14 +11,16 @@ import androidx.compose.ui.unit.dp
 import org.example.core.bottombar.BottomBarIcon
 import org.example.core.bottombar.BottomBarItem
 import org.example.core.bottombar.BottomBarTitle
-import org.example.tinyGlide.listeners.ClickActionListener
-import org.example.tinyGlide.listeners.HoverActionListener
+import org.example.core.bottombar.listener.ClickActionListener
+import org.example.core.bottombar.listener.EmptyClickActionListener
+import org.example.core.bottombar.listener.EmptyHoverActionListener
+import org.example.core.bottombar.listener.HoverActionListener
+import org.example.core.bottombar.listener.emptyHoverActionListener
 
 data class TinyGlideItem(
     override val icon: BottomBarIcon,
     override val contentDescription: String,
     override val size: Dp = 50.dp,
-    override val title: BottomBarTitle,
     override val unselectedBackgroundColor: Color = Color.Blue,
     override val selectedBackgroundColor: Color = unselectedBackgroundColor,
     override val itemShape: Shape = RoundedCornerShape(10.dp),
@@ -34,40 +36,13 @@ data class TinyGlideItem(
     val parentAndSubVerticalSeparationSpace: Dp = 10.dp,
     val marginForScreenSizeChanges: Float = 10f,
     var parentItemDynamicSize: MutableState<Dp> = mutableStateOf(size),
-    val hoverActionListener: HoverActionListener = EmptyHoverActionListener,
+    val hoverActionListener: HoverActionListener<TinyGlideItem> = emptyHoverActionListener(),
     val clickActionListener: ClickActionListener = EmptyClickActionListener
-) : BottomBarItem()
-{
+) : BottomBarItem() {
     override val withTitleShown: Boolean = false
+    override val title: BottomBarTitle = BottomBarTitle("bottomBarTitle")
 }
 
 fun TinyGlideItem.isSelectedItem(selectedItem: TinyGlideItem?): Boolean {
     return this == selectedItem
 }
-
-val EmptyHoverActionListener = object : HoverActionListener {
-    override fun onHoverEnter(tinyGlideItem: TinyGlideItem) {
-        // Do nothing
-    }
-
-    override fun onHoverExit(tinyGlideItem: TinyGlideItem) {
-        // Do nothing
-    }
-
-    override fun onHoverParentItem(tinyGlideItem: TinyGlideItem) {
-        // Do nothing
-    }
-
-    override fun onHoverSubItem(tinyGlideItem: TinyGlideItem) {
-        // Do nothing
-    }
-}
-
-val EmptyClickActionListener =
-
-    object : ClickActionListener {
-        override fun onItemClickListener(
-        ) {
-            // Do nothing
-        }
-    }

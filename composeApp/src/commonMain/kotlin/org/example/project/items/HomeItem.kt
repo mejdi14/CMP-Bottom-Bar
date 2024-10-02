@@ -12,19 +12,16 @@ import org.example.tinyGlide.data.TinyGlideItem
 val homeItem = TinyGlideItem(
     icon = BottomBarIcon(Res.drawable.icon13),
     contentDescription = "Home Screen",
-    title = BottomBarTitle("hello"),
     unselectedBackgroundColor = Color(0xFFCDC1FF),
     subTinyGlideItems = listOf(
         TinyGlideItem(
             BottomBarIcon(Res.drawable.icon1),
             "Read Papers",
-            title = BottomBarTitle("hello"),
             unselectedBackgroundColor = Color(0xFFCDC1FF)
         ),
         TinyGlideItem(
             BottomBarIcon(Res.drawable.icon2),
             "Visit Mosque",
-            title = BottomBarTitle("hello"),
             unselectedBackgroundColor = Color(0xFFCDC1FF)
         )
     )

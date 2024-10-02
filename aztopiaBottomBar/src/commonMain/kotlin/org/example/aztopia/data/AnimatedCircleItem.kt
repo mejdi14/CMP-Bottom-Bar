@@ -6,14 +6,11 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.example.core.bottombar.listener.ClickActionListener
-import org.example.core.bottombar.listener.HoverActionListener
 import org.example.core.bottombar.BottomBarIcon
 import org.example.core.bottombar.BottomBarItem
 import org.example.core.bottombar.BottomBarTitle
-import org.example.core.bottombar.listener.EmptyHoverActionListener
-import org.example.core.bottombar.listener.emptyHoverActionListener
 
-data class AztopiaItem(
+data class AnimatedCircleItem (
     override val icon: BottomBarIcon,
     override val contentDescription: String,
     override val size: Dp = 50.dp,
@@ -27,6 +24,19 @@ data class AztopiaItem(
     val radius: Dp = 10.dp,
     val onSelectItemSizeChangeFriction: Float = 1.3f,
     val itemSeparationSpace: Dp = 10.dp,
-    val hoverActionListener: HoverActionListener<AztopiaItem> = emptyHoverActionListener(),
     val clickActionListener: ClickActionListener = EmptyClickActionListener
 ) : BottomBarItem()
+
+fun AztopiaItem.isSelectedItem(selectedItem: AztopiaItem?): Boolean {
+    return this == selectedItem
+}
+
+
+val EmptyClickActionListener =
+
+    object : ClickActionListener {
+        override fun onItemClickListener(
+        ) {
+            // Do nothing
+        }
+    }

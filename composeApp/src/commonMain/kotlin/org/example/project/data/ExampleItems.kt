@@ -1,6 +1,7 @@
 package org.example.project.data
 
 import androidx.compose.ui.graphics.Color
+import co.touchlab.kermit.Logger
 import kmp_bottom_bar.composeapp.generated.resources.Res
 import kmp_bottom_bar.composeapp.generated.resources.home_line
 import kmp_bottom_bar.composeapp.generated.resources.icon10
@@ -16,6 +17,7 @@ import kmp_bottom_bar.composeapp.generated.resources.icon9
 import kmp_bottom_bar.composeapp.generated.resources.menu_meatballs
 import org.example.aztopia.data.AztopiaItem
 import org.example.core.bottombar.BottomBarIcon
+import org.example.core.bottombar.listener.HoverActionListener
 import org.example.project.items.homeItem
 import org.example.tinyGlide.data.TinyGlideItem
 
@@ -30,7 +32,25 @@ val bottomBarItems =
                 TinyGlideItem(BottomBarIcon(Res.drawable.icon5), "Papers"),
                 TinyGlideItem(BottomBarIcon(Res.drawable.icon6), "Papers"),
                 TinyGlideItem(BottomBarIcon(Res.drawable.icon7), "Papers"),
-            )
+            ),
+            hoverActionListener = object : HoverActionListener<TinyGlideItem> {
+                override fun onHoverEnter(item: TinyGlideItem) {
+                    Logger.i("hover enter")
+                }
+
+                override fun onHoverExit(item: TinyGlideItem) {
+                    Logger.i("hover exit")
+                }
+
+                override fun onHoverParentItem(item: TinyGlideItem) {
+                    Logger.i("hover parent enter")
+                }
+
+                override fun onHoverSubItem(item: TinyGlideItem) {
+                    Logger.i("hover sub enter")
+                }
+
+            }
         ),
         TinyGlideItem(
             BottomBarIcon(Res.drawable.icon8), "Mosque",
@@ -51,10 +71,13 @@ val bottomBarItems =
 
 val aztopiaItems = listOf(
     AztopiaItem(
-        BottomBarIcon(Res.drawable.home_line, unselectedIconTint = Color.Black), "Papers",
-        unselectedBackgroundColor = Color(0xFFE6D9A2),),
+        BottomBarIcon(Res.drawable.home_line, unselectedIconTint = Color.Black),
+        "Papers",
+        unselectedBackgroundColor = Color(0xFFE6D9A2),
+    ),
     AztopiaItem(
-        BottomBarIcon(Res.drawable.menu_meatballs, unselectedIconTint = Color.Black), "Papers",
-        unselectedBackgroundColor = Color(0xFFE6D9A2),),
-
+        BottomBarIcon(Res.drawable.menu_meatballs, unselectedIconTint = Color.Black),
+        "Papers",
+        unselectedBackgroundColor = Color(0xFFE6D9A2),
+    ),
 )

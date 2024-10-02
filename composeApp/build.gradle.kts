@@ -70,6 +70,7 @@ kotlin {
             implementation(project(":expandableBottomBar"))
             implementation(project(":tinyGlideBottomBar"))
             implementation(project(":aztopiaBottomBar"))
+            implementation(libs.kermit)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
