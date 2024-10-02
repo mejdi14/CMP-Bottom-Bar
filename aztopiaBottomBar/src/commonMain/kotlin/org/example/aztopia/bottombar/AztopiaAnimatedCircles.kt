@@ -20,17 +20,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import kmp_bottom_bar.aztopiabottombar.generated.resources.Res
-import kmp_bottom_bar.aztopiabottombar.generated.resources.calendar_day
-import kmp_bottom_bar.aztopiabottombar.generated.resources.open_reader
-import kmp_bottom_bar.aztopiabottombar.generated.resources.papers
-import kmp_bottom_bar.aztopiabottombar.generated.resources.the_plus_icon
 import org.example.aztopia.animation.handleSpreadOutAnimation
 import org.example.aztopia.data.AztopiaAnimatedComposable
+import org.example.aztopia.listeners.AztopiaActionListener
 import org.jetbrains.compose.resources.painterResource
 import kotlin.math.PI
 import kotlin.math.cos
@@ -41,7 +36,8 @@ internal fun AztopiaAnimatedCircles(
     aztopiaAnimatedComposable: AztopiaAnimatedComposable,
     parentMaxWidth: Dp,
     parentMaxHeight: Dp,
-    spreadOut: MutableState<Boolean>
+    spreadOut: MutableState<Boolean>,
+    aztopiaActionListener: AztopiaActionListener
 ) {
     val density = LocalDensity.current
     val scope = rememberCoroutineScope()
@@ -51,22 +47,32 @@ internal fun AztopiaAnimatedCircles(
         List(4) { Animatable(initialAngle) }
     }
 
-    val plusIconRotation = animateFloatAsState(
+    val baseIconRotation = animateFloatAsState(
         if (spreadOut.value) 45f else 0f
     )
-    val plusIconColorAnimation = animateColorAsState(
-        if (spreadOut.value) Color.Black else Color.White
+    val baseIconColorAnimation = animateColorAsState(
+        if (spreadOut.value) aztopiaAnimatedComposable.icon.selectedIconTint else aztopiaAnimatedComposable.icon.iconTintColor
     )
     val bonusIconsScale = animateFloatAsState(
         if (spreadOut.value) 1f else 0f
     )
 
     val circleSize: Dp = aztopiaAnimatedComposable.size
-    val radius: Float = with(density) { 22.dp.toPx() }
+    val radius: Float = with(density) { (aztopiaAnimatedComposable.circularMovementRadius).toPx() }
 
-    val colors = listOf(Color(0xFFFFFFFF), Color(0xFFEA686C), Color(0xFFC66CAD), Color(0xFF631beb))
+    val colors = listOf(
+        aztopiaAnimatedComposable.backgroundColor,
+        aztopiaAnimatedComposable.animatedCircleItems.first.backgroundColor,
+        aztopiaAnimatedComposable.animatedCircleItems.second.backgroundColor,
+        aztopiaAnimatedComposable.animatedCircleItems.third.backgroundColor
+    )
     val icons =
-        listOf(null, Res.drawable.calendar_day, Res.drawable.papers, Res.drawable.open_reader)
+        listOf(
+            null,
+            aztopiaAnimatedComposable.animatedCircleItems.first.icon,
+            aztopiaAnimatedComposable.animatedCircleItems.second.icon,
+            aztopiaAnimatedComposable.animatedCircleItems.third.icon
+        )
 
     Box(
         contentAlignment = Alignment.Center,
@@ -79,7 +85,7 @@ internal fun AztopiaAnimatedCircles(
             val y = sin(animatable.value) * radius
             val offset = Offset(x, y)
             val additionalVerticalOffset =
-                (if (index != 0 && !spreadOut.value) ((20 - (index * 5)).dp) else 0.dp)
+                (if (index != 0 && !spreadOut.value) (((aztopiaAnimatedComposable.itemsOffsetOverlayFriction * 4) - (index * aztopiaAnimatedComposable.itemsOffsetOverlayFriction)).dp) else 0.dp)
             Box(
                 modifier = Modifier.align(Alignment.TopCenter)
                     .size(if (index == 0) circleSize else circleSize - aztopiaAnimatedComposable.sizeDifference)
@@ -88,19 +94,22 @@ internal fun AztopiaAnimatedCircles(
                         y = (offset.y.dp - circleSize / 2) - (parentMaxHeight / 2) + additionalVerticalOffset
                     )
                     .background(colors[index], CircleShape)
-
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null
+                    ) {
+                        aztopiaActionListener.onAnimatedCircularItemClickListener(index)
+                    }
             ) {
                 icons[index]?.let {
                     Icon(
-                        painter = painterResource(it),
-                        contentDescription = "close icon",
-                        tint = Color.White,
+                        painter = painterResource(it.iconDrawable),
+                        contentDescription = it.contentDescription,
+                        tint = it.iconTintColor,
                         modifier = Modifier
                             .align(Alignment.Center)
                             .size(circleSize / 3)
                             .scale(bonusIconsScale.value)
-
-
                     )
                 }
             }
@@ -108,7 +117,7 @@ internal fun AztopiaAnimatedCircles(
     }
     Box(
         modifier = Modifier
-            .size(circleSize + 10.dp)
+            .size(aztopiaAnimatedComposable.size)
             .offset(
                 x = (parentMaxWidth / 2) - (circleSize / 2),
                 y = -(parentMaxHeight / 2) + 20.dp
@@ -116,9 +125,9 @@ internal fun AztopiaAnimatedCircles(
 
         ) {
         Icon(
-            painter = painterResource(Res.drawable.the_plus_icon),
-            tint = plusIconColorAnimation.value,
-            contentDescription = "close icon",
+            painter = painterResource(aztopiaAnimatedComposable.icon.iconDrawable),
+            tint = baseIconColorAnimation.value,
+            contentDescription = aztopiaAnimatedComposable.contentDescription,
             modifier = Modifier
                 .align(Alignment.Center)
                 .size(circleSize / 2)
@@ -128,7 +137,8 @@ internal fun AztopiaAnimatedCircles(
                 ) {
                     handleSpreadOutAnimation(spreadOut, initialAngle, angles, scope)
                 }
-                .rotate(plusIconRotation.value)
+                .rotate(baseIconRotation.value)
+                .then(aztopiaAnimatedComposable.icon.modifier)
 
         )
     }

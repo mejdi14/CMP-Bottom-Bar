@@ -10,6 +10,7 @@ import org.example.core.bottombar.listener.HoverActionListener
 import org.example.core.bottombar.BottomBarIcon
 import org.example.core.bottombar.BottomBarItem
 import org.example.core.bottombar.BottomBarTitle
+import org.example.core.bottombar.listener.EmptyClickActionListener
 import org.example.core.bottombar.listener.emptyHoverActionListener
 
 data class AztopiaItem(

@@ -7,9 +7,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import org.example.aztopia.bottombar.AztopiaBottomBar
+import org.example.aztopia.data.AztopiaAnimatedComposable
 import org.example.aztopia.data.AztopiaItem
 import org.example.aztopia.listeners.AztopiaActionListener
 import org.example.project.data.aztopiaItems
+import org.example.project.demo.AztopiaDemo
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 
@@ -19,22 +21,7 @@ fun App() {
     MaterialTheme {
         Box(Modifier.fillMaxSize()) {
             //TinyGlideDemo(Modifier.align(Alignment.BottomCenter))
-            AztopiaBottomBar(
-                aztopiaItems,
-                Modifier.align(Alignment.BottomCenter),
-                aztopiaActionListener = object : AztopiaActionListener {
-                    override fun onItemClickListener(item: AztopiaItem, index: Int) {
-                        //TODO("Not yet implemented")
-                    }
-
-                    override fun onAnimatedCircularItemClickListener(
-                        item: AztopiaItem,
-                        index: Int
-                    ) {
-                        //TODO("Not yet implemented")
-                    }
-
-                })
+             AztopiaDemo(Modifier.align(Alignment.BottomCenter))
         }
     }
 }

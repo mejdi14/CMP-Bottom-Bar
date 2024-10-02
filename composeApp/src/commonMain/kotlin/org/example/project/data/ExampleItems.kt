@@ -21,7 +21,7 @@ import org.example.core.bottombar.listener.HoverActionListener
 import org.example.project.items.homeItem
 import org.example.tinyGlide.data.TinyGlideItem
 
-val bottomBarItems =
+val tinyGlideItems =
     listOf(
         homeItem,
         TinyGlideItem(
@@ -71,12 +71,12 @@ val bottomBarItems =
 
 val aztopiaItems = listOf(
     AztopiaItem(
-        BottomBarIcon(Res.drawable.home_line, unselectedIconTint = Color.Black),
+        BottomBarIcon(Res.drawable.home_line, iconTintColor = Color.Black),
         "Papers",
         backgroundColor = Color(0xFFE6D9A2),
     ),
     AztopiaItem(
-        BottomBarIcon(Res.drawable.menu_meatballs, unselectedIconTint = Color.Black),
+        BottomBarIcon(Res.drawable.menu_meatballs, iconTintColor = Color.Black),
         "Papers",
         backgroundColor = Color(0xFFE6D9A2),
     ),

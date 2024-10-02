@@ -66,6 +66,6 @@ fun AztopiaBottomBar(
                     }
             }
         }
-        AztopiaAnimatedCircles(aztopiaAnimatedComposable, parentMaxWidth, parentMaxHeight, spreadOut)
+        AztopiaAnimatedCircles(aztopiaAnimatedComposable, parentMaxWidth, parentMaxHeight, spreadOut, aztopiaActionListener)
     }
 }

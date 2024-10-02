@@ -4,5 +4,5 @@ import org.example.aztopia.data.AztopiaItem
 import org.example.core.bottombar.listener.GlobalClickActionListener
 
 interface AztopiaActionListener : GlobalClickActionListener<AztopiaItem>{
-    fun onAnimatedCircularItemClickListener(item: AztopiaItem, index: Int)
+    fun onAnimatedCircularItemClickListener(index: Int)
 }

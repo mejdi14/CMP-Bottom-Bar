@@ -27,9 +27,9 @@ internal fun TinyGlideIcon(
 
         false -> {
             Icon(
-                painter = painterResource(item.icon.unselectedIconDrawable),
+                painter = painterResource(item.icon.iconDrawable),
                 contentDescription = item.icon.contentDescription,
-                tint = item.icon.unselectedIconTint,
+                tint = item.icon.iconTintColor,
                 modifier = item.icon.modifier.then(modifier.size(item.size - item.icon.sizeDifferenceComparedToParent))
             )
         }

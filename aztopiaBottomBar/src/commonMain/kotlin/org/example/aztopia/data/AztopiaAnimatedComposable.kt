@@ -10,10 +10,11 @@ import org.example.core.bottombar.listener.ClickActionListener
 import org.example.core.bottombar.BottomBarIcon
 import org.example.core.bottombar.BottomBarItem
 import org.example.core.bottombar.BottomBarTitle
+import org.example.core.bottombar.listener.EmptyClickActionListener
 
 data class AztopiaAnimatedComposable (
     override val icon: BottomBarIcon,
-    override val contentDescription: String,
+    override val contentDescription: String = "AztopiaAnimatedComposable",
     override val size: Dp = 80.dp,
     override val title: BottomBarTitle = BottomBarTitle("placeholder"),
     override val backgroundColor: Color = Color.Blue,
@@ -21,8 +22,8 @@ data class AztopiaAnimatedComposable (
     override val itemShape: Shape = RoundedCornerShape(10.dp),
     override var index: Int = -1,
     val animatedCircleItems: AztopiaTrio<AztopiaAnimatedCircle>,
-    val radius: Dp = 10.dp,
-    val onSelectItemSizeChangeFriction: Float = 1.3f,
+    val circularMovementRadius: Dp = 22.dp,
+    val itemsOffsetOverlayFriction: Int = 5,
     val sizeDifference: Dp = 10.dp,
     val clickActionListener: ClickActionListener = EmptyClickActionListener
 ) : BottomBarItem(){
@@ -33,13 +34,3 @@ data class AztopiaAnimatedComposable (
 fun AztopiaItem.isSelectedItem(selectedItem: AztopiaItem?): Boolean {
     return this == selectedItem
 }
-
-
-val EmptyClickActionListener =
-
-    object : ClickActionListener {
-        override fun onItemClickListener(
-        ) {
-            // Do nothing
-        }
-    }
