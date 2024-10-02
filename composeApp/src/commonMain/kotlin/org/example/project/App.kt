@@ -6,7 +6,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import org.example.project.demo.AztopiaDemo
+import basic.example.component.bottombar.BasicBottomBar
+import org.example.project.data.basicDemoItems
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 
@@ -16,7 +17,11 @@ fun App() {
     MaterialTheme {
         Box(Modifier.fillMaxSize()) {
             //TinyGlideDemo(Modifier.align(Alignment.BottomCenter))
-             AztopiaDemo(Modifier.align(Alignment.BottomCenter))
+            // AztopiaDemo(Modifier.align(Alignment.BottomCenter))
+            BasicBottomBar(bottomBarItems = basicDemoItems, parentModifier = Modifier.align(
+                Alignment.BottomCenter) ){
+
+            }
         }
     }
 }

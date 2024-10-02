@@ -70,6 +70,7 @@ kotlin {
             implementation(project(":expandableBottomBar"))
             implementation(project(":tinyGlideBottomBar"))
             implementation(project(":aztopiaBottomBar"))
+            implementation(project(":basicBottomBar"))
             implementation(libs.kermit)
         }
         desktopMain.dependencies {

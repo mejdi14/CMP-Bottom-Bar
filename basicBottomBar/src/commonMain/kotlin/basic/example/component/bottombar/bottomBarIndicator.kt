@@ -20,7 +20,7 @@ import org.example.core.bottombar.indicator.BottomBarSelectedIndicator
 import org.example.core.bottombar.indicator.ShapeType
 
 @Composable
-fun CustomBottomBar(
+fun bottomBarIndicator(
     config: BottomBarSelectedIndicator,
     color: Color = Color.Blue,
     animatedOffset: State<Dp>,
