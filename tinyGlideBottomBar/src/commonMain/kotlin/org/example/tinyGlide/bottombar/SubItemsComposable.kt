@@ -117,16 +117,16 @@ internal fun SubItemsComposable(
                             .background(
                                 color = if (currentItem.isSelectedItem(selectedItem.value))
                                     currentItem.selectedBackgroundColor
-                                else currentItem.unselectedBackgroundColor,
+                                else currentItem.backgroundColor,
                                 shape = currentItem.itemShape
                             ) else Modifier
                     ) {
                         Icon(
                             painter = if (currentItem?.isSelectedItem(selectedItem.value) != false) painterResource(
                                 item.icon.selectedIconDrawable
-                            ) else painterResource(item.icon.unselectedIconDrawable),
+                            ) else painterResource(item.icon.iconDrawable),
                             contentDescription = item.contentDescription,
-                            tint = if (currentItem?.isSelectedItem(selectedItem.value) != false) item.icon.selectedIconTint else item.icon.unselectedIconTint,
+                            tint = if (currentItem?.isSelectedItem(selectedItem.value) != false) item.icon.selectedIconTint else item.icon.iconTintColor,
                             modifier = item.icon.modifier.then(Modifier.size(item.size - item.icon.sizeDifferenceComparedToParent))
                         )
                     }
