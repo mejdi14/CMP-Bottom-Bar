@@ -14,7 +14,6 @@ import kmp_bottom_bar.composeapp.generated.resources.icon7
 import kmp_bottom_bar.composeapp.generated.resources.icon8
 import kmp_bottom_bar.composeapp.generated.resources.icon9
 import kmp_bottom_bar.composeapp.generated.resources.menu_meatballs
-import kmp_bottom_bar.composeapp.generated.resources.papers
 import org.example.aztopia.data.AztopiaItem
 import org.example.core.bottombar.BottomBarIcon
 import org.example.project.items.homeItem
