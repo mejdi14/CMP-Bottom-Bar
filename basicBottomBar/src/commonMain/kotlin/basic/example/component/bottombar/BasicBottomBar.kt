@@ -4,11 +4,10 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -52,57 +51,67 @@ fun BasicBottomBar(
         targetValue = (selectedIndex.value * itemWidth.value).dp
     )
     var spaceBetween by remember { mutableStateOf(0.dp) }
-    Box()
-    Box(
-        parentModifier.width(300.dp).padding(5.dp).height(60.dp)
-            .background(color = Color.Black, shape = RoundedCornerShape(10.dp))
-            .onGloballyPositioned { layoutCoordinates ->
-                val widthPx = layoutCoordinates.size.width
-                parentWidth = with(density) { widthPx.toDp() }
+    Column(parentModifier) {
+        Box(Modifier.width(300.dp)) {
+            HoverDescriptionText(
+                spaceBetween,
+                animatedOffset,
+                selectedIndex
+            )
+        }
+        Box(
+            parentModifier.width(300.dp).padding(5.dp).height(60.dp)
+                .background(color = Color.Black, shape = RoundedCornerShape(10.dp))
+                .onGloballyPositioned { layoutCoordinates ->
+                    val widthPx = layoutCoordinates.size.width
+                    parentWidth = with(density) { widthPx.toDp() }
 
-                animatedOffset.value
-            }
-    ) {
-        spaceBetween = ((parentWidth - (itemWidth * 4)) / 5)
-        bottomBarIndicator(
-            config = BottomBarSelectedIndicator(
-                shapeType = ShapeType.Square,
-                positionType = PositionType.Bottom
-            ),
-            spaceBetween = spaceBetween,
-            animatedOffset = animatedOffset,
-            selectedIndex = selectedIndex
-        )
-        LazyRow(
-            state = lazyListState,
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxSize()
+                    animatedOffset.value
+                }
         ) {
-            itemsIndexed(bottomBarItems) { index, item ->
-                val isHovered = remember { mutableStateOf(false) }
-                IconButton(
-                    onClick = {
-                        selectedIndex.value = index
-                        onIconClick(item)
-                    },
-                    modifier = Modifier.align(Alignment.Center)
-                        .hoverEffect { onHover ->
-                            isHovered.value = onHover
-                        }
-                        .background(
-                            color = if (isHovered.value) Color.Red else Color.Unspecified,
-                            RoundedCornerShape(10.dp)
-                        )
-                ) {
-                    Icon(
-                        painter = painterResource(item.icon.selectedIconDrawable),
-                        contentDescription = item.contentDescription,
-                        tint = Color.White,
+            spaceBetween = ((parentWidth - (itemWidth * 4)) / 5)
+            bottomBarIndicator(
+                config = BottomBarSelectedIndicator(
+                    shapeType = ShapeType.Square,
+                    positionType = PositionType.Bottom
+                ),
+                spaceBetween = spaceBetween,
+                animatedOffset = animatedOffset,
+                selectedIndex = selectedIndex
+            )
+            LazyRow(
+                state = lazyListState,
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                itemsIndexed(bottomBarItems) { index, item ->
+                    val isHovered = remember { mutableStateOf(false) }
+                    IconButton(
+                        onClick = {
+                            selectedIndex.value = index
+                            onIconClick(item)
+                        },
                         modifier = Modifier.align(Alignment.Center)
-                    )
+                            .hoverEffect { onHover ->
+                                isHovered.value = onHover
+                            }
+                            .background(
+                                color = if (isHovered.value) Color.Red else Color.Unspecified,
+                                RoundedCornerShape(10.dp)
+                            )
+                    ) {
+                        Icon(
+                            painter = painterResource(item.icon.selectedIconDrawable),
+                            contentDescription = item.contentDescription,
+                            tint = Color.White,
+                            modifier = Modifier.align(Alignment.Center)
+                        )
+                    }
                 }
             }
         }
     }
 }
+
+

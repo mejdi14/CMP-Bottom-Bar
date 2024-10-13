@@ -47,7 +47,7 @@ fun bottomBarIndicator(
         modifier = Modifier
             .offset(
                 x = (animatedOffset.value + (spaceBetween * (selectedIndex.value + 1))),
-                y = if ((config.shapeType == ShapeType.Line || config.shapeType == ShapeType.Line)
+                y = if ((config.shapeType == ShapeType.Line || config.shapeType == ShapeType.Dot)
                     && config.positionType == PositionType.Bottom
                 )
                     0.dp + (config.size - config.thickness)
