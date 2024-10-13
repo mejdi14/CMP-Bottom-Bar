@@ -51,6 +51,8 @@ fun BasicBottomBar(
     val animatedOffset = animateDpAsState(
         targetValue = (selectedIndex.value * itemWidth.value).dp
     )
+    var spaceBetween by remember { mutableStateOf(0.dp) }
+    Box()
     Box(
         parentModifier.width(300.dp).padding(5.dp).height(60.dp)
             .background(color = Color.Black, shape = RoundedCornerShape(10.dp))
@@ -61,7 +63,7 @@ fun BasicBottomBar(
                 animatedOffset.value
             }
     ) {
-        val spaceBetween = ((parentWidth - (itemWidth * 4)) / 5)
+        spaceBetween = ((parentWidth - (itemWidth * 4)) / 5)
         bottomBarIndicator(
             config = BottomBarSelectedIndicator(
                 shapeType = ShapeType.Square,
