@@ -11,12 +11,15 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.example.core.bottombar.indicator.BottomBarSelectedIndicator
+import org.example.core.bottombar.indicator.PositionType
 import org.example.core.bottombar.indicator.ShapeType
 
 @Composable
@@ -27,6 +30,7 @@ fun bottomBarIndicator(
     spaceBetween: Dp,
     selectedIndex: MutableState<Int>
 ) {
+
 
     val shapeModifier = when (config.shapeType) {
         ShapeType.Square -> Modifier.size(
@@ -43,9 +47,15 @@ fun bottomBarIndicator(
         modifier = Modifier
             .offset(
                 x = (animatedOffset.value + (spaceBetween * (selectedIndex.value + 1))),
-                y = 0.dp
+                y = if ((config.shapeType == ShapeType.Line || config.shapeType == ShapeType.Line)
+                    && config.positionType == PositionType.Bottom
+                )
+                    0.dp + (config.size - config.thickness)
+                else 0.dp + (config.padding / 2)
             )
-            .then(shapeModifier)
+
             .background(color, RoundedCornerShape(10.dp))
+
+            .then(shapeModifier)
     )
 }

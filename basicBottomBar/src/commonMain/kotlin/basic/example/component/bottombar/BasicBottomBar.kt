@@ -4,7 +4,9 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -27,11 +29,16 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import org.example.core.bottombar.BottomBarItem
 import org.example.core.bottombar.indicator.BottomBarSelectedIndicator
+import org.example.core.bottombar.indicator.PositionType
 import org.example.core.bottombar.indicator.ShapeType
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun BasicBottomBar(bottomBarItems: List<BottomBarItem>, parentModifier : Modifier, onIconClick: (BottomBarItem) -> Unit) {
+fun BasicBottomBar(
+    bottomBarItems: List<BottomBarItem>,
+    parentModifier: Modifier,
+    onIconClick: (BottomBarItem) -> Unit
+) {
     val selectedIndex = remember { mutableStateOf(0) }
     val itemWidth = 50.dp
 
@@ -45,7 +52,7 @@ fun BasicBottomBar(bottomBarItems: List<BottomBarItem>, parentModifier : Modifie
         targetValue = (selectedIndex.value * itemWidth.value).dp
     )
     Box(
-        parentModifier.width(300.dp).padding(5.dp)
+        parentModifier.width(300.dp).padding(5.dp).height(60.dp)
             .background(color = Color.Black, shape = RoundedCornerShape(10.dp))
             .onGloballyPositioned { layoutCoordinates ->
                 val widthPx = layoutCoordinates.size.width
@@ -57,7 +64,8 @@ fun BasicBottomBar(bottomBarItems: List<BottomBarItem>, parentModifier : Modifie
         val spaceBetween = ((parentWidth - (itemWidth * 4)) / 5)
         bottomBarIndicator(
             config = BottomBarSelectedIndicator(
-                shapeType = ShapeType.Line,
+                shapeType = ShapeType.Square,
+                positionType = PositionType.Bottom
             ),
             spaceBetween = spaceBetween,
             animatedOffset = animatedOffset,
@@ -67,16 +75,23 @@ fun BasicBottomBar(bottomBarItems: List<BottomBarItem>, parentModifier : Modifie
             state = lazyListState,
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxSize()
         ) {
             itemsIndexed(bottomBarItems) { index, item ->
-
+                val isHovered = remember { mutableStateOf(false) }
                 IconButton(
                     onClick = {
                         selectedIndex.value = index
                         onIconClick(item)
                     },
-                    modifier = Modifier.size(50.dp).align(Alignment.Center)
+                    modifier = Modifier.align(Alignment.Center)
+                        .hoverEffect { onHover ->
+                            isHovered.value = onHover
+                        }
+                        .background(
+                            color = if (isHovered.value) Color.Red else Color.Unspecified,
+                            RoundedCornerShape(10.dp)
+                        )
                 ) {
                     Icon(
                         painter = painterResource(item.icon.selectedIconDrawable),
