@@ -1,7 +1,9 @@
-
 on:
   issues:
-    types: [ assigned ]
+    types: [assigned]
+
+permissions:
+  issues: write  # Grant write permissions to issues
 
 jobs:
   create_issue_branch_job:
@@ -11,13 +13,13 @@ jobs:
         uses: robvanderleek/create-issue-branch@main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: create new branch
+      - name: Post a GIF as a comment
         uses: actions/github-script@v4
         with:
           script: |
-            github.issues.createComment({
-            issue_number: context.issue.number,
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            body: "![Alt Text](https://media.giphy.com/media/uurU31TE5YAUM/giphy.gif)"
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: "![Alt Text](https://media.giphy.com/media/uurU31TE5YAUM/giphy.gif)"
             });
