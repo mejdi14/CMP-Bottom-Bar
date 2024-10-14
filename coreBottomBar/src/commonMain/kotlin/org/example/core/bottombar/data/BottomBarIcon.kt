@@ -1,4 +1,4 @@
-package org.example.core.bottombar
+package org.example.core.bottombar.data
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color

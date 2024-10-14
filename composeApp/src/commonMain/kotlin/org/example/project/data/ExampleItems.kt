@@ -16,7 +16,7 @@ import kmp_bottom_bar.composeapp.generated.resources.icon8
 import kmp_bottom_bar.composeapp.generated.resources.icon9
 import kmp_bottom_bar.composeapp.generated.resources.menu_meatballs
 import org.example.aztopia.data.AztopiaItem
-import org.example.core.bottombar.BottomBarIcon
+import org.example.core.bottombar.data.BottomBarIcon
 import org.example.core.bottombar.listener.HoverActionListener
 import org.example.project.items.homeItem
 import org.example.tinyGlide.data.TinyGlideItem

@@ -8,9 +8,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import org.example.core.bottombar.BottomBarIcon
-import org.example.core.bottombar.BottomBarItem
-import org.example.core.bottombar.BottomBarTitle
+import org.example.core.bottombar.data.BottomBarIcon
+import org.example.core.bottombar.data.BottomBarItem
+import org.example.core.bottombar.data.BottomBarTitle
 import org.example.core.bottombar.listener.ClickActionListener
 import org.example.core.bottombar.listener.EmptyClickActionListener
 import org.example.core.bottombar.listener.HoverActionListener
@@ -34,6 +34,7 @@ data class BasicItem(
     val parentAndSubVerticalSeparationSpace: Dp = 10.dp,
     val marginForScreenSizeChanges: Float = 10f,
     var parentItemDynamicSize: MutableState<Dp> = mutableStateOf(size),
+    val hoverText: String = "holder",
     val hoverActionListener: HoverActionListener<BasicItem> = emptyHoverActionListener(),
     val clickActionListener: ClickActionListener = EmptyClickActionListener
 ) : BottomBarItem() {

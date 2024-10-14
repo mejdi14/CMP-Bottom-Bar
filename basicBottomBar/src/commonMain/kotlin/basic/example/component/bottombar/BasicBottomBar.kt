@@ -26,7 +26,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
-import org.example.core.bottombar.BottomBarItem
+import basic.example.component.data.BasicItem
+import org.example.core.bottombar.data.BottomBarItem
 import org.example.core.bottombar.indicator.BottomBarSelectedIndicator
 import org.example.core.bottombar.indicator.PositionType
 import org.example.core.bottombar.indicator.ShapeType
@@ -34,7 +35,7 @@ import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun BasicBottomBar(
-    bottomBarItems: List<BottomBarItem>,
+    bottomBarItems: List<BasicItem>,
     parentModifier: Modifier,
     onIconClick: (BottomBarItem) -> Unit
 ) {
@@ -53,11 +54,12 @@ fun BasicBottomBar(
     var spaceBetween by remember { mutableStateOf(0.dp) }
     Column(parentModifier) {
         Box(Modifier.width(300.dp).padding(5.dp).background(Color.Red)) {
-            HoverDescriptionText(
+            HoverDescriptionTextComposable(
                 spaceBetween,
                 animatedOffset,
                 selectedIndex,
-                itemWidth
+                itemWidth,
+                bottomBarItems
             )
         }
         Box(
@@ -71,7 +73,7 @@ fun BasicBottomBar(
                 }
         ) {
             spaceBetween = ((parentWidth - (itemWidth * 4)) / 5)
-            bottomBarIndicator(
+            bottomBarIndicatorComposable(
                 config = BottomBarSelectedIndicator(
                     shapeType = ShapeType.Square,
                     positionType = PositionType.Bottom

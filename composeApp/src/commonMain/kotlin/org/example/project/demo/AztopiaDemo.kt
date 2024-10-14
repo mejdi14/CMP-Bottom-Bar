@@ -11,7 +11,7 @@ import org.example.aztopia.data.AztopiaAnimatedComposable
 import org.example.aztopia.data.AztopiaItem
 import org.example.aztopia.helper.AztopiaTrio
 import org.example.aztopia.listeners.AztopiaActionListener
-import org.example.core.bottombar.BottomBarIcon
+import org.example.core.bottombar.data.BottomBarIcon
 import org.example.project.data.aztopiaItems
 
 @Composable

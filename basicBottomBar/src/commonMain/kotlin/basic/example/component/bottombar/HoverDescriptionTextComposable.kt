@@ -23,17 +23,20 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import basic.example.component.data.BasicItem
+import org.example.core.bottombar.data.BottomBarItem
 
 @Composable
-internal fun HoverDescriptionText(
+internal fun HoverDescriptionTextComposable(
     spaceBetween: Dp,
     animatedOffset: State<Dp>,
     selectedIndex: MutableState<Int>,
-    itemWidth: Dp
+    itemWidth: Dp,
+    bottomBarItems: List<BasicItem>
 ) {
     var parentWidth by remember { mutableStateOf(0.dp) }
     val density = LocalDensity.current
-    Box(modifier = Modifier.height(30.dp).width(60.dp)
+    Box(modifier = Modifier.height(30.dp)
         .onGloballyPositioned { layoutCoordinates ->
             val widthPx = layoutCoordinates.size.width
             parentWidth = with(density) { widthPx.toDp() }
@@ -42,6 +45,6 @@ internal fun HoverDescriptionText(
             x = (animatedOffset.value + (spaceBetween * (selectedIndex.value + 1))) + (itemWidth / 2) - (parentWidth / 2),
         ).clip(RoundedCornerShape(6.dp)).background(color = Color.Black)
     ) {
-        Text("Host", color = Color.White, modifier = Modifier.align(Alignment.Center).padding(4.dp))
+        Text(bottomBarItems.get(selectedIndex.value).hoverText, color = Color.White, modifier = Modifier.align(Alignment.Center).padding(4.dp))
     }
 }

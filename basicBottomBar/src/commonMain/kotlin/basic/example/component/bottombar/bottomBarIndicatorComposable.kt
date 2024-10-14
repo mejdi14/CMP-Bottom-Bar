@@ -11,8 +11,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -23,7 +21,7 @@ import org.example.core.bottombar.indicator.PositionType
 import org.example.core.bottombar.indicator.ShapeType
 
 @Composable
-fun bottomBarIndicator(
+fun bottomBarIndicatorComposable(
     config: BottomBarSelectedIndicator,
     color: Color = Color.Blue,
     animatedOffset: State<Dp>,
