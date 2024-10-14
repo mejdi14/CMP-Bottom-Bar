@@ -52,13 +52,11 @@ fun BasicBottomBar(
     val animatedOffset = animateDpAsState(
         targetValue = (selectedIndex.value * itemWidth.value).dp
     )
-    val hoverOffset = remember { mutableStateOf((hoverSelectedIndex.value * itemWidth.value).dp) }
     var spaceBetween by remember { mutableStateOf(0.dp) }
     Column(parentModifier) {
-        Box(Modifier.width(300.dp).padding(5.dp).background(Color.Red)) {
+        Box(Modifier.width(300.dp).padding(5.dp)) {
             HoverDescriptionTextComposable(
                 spaceBetween,
-                hoverOffset,
                 hoverSelectedIndex,
                 itemWidth,
                 bottomBarItems,
@@ -104,7 +102,12 @@ fun BasicBottomBar(
                                 hoverSelectedIndex.value = index
                             }
                             .background(
-                                color = if (isHovered.value) Color.Red else Color.Unspecified,
+                                color = if (isHovered.value
+                                    && index == hoverSelectedIndex.value
+                                    && index != selectedIndex.value
+                                ) Color.Gray
+                                else
+                                    Color.Unspecified,
                                 RoundedCornerShape(10.dp)
                             )
                     ) {

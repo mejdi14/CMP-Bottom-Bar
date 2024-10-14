@@ -28,7 +28,6 @@ import basic.example.component.data.BasicItem
 @Composable
 internal fun HoverDescriptionTextComposable(
     spaceBetween: Dp,
-    animatedOffset: State<Dp>,
     selectedIndex: MutableState<Int>,
     itemWidth: Dp,
     bottomBarItems: List<BasicItem>,
@@ -36,7 +35,7 @@ internal fun HoverDescriptionTextComposable(
 ) {
     var parentWidth by remember { mutableStateOf(0.dp) }
     val density = LocalDensity.current
-    AnimatedVisibility(visible = isHovered.value) {
+    if(isHovered.value)
         Box(modifier = Modifier.height(30.dp)
             .onGloballyPositioned { layoutCoordinates ->
                 val widthPx = layoutCoordinates.size.width
@@ -53,4 +52,3 @@ internal fun HoverDescriptionTextComposable(
             )
         }
     }
-}
