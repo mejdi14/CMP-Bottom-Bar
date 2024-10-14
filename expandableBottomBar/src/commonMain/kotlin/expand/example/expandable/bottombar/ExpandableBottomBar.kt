@@ -27,7 +27,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
-import org.example.core.bottombar.BottomBarItem
+import org.example.core.bottombar.data.BottomBarItem
+import org.example.core.bottombar.data.BottomBarIcon
 import org.example.core.bottombar.indicator.BottomBarSelectedIndicator
 import org.example.core.bottombar.indicator.ShapeType
 import org.jetbrains.compose.resources.painterResource
