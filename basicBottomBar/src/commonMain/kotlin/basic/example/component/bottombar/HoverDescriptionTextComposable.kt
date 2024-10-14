@@ -1,11 +1,11 @@
 package basic.example.component.bottombar
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,7 +24,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import basic.example.component.data.BasicItem
-import org.example.core.bottombar.data.BottomBarItem
 
 @Composable
 internal fun HoverDescriptionTextComposable(
@@ -32,19 +31,26 @@ internal fun HoverDescriptionTextComposable(
     animatedOffset: State<Dp>,
     selectedIndex: MutableState<Int>,
     itemWidth: Dp,
-    bottomBarItems: List<BasicItem>
+    bottomBarItems: List<BasicItem>,
+    isHovered: MutableState<Boolean>
 ) {
     var parentWidth by remember { mutableStateOf(0.dp) }
     val density = LocalDensity.current
-    Box(modifier = Modifier.height(30.dp)
-        .onGloballyPositioned { layoutCoordinates ->
-            val widthPx = layoutCoordinates.size.width
-            parentWidth = with(density) { widthPx.toDp() }
+    AnimatedVisibility(visible = isHovered.value) {
+        Box(modifier = Modifier.height(30.dp)
+            .onGloballyPositioned { layoutCoordinates ->
+                val widthPx = layoutCoordinates.size.width
+                parentWidth = with(density) { widthPx.toDp() }
+            }
+            .offset(
+                x = ((selectedIndex.value * itemWidth.value).dp + (spaceBetween * (selectedIndex.value + 1))) + (itemWidth / 2) - (parentWidth / 2),
+            ).clip(RoundedCornerShape(6.dp)).background(color = Color.Black)
+        ) {
+            Text(
+                bottomBarItems.get(selectedIndex.value).hoverText,
+                color = Color.White,
+                modifier = Modifier.align(Alignment.Center).padding(4.dp)
+            )
         }
-        .offset(
-            x = (animatedOffset.value + (spaceBetween * (selectedIndex.value + 1))) + (itemWidth / 2) - (parentWidth / 2),
-        ).clip(RoundedCornerShape(6.dp)).background(color = Color.Black)
-    ) {
-        Text(bottomBarItems.get(selectedIndex.value).hoverText, color = Color.White, modifier = Modifier.align(Alignment.Center).padding(4.dp))
     }
 }

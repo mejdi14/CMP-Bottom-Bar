@@ -40,6 +40,7 @@ fun BasicBottomBar(
     onIconClick: (BottomBarItem) -> Unit
 ) {
     val selectedIndex = remember { mutableStateOf(0) }
+    val hoverSelectedIndex = remember { mutableStateOf(0) }
     val itemWidth = 50.dp
 
     val lazyListState = rememberLazyListState()
@@ -47,19 +48,21 @@ fun BasicBottomBar(
     var parentWidth by remember { mutableStateOf(0.dp) }
     val density = LocalDensity.current
     val bottomBarWidth = itemWidth * bottomBarItems.size + 10.dp
-
+    val isHovered = remember { mutableStateOf(false) }
     val animatedOffset = animateDpAsState(
         targetValue = (selectedIndex.value * itemWidth.value).dp
     )
+    val hoverOffset = remember { mutableStateOf((hoverSelectedIndex.value * itemWidth.value).dp) }
     var spaceBetween by remember { mutableStateOf(0.dp) }
     Column(parentModifier) {
         Box(Modifier.width(300.dp).padding(5.dp).background(Color.Red)) {
             HoverDescriptionTextComposable(
                 spaceBetween,
-                animatedOffset,
-                selectedIndex,
+                hoverOffset,
+                hoverSelectedIndex,
                 itemWidth,
-                bottomBarItems
+                bottomBarItems,
+                isHovered
             )
         }
         Box(
@@ -69,7 +72,7 @@ fun BasicBottomBar(
                     val widthPx = layoutCoordinates.size.width
                     parentWidth = with(density) { widthPx.toDp() }
 
-                    animatedOffset.value
+                    //animatedOffset.value
                 }
         ) {
             spaceBetween = ((parentWidth - (itemWidth * 4)) / 5)
@@ -89,7 +92,7 @@ fun BasicBottomBar(
                 modifier = Modifier.fillMaxSize()
             ) {
                 itemsIndexed(bottomBarItems) { index, item ->
-                    val isHovered = remember { mutableStateOf(false) }
+
                     IconButton(
                         onClick = {
                             selectedIndex.value = index
@@ -98,6 +101,7 @@ fun BasicBottomBar(
                         modifier = Modifier.align(Alignment.Center)
                             .hoverEffect { onHover ->
                                 isHovered.value = onHover
+                                hoverSelectedIndex.value = index
                             }
                             .background(
                                 color = if (isHovered.value) Color.Red else Color.Unspecified,
