@@ -52,7 +52,7 @@ fun BasicBottomBar(
     )
     var spaceBetween by remember { mutableStateOf(0.dp) }
     Column(parentModifier) {
-        Box(Modifier.width(300.dp).background(Color.Red)) {
+        Box(Modifier.width(300.dp).padding(5.dp).background(Color.Red)) {
             HoverDescriptionText(
                 spaceBetween,
                 animatedOffset,
