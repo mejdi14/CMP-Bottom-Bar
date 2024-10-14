@@ -56,7 +56,8 @@ fun BasicBottomBar(
             HoverDescriptionText(
                 spaceBetween,
                 animatedOffset,
-                selectedIndex
+                selectedIndex,
+                itemWidth
             )
         }
         Box(
