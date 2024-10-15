@@ -71,8 +71,6 @@ fun BasicBottomBar(
                 .onGloballyPositioned { layoutCoordinates ->
                     val widthPx = layoutCoordinates.size.width
                     parentWidth = with(density) { widthPx.toDp() }
-
-                    //animatedOffset.value
                 }
         ) {
             spaceBetween = ((parentWidth - (itemWidth * 4)) / 5)
