@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
+import basic.example.component.data.BasicBarConfig
 import basic.example.component.data.BasicItem
 import org.example.core.bottombar.data.BottomBarItem
 import org.example.core.bottombar.indicator.BottomBarSelectedIndicator
@@ -36,6 +37,7 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun BasicBottomBar(
     bottomBarItems: List<BasicItem>,
+    basicBarConfig: BasicBarConfig,
     parentModifier: Modifier,
     onIconClick: (BottomBarItem) -> Unit
 ) {

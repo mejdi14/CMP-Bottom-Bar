@@ -9,8 +9,6 @@ data class BasicBarConfig (
     val onSelectItemSizeChangeFriction: Float = 1.3f,
     val onSelectItemSizeChangeDurationMillis: Int = 300,
     val hoverCancelDurationMillis: Long = 8,
-    val itemSeparationSpace: Dp = 10.dp,
-    val parentAndSubVerticalSeparationSpace: Dp = 10.dp,
-    val marginForScreenSizeChanges: Float = 10f,
+    val basicBarPosition: BasicBarPosition = BasicBarPosition.HORIZONTAL_BOTTOM,
     val hoverTextConfig: BottomBarHoverText = BottomBarHoverText()
 )
