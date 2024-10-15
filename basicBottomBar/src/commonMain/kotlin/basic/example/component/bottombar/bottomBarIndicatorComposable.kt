@@ -16,6 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import basic.example.component.data.BasicBarPosition
 import org.example.core.bottombar.indicator.BottomBarSelectedIndicator
 import org.example.core.bottombar.indicator.PositionType
 import org.example.core.bottombar.indicator.ShapeType
@@ -26,7 +27,8 @@ fun bottomBarIndicatorComposable(
     color: Color = Color.Blue,
     animatedOffset: State<Dp>,
     spaceBetween: Dp,
-    selectedIndex: MutableState<Int>
+    selectedIndex: MutableState<Int>,
+    basicBarPosition: BasicBarPosition
 ) {
 
 

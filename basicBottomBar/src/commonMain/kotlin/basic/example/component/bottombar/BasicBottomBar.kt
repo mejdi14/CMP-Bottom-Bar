@@ -86,7 +86,8 @@ fun BasicBottomBar(
                         ),
                         spaceBetween = spaceBetween,
                         animatedOffset = animatedOffset,
-                        selectedIndex = selectedIndex
+                        selectedIndex = selectedIndex,
+                        basicBarPosition = basicBarConfig.basicBarPosition
                     )
                     LazyRow(
                         state = lazyListState,
@@ -155,7 +156,8 @@ fun BasicBottomBar(
                         ),
                         spaceBetween = spaceBetween,
                         animatedOffset = animatedOffset,
-                        selectedIndex = selectedIndex
+                        selectedIndex = selectedIndex,
+                        basicBarPosition = basicBarConfig.basicBarPosition
                     )
                     LazyColumn(
                         state = lazyListState,
@@ -164,7 +166,6 @@ fun BasicBottomBar(
                         modifier = Modifier.fillMaxSize()
                     ) {
                         itemsIndexed(bottomBarItems) { index, item ->
-
                             IconButton(
                                 onClick = {
                                     selectedIndex.value = index
@@ -198,5 +199,4 @@ fun BasicBottomBar(
             }
         }
     }
-
 }
