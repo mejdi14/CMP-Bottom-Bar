@@ -3,13 +3,13 @@ package basic.example.component.bottombar
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -33,7 +33,7 @@ import org.example.core.bottombar.indicator.ShapeType
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-internal fun VerticalBasicBar(
+internal fun HorizontalBasicBar(
     parentModifier: Modifier,
     spaceBetween: MutableState<Dp>,
     hoverSelectedIndex: MutableState<Int>,
@@ -48,10 +48,18 @@ internal fun VerticalBasicBar(
     lazyListState: LazyListState,
     onIconClick: (BottomBarItem) -> Unit
 ) {
-
-    Row(parentModifier) {
+    Column(parentModifier) {
+        Box(Modifier.width(300.dp).padding(5.dp)) {
+            HoverDescriptionTextComposable(
+                spaceBetween.value,
+                hoverSelectedIndex,
+                itemWidth,
+                bottomBarItems,
+                isHovered
+            )
+        }
         Box(
-            parentModifier.height(300.dp).padding(5.dp).width(60.dp)
+            parentModifier.width(300.dp).padding(5.dp).height(60.dp)
                 .background(color = Color.Black, shape = RoundedCornerShape(10.dp))
                 .onGloballyPositioned { layoutCoordinates ->
                     val widthPx = layoutCoordinates.size.width
@@ -69,13 +77,14 @@ internal fun VerticalBasicBar(
                 selectedIndex = selectedIndex,
                 basicBarPosition = basicBarConfig.basicBarPosition
             )
-            LazyColumn(
+            LazyRow(
                 state = lazyListState,
-                verticalArrangement = Arrangement.SpaceEvenly,
-                horizontalAlignment = Alignment.CenterHorizontally,
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxSize()
             ) {
                 itemsIndexed(bottomBarItems) { index, item ->
+
                     IconButton(
                         onClick = {
                             selectedIndex.value = index
