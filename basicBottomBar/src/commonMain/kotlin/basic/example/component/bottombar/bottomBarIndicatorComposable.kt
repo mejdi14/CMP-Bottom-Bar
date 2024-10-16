@@ -43,19 +43,41 @@ fun bottomBarIndicatorComposable(
         ShapeType.Dot -> Modifier.size(config.thickness).clip(CircleShape)
     }
 
-    Box(
-        modifier = Modifier
-            .offset(
-                x = (animatedOffset.value + (spaceBetween * (selectedIndex.value + 1))),
-                y = if ((config.shapeType == ShapeType.Line || config.shapeType == ShapeType.Dot)
-                    && config.positionType == PositionType.Bottom
-                )
-                    0.dp + (config.size - config.thickness)
-                else 0.dp + (config.padding / 2)
+    when(basicBarPosition) {
+        BasicBarPosition.HORIZONTAL_BOTTOM, BasicBarPosition.HORIZONTAL_TOP -> {
+            Box(
+                modifier = Modifier
+                    .offset(
+                        x = (animatedOffset.value + (spaceBetween * (selectedIndex.value + 1))),
+                        y = if ((config.shapeType == ShapeType.Line || config.shapeType == ShapeType.Dot)
+                            && config.positionType == PositionType.Bottom
+                        )
+                            0.dp + (config.size - config.thickness)
+                        else 0.dp + (config.padding / 2)
+                    )
+
+                    .background(color, RoundedCornerShape(10.dp))
+
+                    .then(shapeModifier)
             )
+        }
+        BasicBarPosition.VERTICAL_LEFT, BasicBarPosition.VERTICAL_RIGHT -> {
+            Box(
+                modifier = Modifier
+                    .offset(
+                        y = (animatedOffset.value + (spaceBetween * (selectedIndex.value + 1))),
+                        x = if ((config.shapeType == ShapeType.Line || config.shapeType == ShapeType.Dot)
+                            && config.positionType == PositionType.Bottom
+                        )
+                            0.dp + (config.size - config.thickness)
+                        else 0.dp + (config.padding / 2)
+                    )
 
-            .background(color, RoundedCornerShape(10.dp))
+                    .background(color, RoundedCornerShape(10.dp))
 
-            .then(shapeModifier)
-    )
+                    .then(shapeModifier)
+            )
+        }
+    }
+
 }

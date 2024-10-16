@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -18,6 +19,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,6 +30,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import basic.example.component.data.BasicBarConfig
 import basic.example.component.data.BasicBarPosition
@@ -50,20 +55,20 @@ fun BasicBottomBar(
 
     val lazyListState = rememberLazyListState()
 
-    var parentWidth by remember { mutableStateOf(0.dp) }
+    var parentWidth = remember { mutableStateOf(0.dp) }
     val density = LocalDensity.current
     val bottomBarWidth = itemWidth * bottomBarItems.size + 10.dp
     val isHovered = remember { mutableStateOf(false) }
     val animatedOffset = animateDpAsState(
         targetValue = (selectedIndex.value * itemWidth.value).dp
     )
-    var spaceBetween by remember { mutableStateOf(0.dp) }
+    var spaceBetween = remember { mutableStateOf(0.dp) }
     when(basicBarConfig.basicBarPosition){
         BasicBarPosition.HORIZONTAL_BOTTOM, BasicBarPosition.HORIZONTAL_TOP -> {
             Column(parentModifier) {
                 Box(Modifier.width(300.dp).padding(5.dp)) {
                     HoverDescriptionTextComposable(
-                        spaceBetween,
+                        spaceBetween.value,
                         hoverSelectedIndex,
                         itemWidth,
                         bottomBarItems,
@@ -75,16 +80,16 @@ fun BasicBottomBar(
                         .background(color = Color.Black, shape = RoundedCornerShape(10.dp))
                         .onGloballyPositioned { layoutCoordinates ->
                             val widthPx = layoutCoordinates.size.width
-                            parentWidth = with(density) { widthPx.toDp() }
+                            parentWidth.value = with(density) { widthPx.toDp() }
                         }
                 ) {
-                    spaceBetween = ((parentWidth - (itemWidth * 4)) / 5)
+                    spaceBetween.value = ((parentWidth.value - (itemWidth * 4)) / 5)
                     bottomBarIndicatorComposable(
                         config = BottomBarSelectedIndicator(
                             shapeType = ShapeType.Square,
                             positionType = PositionType.Bottom
                         ),
-                        spaceBetween = spaceBetween,
+                        spaceBetween = spaceBetween.value,
                         animatedOffset = animatedOffset,
                         selectedIndex = selectedIndex,
                         basicBarPosition = basicBarConfig.basicBarPosition
@@ -130,70 +135,97 @@ fun BasicBottomBar(
             }
         }
         BasicBarPosition.VERTICAL_LEFT, BasicBarPosition.VERTICAL_RIGHT -> {
-            Row(parentModifier) {
-                Box(Modifier.height(300.dp).padding(5.dp)) {
-                    HoverDescriptionTextComposable(
-                        spaceBetween,
-                        hoverSelectedIndex,
-                        itemWidth,
-                        bottomBarItems,
-                        isHovered
-                    )
+            VerticalBasicBottomBar(
+                parentModifier,
+                spaceBetween,
+                hoverSelectedIndex,
+                itemWidth,
+                bottomBarItems,
+                isHovered,
+                parentWidth,
+                density,
+                animatedOffset,
+                selectedIndex,
+                basicBarConfig,
+                lazyListState,
+                onIconClick
+            )
+
+        }
+    }
+}
+
+@Composable
+private fun VerticalBasicBottomBar(
+    parentModifier: Modifier,
+    spaceBetween: MutableState<Dp>,
+    hoverSelectedIndex: MutableState<Int>,
+    itemWidth: Dp,
+    bottomBarItems: List<BasicItem>,
+    isHovered: MutableState<Boolean>,
+    parentWidth: MutableState<Dp>,
+    density: Density,
+    animatedOffset: State<Dp>,
+    selectedIndex: MutableState<Int>,
+    basicBarConfig: BasicBarConfig,
+    lazyListState: LazyListState,
+    onIconClick: (BottomBarItem) -> Unit
+) {
+
+    Row(parentModifier) {
+
+        Box(
+            parentModifier.height(300.dp).padding(5.dp).width(60.dp)
+                .background(color = Color.Black, shape = RoundedCornerShape(10.dp))
+                .onGloballyPositioned { layoutCoordinates ->
+                    val widthPx = layoutCoordinates.size.width
+                    parentWidth.value = with(density) { widthPx.toDp() }
                 }
-                Box(
-                    parentModifier.height(300.dp).padding(5.dp).width(60.dp)
-                        .background(color = Color.Black, shape = RoundedCornerShape(10.dp))
-                        .onGloballyPositioned { layoutCoordinates ->
-                            val widthPx = layoutCoordinates.size.width
-                            parentWidth = with(density) { widthPx.toDp() }
-                        }
-                ) {
-                    spaceBetween = ((parentWidth - (itemWidth * 4)) / 5)
-                    bottomBarIndicatorComposable(
-                        config = BottomBarSelectedIndicator(
-                            shapeType = ShapeType.Square,
-                            positionType = PositionType.Bottom
-                        ),
-                        spaceBetween = spaceBetween,
-                        animatedOffset = animatedOffset,
-                        selectedIndex = selectedIndex,
-                        basicBarPosition = basicBarConfig.basicBarPosition
-                    )
-                    LazyColumn(
-                        state = lazyListState,
-                        verticalArrangement = Arrangement.SpaceEvenly,
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        itemsIndexed(bottomBarItems) { index, item ->
-                            IconButton(
-                                onClick = {
-                                    selectedIndex.value = index
-                                    onIconClick(item)
-                                },
-                                modifier = Modifier.align(Alignment.Center)
-                                    .hoverEffect { onHover ->
-                                        isHovered.value = onHover
-                                        hoverSelectedIndex.value = index
-                                    }
-                                    .background(
-                                        color = if (isHovered.value
-                                            && index == hoverSelectedIndex.value
-                                            && index != selectedIndex.value
-                                        ) Color.Gray
-                                        else
-                                            Color.Unspecified,
-                                        RoundedCornerShape(10.dp)
-                                    )
-                            ) {
-                                Icon(
-                                    painter = painterResource(item.icon.selectedIconDrawable),
-                                    contentDescription = item.contentDescription,
-                                    tint = Color.White,
-                                    modifier = Modifier.align(Alignment.Center)
-                                )
+        ) {
+            spaceBetween.value = ((parentWidth.value - (itemWidth * 4)) / 5)
+            bottomBarIndicatorComposable(
+                config = BottomBarSelectedIndicator(
+                    shapeType = ShapeType.Square,
+                    positionType = PositionType.Bottom
+                ),
+                spaceBetween = spaceBetween.value,
+                animatedOffset = animatedOffset,
+                selectedIndex = selectedIndex,
+                basicBarPosition = basicBarConfig.basicBarPosition
+            )
+            LazyColumn(
+                state = lazyListState,
+                verticalArrangement = Arrangement.SpaceEvenly,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                itemsIndexed(bottomBarItems) { index, item ->
+                    IconButton(
+                        onClick = {
+                            selectedIndex.value = index
+                            onIconClick(item)
+                        },
+                        modifier = Modifier.align(Alignment.Center)
+                            .hoverEffect { onHover ->
+                                isHovered.value = onHover
+                                hoverSelectedIndex.value = index
                             }
-                        }
+                            .background(
+                                color = if (isHovered.value
+                                    && index == hoverSelectedIndex.value
+                                    && index != selectedIndex.value
+                                ) Color.Gray
+                                else
+                                    Color.Unspecified,
+                                RoundedCornerShape(10.dp)
+                            )
+                    ) {
+                        Icon(
+                            painter = painterResource(item.icon.selectedIconDrawable),
+                            contentDescription = item.contentDescription,
+                            tint = Color.White,
+                            modifier = Modifier.align(Alignment.Center)
+                        )
                     }
                 }
             }
