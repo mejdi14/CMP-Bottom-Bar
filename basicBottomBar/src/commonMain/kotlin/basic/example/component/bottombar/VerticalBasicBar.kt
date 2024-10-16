@@ -1,4 +1,110 @@
 package basic.example.component.bottombar
 
-class VerticalBasicBar {
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import basic.example.component.data.BasicBarConfig
+import basic.example.component.data.BasicItem
+import org.example.core.bottombar.data.BottomBarItem
+import org.example.core.bottombar.indicator.BottomBarSelectedIndicator
+import org.example.core.bottombar.indicator.PositionType
+import org.example.core.bottombar.indicator.ShapeType
+import org.jetbrains.compose.resources.painterResource
+
+@Composable
+internal fun VerticalBasicBottomBar(
+    parentModifier: Modifier,
+    spaceBetween: MutableState<Dp>,
+    hoverSelectedIndex: MutableState<Int>,
+    itemWidth: Dp,
+    bottomBarItems: List<BasicItem>,
+    isHovered: MutableState<Boolean>,
+    parentWidth: MutableState<Dp>,
+    density: Density,
+    animatedOffset: State<Dp>,
+    selectedIndex: MutableState<Int>,
+    basicBarConfig: BasicBarConfig,
+    lazyListState: LazyListState,
+    onIconClick: (BottomBarItem) -> Unit
+) {
+
+    Row(parentModifier) {
+        Box(
+            parentModifier.height(300.dp).padding(5.dp).width(60.dp)
+                .background(color = Color.Black, shape = RoundedCornerShape(10.dp))
+                .onGloballyPositioned { layoutCoordinates ->
+                    val widthPx = layoutCoordinates.size.width
+                    parentWidth.value = with(density) { widthPx.toDp() }
+                }
+        ) {
+            spaceBetween.value = ((parentWidth.value - (itemWidth * 4)) / 5)
+            bottomBarIndicatorComposable(
+                config = BottomBarSelectedIndicator(
+                    shapeType = ShapeType.Square,
+                    positionType = PositionType.Bottom
+                ),
+                spaceBetween = spaceBetween.value,
+                animatedOffset = animatedOffset,
+                selectedIndex = selectedIndex,
+                basicBarPosition = basicBarConfig.basicBarPosition
+            )
+            LazyColumn(
+                state = lazyListState,
+                verticalArrangement = Arrangement.SpaceEvenly,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                itemsIndexed(bottomBarItems) { index, item ->
+                    IconButton(
+                        onClick = {
+                            selectedIndex.value = index
+                            onIconClick(item)
+                        },
+                        modifier = Modifier.align(Alignment.Center)
+                            .hoverEffect { onHover ->
+                                isHovered.value = onHover
+                                hoverSelectedIndex.value = index
+                            }
+                            .background(
+                                color = if (isHovered.value
+                                    && index == hoverSelectedIndex.value
+                                    && index != selectedIndex.value
+                                ) Color.Gray
+                                else
+                                    Color.Unspecified,
+                                RoundedCornerShape(10.dp)
+                            )
+                    ) {
+                        Icon(
+                            painter = painterResource(item.icon.selectedIconDrawable),
+                            contentDescription = item.contentDescription,
+                            tint = Color.White,
+                            modifier = Modifier.align(Alignment.Center)
+                        )
+                    }
+                }
+            }
+        }
+    }
 }
