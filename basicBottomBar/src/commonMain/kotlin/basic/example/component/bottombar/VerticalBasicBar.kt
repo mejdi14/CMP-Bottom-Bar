@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -118,7 +119,7 @@ internal fun VerticalBasicBar(
             }
         }
         if (basicBarConfig.basicBarPosition == BasicBarPosition.VERTICAL_LEFT)
-            Box(Modifier.height(300.dp).width(500.dp).padding(5.dp)) {
+            Box(Modifier.height(300.dp).fillMaxWidth().padding(5.dp)) {
                 HoverDescriptionTextComposable(
                     spaceBetween.value,
                     hoverSelectedIndex,
