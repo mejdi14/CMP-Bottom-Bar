@@ -40,7 +40,7 @@ internal fun VerticalBasicBar(
     itemWidth: Dp,
     bottomBarItems: List<BasicItem>,
     isHovered: MutableState<Boolean>,
-    parentWidth: MutableState<Dp>,
+    parentHeight: MutableState<Dp>,
     density: Density,
     animatedOffset: State<Dp>,
     selectedIndex: MutableState<Int>,
@@ -48,17 +48,16 @@ internal fun VerticalBasicBar(
     lazyListState: LazyListState,
     onIconClick: (BottomBarItem) -> Unit
 ) {
-
     Row(parentModifier) {
         Box(
             parentModifier.height(300.dp).padding(5.dp).width(60.dp)
                 .background(color = Color.Black, shape = RoundedCornerShape(10.dp))
                 .onGloballyPositioned { layoutCoordinates ->
-                    val widthPx = layoutCoordinates.size.width
-                    parentWidth.value = with(density) { widthPx.toDp() }
+                    val heightPx = layoutCoordinates.size.height
+                    parentHeight.value = with(density) { heightPx.toDp() }
                 }
         ) {
-            spaceBetween.value = ((parentWidth.value - (itemWidth * 4)) / 5)
+            spaceBetween.value = ((parentHeight.value - (itemWidth * 4)) / 5)
             bottomBarIndicatorComposable(
                 config = BottomBarSelectedIndicator(
                     shapeType = ShapeType.Square,

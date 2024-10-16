@@ -27,6 +27,7 @@ fun BasicBottomBar(
     val lazyListState = rememberLazyListState()
 
     var parentWidth = remember { mutableStateOf(0.dp) }
+    var parentHeight = remember { mutableStateOf(0.dp) }
     val density = LocalDensity.current
     val bottomBarWidth = itemWidth * bottomBarItems.size + 10.dp
     val isHovered = remember { mutableStateOf(false) }
@@ -60,7 +61,7 @@ fun BasicBottomBar(
                 itemWidth,
                 bottomBarItems,
                 isHovered,
-                parentWidth,
+                parentHeight,
                 density,
                 animatedOffset,
                 selectedIndex,
