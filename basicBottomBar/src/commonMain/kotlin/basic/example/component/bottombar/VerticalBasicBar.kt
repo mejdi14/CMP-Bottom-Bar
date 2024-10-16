@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import basic.example.component.data.BasicBarConfig
+import basic.example.component.data.BasicBarPosition
 import basic.example.component.data.BasicItem
 import org.example.core.bottombar.data.BottomBarItem
 import org.example.core.bottombar.indicator.BottomBarSelectedIndicator
@@ -49,6 +50,17 @@ internal fun VerticalBasicBar(
     onIconClick: (BottomBarItem) -> Unit
 ) {
     Row(parentModifier) {
+        if (basicBarConfig.basicBarPosition == BasicBarPosition.VERTICAL_RIGHT)
+            Box(Modifier.height(300.dp).padding(5.dp)) {
+                HoverDescriptionTextComposable(
+                    spaceBetween.value,
+                    hoverSelectedIndex,
+                    itemWidth,
+                    bottomBarItems,
+                    isHovered,
+                    basicBarConfig.basicBarPosition
+                )
+            }
         Box(
             parentModifier.height(300.dp).padding(5.dp).width(60.dp)
                 .background(color = Color.Black, shape = RoundedCornerShape(10.dp))
@@ -105,5 +117,16 @@ internal fun VerticalBasicBar(
                 }
             }
         }
+        if (basicBarConfig.basicBarPosition == BasicBarPosition.VERTICAL_LEFT)
+            Box(Modifier.height(300.dp).width(500.dp).padding(5.dp)) {
+                HoverDescriptionTextComposable(
+                    spaceBetween.value,
+                    hoverSelectedIndex,
+                    itemWidth,
+                    bottomBarItems,
+                    isHovered,
+                    basicBarConfig.basicBarPosition
+                )
+            }
     }
 }

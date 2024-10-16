@@ -55,7 +55,8 @@ internal fun HorizontalBasicBar(
                 hoverSelectedIndex,
                 itemWidth,
                 bottomBarItems,
-                isHovered
+                isHovered,
+                basicBarConfig.basicBarPosition
             )
         }
         Box(
