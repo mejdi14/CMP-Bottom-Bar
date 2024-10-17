@@ -2,6 +2,7 @@ package basic.example.component.bottombar
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -18,6 +19,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -61,7 +63,8 @@ internal fun VerticalBasicBar(
                 )
             }
         Box(
-            parentModifier.height(400.dp).padding(5.dp).width(60.dp)
+            parentModifier.height(400.dp).padding(basicBarConfig.basicBarPadding)
+                .width(basicBarConfig.itemSize + (basicBarConfig.basicBarPadding * 2))
                 .background(color = basicBarConfig.backgroundColor, shape = basicBarConfig.shape)
                 .onGloballyPositioned { layoutCoordinates ->
                     val heightPx = layoutCoordinates.size.height
@@ -88,12 +91,15 @@ internal fun VerticalBasicBar(
             ) {
                 itemsIndexed(bottomBarItems) { index, item ->
                     Box(
-                        modifier = Modifier.size(50.dp).align(Alignment.Center)
+                        modifier = Modifier.size(basicBarConfig.itemSize).align(Alignment.Center)
                             .hoverEffect { onHover ->
                                 isHovered.value = onHover
                                 hoverSelectedIndex.value = index
                             }
-                            .clickable(){
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null
+                            ) {
                                 selectedIndex.value = index
                                 onIconClick(item)
                             }
@@ -111,7 +117,8 @@ internal fun VerticalBasicBar(
                             painter = painterResource(item.icon.selectedIconDrawable),
                             contentDescription = item.contentDescription,
                             tint = Color.White,
-                            modifier = Modifier.align(Alignment.Center).background(color = Color.Unspecified)
+                            modifier = Modifier.align(Alignment.Center)
+                                .background(color = Color.Unspecified)
                         )
                     }
                 }

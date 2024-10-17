@@ -61,7 +61,7 @@ internal fun HorizontalBasicBar(
             )
         }
         Box(
-            Modifier.width(400.dp).height(60.dp)
+            Modifier.width(400.dp).padding(basicBarConfig.basicBarPadding).height(basicBarConfig.itemSize + (basicBarConfig.basicBarPadding * 2))
                 .background(color = basicBarConfig.backgroundColor, shape = basicBarConfig.shape)
                 .onGloballyPositioned { layoutCoordinates ->
                     val widthPx = layoutCoordinates.size.width
