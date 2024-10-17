@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -19,11 +19,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import basic.example.component.data.BasicBarConfig
 import basic.example.component.data.BasicBarPosition
 import basic.example.component.data.BasicItem
+import org.jetbrains.skia.FontStyle
+import org.jetbrains.skia.FontWeight
 
 @Composable
 internal fun HoverDescriptionTextComposable(
@@ -63,9 +66,12 @@ internal fun HoverDescriptionTextComposable(
             .clip(RoundedCornerShape(6.dp)).background(color = Color.Black)
         ) {
             Text(
-                bottomBarItems.get(selectedIndex.value).hoverText,
-                color = Color.White,
-                modifier = Modifier.align(Alignment.Center).padding(4.dp)
+                bottomBarItems[selectedIndex.value].hoverText,
+                modifier = Modifier.align(Alignment.Center).padding(4.dp),
+                color = basicBarConfig.hoverTextConfig.textColor,
+                style = TextStyle(
+                    fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
+                )
             )
         }
 }
