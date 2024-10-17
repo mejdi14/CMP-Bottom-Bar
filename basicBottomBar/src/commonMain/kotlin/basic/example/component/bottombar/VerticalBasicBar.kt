@@ -119,7 +119,7 @@ internal fun VerticalBasicBar(
             }
         }
         if (basicBarConfig.basicBarPosition == BasicBarPosition.VERTICAL_LEFT)
-            Box(Modifier.height(300.dp).fillMaxWidth().padding(5.dp)) {
+            Box(Modifier.height(300.dp).padding(5.dp)) {
                 HoverDescriptionTextComposable(
                     spaceBetween.value,
                     hoverSelectedIndex,
