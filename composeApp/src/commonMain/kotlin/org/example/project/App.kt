@@ -29,6 +29,15 @@ fun App() {
             ) {
 
             }
+            BasicBottomBar(
+                bottomBarItems = basicDemoItems,
+                BasicBarConfig(basicBarPosition = BasicBarPosition.VERTICAL_LEFT),
+                parentModifier = Modifier.align(
+                    Alignment.CenterStart
+                )
+            ) {
+
+            }
         }
     }
 }

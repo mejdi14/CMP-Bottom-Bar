@@ -63,14 +63,15 @@ internal fun VerticalBasicBar(
                 )
             }
         Box(
-            parentModifier.height(300.dp).padding(5.dp).width(60.dp)
+            parentModifier.height(400.dp).padding(5.dp).width(60.dp)
                 .background(color = basicBarConfig.backgroundColor, shape = basicBarConfig.shape)
                 .onGloballyPositioned { layoutCoordinates ->
                     val heightPx = layoutCoordinates.size.height
                     parentHeight.value = with(density) { heightPx.toDp() }
                 }
         ) {
-            spaceBetween.value = ((parentHeight.value - (itemWidth * 4)) / 5)
+            spaceBetween.value =
+                ((parentHeight.value - (itemWidth * bottomBarItems.size)) / (bottomBarItems.size + 1))
             bottomBarIndicatorComposable(
                 config = BottomBarSelectedIndicator(
                     shapeType = ShapeType.Square,
