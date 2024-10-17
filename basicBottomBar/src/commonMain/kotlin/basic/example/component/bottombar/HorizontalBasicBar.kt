@@ -66,14 +66,14 @@ internal fun HorizontalBasicBar(
             )
         }
         Box(
-            Modifier.fillMaxWidth().height(60.dp)
+            Modifier.width(400.dp).height(60.dp)
                 .background(color = basicBarConfig.backgroundColor, shape = basicBarConfig.shape)
                 .onGloballyPositioned { layoutCoordinates ->
                     val widthPx = layoutCoordinates.size.width
                     parentWidth.value = with(density) { widthPx.toDp() }
                 }
         ) {
-            spaceBetween.value = ((parentWidth.value - (itemWidth * 4)) / 5)
+            spaceBetween.value = ((parentWidth.value - (itemWidth * (bottomBarItems.size))) / (bottomBarItems.size + 1))
             bottomBarIndicatorComposable(
                 config = BottomBarSelectedIndicator(
                     shapeType = ShapeType.Square,
