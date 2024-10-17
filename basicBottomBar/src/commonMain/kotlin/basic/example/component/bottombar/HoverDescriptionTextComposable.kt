@@ -64,10 +64,12 @@ internal fun HoverDescriptionTextComposable(
                 }
             )
             .clip(RoundedCornerShape(6.dp)).background(color = Color.Black)
+            .then(basicBarConfig.hoverTextConfig.containerModifier)
         ) {
             Text(
                 bottomBarItems[selectedIndex.value].hoverText,
-                modifier = Modifier.align(Alignment.Center).padding(4.dp),
+                modifier = Modifier.align(Alignment.Center).padding(4.dp)
+                    .then(basicBarConfig.hoverTextConfig.textModifier),
                 color = basicBarConfig.hoverTextConfig.textColor,
                 style = TextStyle(
                     fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
