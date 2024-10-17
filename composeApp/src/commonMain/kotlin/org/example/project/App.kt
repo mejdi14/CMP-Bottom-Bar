@@ -22,9 +22,9 @@ fun App() {
             // AztopiaDemo(Modifier.align(Alignment.BottomCenter))
             BasicBottomBar(
                 bottomBarItems = basicDemoItems,
-                BasicBarConfig(basicBarPosition = BasicBarPosition.VERTICAL_RIGHT),
+                BasicBarConfig(basicBarPosition = BasicBarPosition.HORIZONTAL_TOP),
                 parentModifier = Modifier.align(
-                    Alignment.BottomEnd
+                    Alignment.TopCenter
                 )
             ) {
 
