@@ -25,8 +25,6 @@ import androidx.compose.ui.unit.dp
 import basic.example.component.data.BasicBarConfig
 import basic.example.component.data.BasicBarPosition
 import basic.example.component.data.BasicItem
-import org.jetbrains.skia.FontStyle
-import org.jetbrains.skia.FontWeight
 
 @Composable
 internal fun HoverDescriptionTextComposable(
