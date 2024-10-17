@@ -4,10 +4,14 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -49,7 +53,7 @@ internal fun HorizontalBasicBar(
     lazyListState: LazyListState,
     onIconClick: (BottomBarItem) -> Unit
 ) {
-    Column(parentModifier) {
+    Column(parentModifier.padding(horizontal = 50.dp)) {
         if (basicBarConfig.basicBarPosition == BasicBarPosition.HORIZONTAL_BOTTOM)
         Box(Modifier.width(300.dp).padding(5.dp)) {
             HoverDescriptionTextComposable(
@@ -62,7 +66,7 @@ internal fun HorizontalBasicBar(
             )
         }
         Box(
-            parentModifier.width(300.dp).padding(5.dp).height(60.dp)
+            Modifier.fillMaxWidth().height(60.dp)
                 .background(color = Color.Black, shape = RoundedCornerShape(10.dp))
                 .onGloballyPositioned { layoutCoordinates ->
                     val widthPx = layoutCoordinates.size.width
@@ -84,7 +88,7 @@ internal fun HorizontalBasicBar(
                 state = lazyListState,
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxHeight().fillMaxWidth()
             ) {
                 itemsIndexed(bottomBarItems) { index, item ->
 
