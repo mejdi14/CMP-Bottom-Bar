@@ -64,7 +64,7 @@ internal fun VerticalBasicBar(
             }
         Box(
             parentModifier.height(300.dp).padding(5.dp).width(60.dp)
-                .background(color = Color.Black, shape = RoundedCornerShape(10.dp))
+                .background(color = basicBarConfig.backgroundColor, shape = basicBarConfig.shape)
                 .onGloballyPositioned { layoutCoordinates ->
                     val heightPx = layoutCoordinates.size.height
                     parentHeight.value = with(density) { heightPx.toDp() }
@@ -102,7 +102,7 @@ internal fun VerticalBasicBar(
                                 color = if (isHovered.value
                                     && index == hoverSelectedIndex.value
                                     && index != selectedIndex.value
-                                ) Color.Gray
+                                ) basicBarConfig.hoveredBackgroundColor
                                 else
                                     Color.Unspecified,
                                 RoundedCornerShape(10.dp)

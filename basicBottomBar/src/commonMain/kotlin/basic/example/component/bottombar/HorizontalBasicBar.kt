@@ -67,7 +67,7 @@ internal fun HorizontalBasicBar(
         }
         Box(
             Modifier.fillMaxWidth().height(60.dp)
-                .background(color = Color.Black, shape = RoundedCornerShape(10.dp))
+                .background(color = basicBarConfig.backgroundColor, shape = basicBarConfig.shape)
                 .onGloballyPositioned { layoutCoordinates ->
                     val widthPx = layoutCoordinates.size.width
                     parentWidth.value = with(density) { widthPx.toDp() }
@@ -106,7 +106,7 @@ internal fun HorizontalBasicBar(
                                 color = if (isHovered.value
                                     && index == hoverSelectedIndex.value
                                     && index != selectedIndex.value
-                                ) Color.Gray
+                                ) basicBarConfig.hoveredBackgroundColor
                                 else
                                     Color.Unspecified,
                                 RoundedCornerShape(10.dp)

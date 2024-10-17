@@ -69,7 +69,6 @@ fun BasicBottomBar(
                 lazyListState,
                 onIconClick
             )
-
         }
     }
 }
