@@ -21,6 +21,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import basic.example.component.data.BasicBarConfig
 import basic.example.component.data.BasicBarPosition
 import basic.example.component.data.BasicItem
 
@@ -28,10 +29,9 @@ import basic.example.component.data.BasicItem
 internal fun HoverDescriptionTextComposable(
     spaceBetween: Dp,
     selectedIndex: MutableState<Int>,
-    itemWidth: Dp,
     bottomBarItems: List<BasicItem>,
     isHovered: MutableState<Boolean>,
-    basicBarPosition: BasicBarPosition
+    basicBarConfig: BasicBarConfig
 ) {
     var parentWidth by remember { mutableStateOf(0.dp) }
     var parentHeight by remember { mutableStateOf(0.dp) }
@@ -45,16 +45,16 @@ internal fun HoverDescriptionTextComposable(
                 parentHeight = with(density) { heightPx.toDp() }
             }
             .offset(
-                x = when (basicBarPosition) {
+                x = when (basicBarConfig.basicBarPosition) {
                     BasicBarPosition.HORIZONTAL_TOP, BasicBarPosition.HORIZONTAL_BOTTOM -> {
-                        ((selectedIndex.value * itemWidth.value).dp + (spaceBetween * (selectedIndex.value + 1))) + (itemWidth / 2) - (parentWidth / 2)
+                        ((selectedIndex.value * basicBarConfig.itemSize.value).dp + (spaceBetween * (selectedIndex.value + 1))) + (basicBarConfig.itemSize / 2) - (parentWidth / 2)
                     }
 
                     else -> 0.dp
                 },
-                y = when (basicBarPosition) {
+                y = when (basicBarConfig.basicBarPosition) {
                     BasicBarPosition.VERTICAL_LEFT, BasicBarPosition.VERTICAL_RIGHT -> {
-                        ((selectedIndex.value * itemWidth.value).dp + (spaceBetween * (selectedIndex.value + 1))) + (itemWidth / 2) - (parentHeight / 2)
+                        ((selectedIndex.value * basicBarConfig.itemSize.value).dp + (spaceBetween * (selectedIndex.value + 1))) + (basicBarConfig.itemSize / 2) - (parentHeight / 2)
                     }
 
                     else -> 0.dp

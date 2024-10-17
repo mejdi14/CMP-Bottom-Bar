@@ -15,7 +15,6 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
@@ -40,7 +39,6 @@ internal fun VerticalBasicBar(
     parentModifier: Modifier,
     spaceBetween: MutableState<Dp>,
     hoverSelectedIndex: MutableState<Int>,
-    itemWidth: Dp,
     bottomBarItems: List<BasicItem>,
     isHovered: MutableState<Boolean>,
     parentHeight: MutableState<Dp>,
@@ -57,10 +55,9 @@ internal fun VerticalBasicBar(
                 HoverDescriptionTextComposable(
                     spaceBetween.value,
                     hoverSelectedIndex,
-                    itemWidth,
                     bottomBarItems,
                     isHovered,
-                    basicBarConfig.basicBarPosition
+                    basicBarConfig
                 )
             }
         Box(
@@ -72,7 +69,7 @@ internal fun VerticalBasicBar(
                 }
         ) {
             spaceBetween.value =
-                ((parentHeight.value - (itemWidth * bottomBarItems.size)) / (bottomBarItems.size + 1))
+                ((parentHeight.value - (basicBarConfig.itemSize * bottomBarItems.size)) / (bottomBarItems.size + 1))
             bottomBarIndicatorComposable(
                 config = SelectedIndicatorConfig(
                     shapeType = ShapeType.Square,
@@ -125,10 +122,9 @@ internal fun VerticalBasicBar(
                 HoverDescriptionTextComposable(
                     spaceBetween.value,
                     hoverSelectedIndex,
-                    itemWidth,
                     bottomBarItems,
                     isHovered,
-                    basicBarConfig.basicBarPosition
+                    basicBarConfig
                 )
             }
     }

@@ -39,7 +39,6 @@ internal fun HorizontalBasicBar(
     parentModifier: Modifier,
     spaceBetween: MutableState<Dp>,
     hoverSelectedIndex: MutableState<Int>,
-    itemWidth: Dp,
     bottomBarItems: List<BasicItem>,
     isHovered: MutableState<Boolean>,
     parentWidth: MutableState<Dp>,
@@ -56,10 +55,9 @@ internal fun HorizontalBasicBar(
             HoverDescriptionTextComposable(
                 spaceBetween.value,
                 hoverSelectedIndex,
-                itemWidth,
                 bottomBarItems,
                 isHovered,
-                basicBarConfig.basicBarPosition
+                basicBarConfig
             )
         }
         Box(
@@ -70,7 +68,7 @@ internal fun HorizontalBasicBar(
                     parentWidth.value = with(density) { widthPx.toDp() }
                 }
         ) {
-            spaceBetween.value = ((parentWidth.value - (itemWidth * (bottomBarItems.size))) / (bottomBarItems.size + 1))
+            spaceBetween.value = ((parentWidth.value - (basicBarConfig.itemSize * (bottomBarItems.size))) / (bottomBarItems.size + 1))
             bottomBarIndicatorComposable(
                 config = SelectedIndicatorConfig(
                     shapeType = ShapeType.Square,
@@ -124,10 +122,9 @@ internal fun HorizontalBasicBar(
                 HoverDescriptionTextComposable(
                     spaceBetween.value,
                     hoverSelectedIndex,
-                    itemWidth,
                     bottomBarItems,
                     isHovered,
-                    basicBarConfig.basicBarPosition
+                    basicBarConfig
                 )
             }
     }

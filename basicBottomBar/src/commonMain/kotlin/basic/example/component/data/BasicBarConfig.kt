@@ -9,6 +9,7 @@ import org.example.core.bottombar.data.BottomBarHoverText
 import org.example.core.bottombar.indicator.SelectedIndicatorConfig
 
 data class BasicBarConfig (
+    val itemSize: Dp = 50.dp,
     val itemsRadius: Dp = 10.dp,
     val backgroundColor: Color = Color(0xFF1c2437),
     val hoveredBackgroundColor: Color = Color(0xFF293751),
