@@ -1,13 +1,14 @@
 package basic.example.component.bottombar
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -29,7 +30,7 @@ import basic.example.component.data.BasicBarConfig
 import basic.example.component.data.BasicBarPosition
 import basic.example.component.data.BasicItem
 import org.example.core.bottombar.data.BottomBarItem
-import org.example.core.bottombar.indicator.BottomBarSelectedIndicator
+import org.example.core.bottombar.indicator.SelectedIndicatorConfig
 import org.example.core.bottombar.indicator.PositionType
 import org.example.core.bottombar.indicator.ShapeType
 import org.jetbrains.compose.resources.painterResource
@@ -73,7 +74,7 @@ internal fun VerticalBasicBar(
             spaceBetween.value =
                 ((parentHeight.value - (itemWidth * bottomBarItems.size)) / (bottomBarItems.size + 1))
             bottomBarIndicatorComposable(
-                config = BottomBarSelectedIndicator(
+                config = SelectedIndicatorConfig(
                     shapeType = ShapeType.Square,
                     positionType = PositionType.Bottom
                 ),
@@ -89,15 +90,15 @@ internal fun VerticalBasicBar(
                 modifier = Modifier.fillMaxSize()
             ) {
                 itemsIndexed(bottomBarItems) { index, item ->
-                    IconButton(
-                        onClick = {
-                            selectedIndex.value = index
-                            onIconClick(item)
-                        },
-                        modifier = Modifier.align(Alignment.Center)
+                    Box(
+                        modifier = Modifier.size(50.dp).align(Alignment.Center)
                             .hoverEffect { onHover ->
                                 isHovered.value = onHover
                                 hoverSelectedIndex.value = index
+                            }
+                            .clickable(){
+                                selectedIndex.value = index
+                                onIconClick(item)
                             }
                             .background(
                                 color = if (isHovered.value
@@ -113,7 +114,7 @@ internal fun VerticalBasicBar(
                             painter = painterResource(item.icon.selectedIconDrawable),
                             contentDescription = item.contentDescription,
                             tint = Color.White,
-                            modifier = Modifier.align(Alignment.Center)
+                            modifier = Modifier.align(Alignment.Center).background(color = Color.Unspecified)
                         )
                     }
                 }

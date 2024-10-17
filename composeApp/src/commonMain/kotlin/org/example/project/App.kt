@@ -6,6 +6,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import basic.example.component.bottombar.BasicBottomBar
 import basic.example.component.data.BasicBarConfig
 import basic.example.component.data.BasicBarPosition
@@ -34,6 +35,15 @@ fun App() {
                 BasicBarConfig(basicBarPosition = BasicBarPosition.VERTICAL_LEFT),
                 parentModifier = Modifier.align(
                     Alignment.CenterStart
+                )
+            ) {
+
+            }
+            BasicBottomBar(
+                bottomBarItems = basicDemoItems,
+                BasicBarConfig(basicBarPosition = BasicBarPosition.VERTICAL_RIGHT, backgroundColor = Color(0xFF3841e6), hoveredBackgroundColor = Color(0xFF6067eb)),
+                parentModifier = Modifier.align(
+                    Alignment.CenterEnd
                 )
             ) {
 

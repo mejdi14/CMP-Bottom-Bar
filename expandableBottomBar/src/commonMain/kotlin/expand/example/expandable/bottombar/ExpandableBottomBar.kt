@@ -28,8 +28,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import org.example.core.bottombar.data.BottomBarItem
-import org.example.core.bottombar.data.BottomBarIcon
-import org.example.core.bottombar.indicator.BottomBarSelectedIndicator
+import org.example.core.bottombar.indicator.SelectedIndicatorConfig
 import org.example.core.bottombar.indicator.ShapeType
 import org.jetbrains.compose.resources.painterResource
 
@@ -65,7 +64,7 @@ fun ExpandableBottomBar(bottomBarItems: List<BottomBarItem>, parentModifier : Mo
             ) {
                 val spaceBetween = ((parentWidth - (itemWidth * 4)) / 5)
                 CustomBottomBar(
-                    config = BottomBarSelectedIndicator(
+                    config = SelectedIndicatorConfig(
                         shapeType = ShapeType.Line,
                     ),
                     spaceBetween = spaceBetween,
@@ -111,7 +110,7 @@ fun ExpandableBottomBar(bottomBarItems: List<BottomBarItem>, parentModifier : Mo
             ) {
                 val spaceBetween = ((parentWidth - (itemWidth * 4)) / 5)
                 CustomBottomBar(
-                    config = BottomBarSelectedIndicator(
+                    config = SelectedIndicatorConfig(
                         shapeType = ShapeType.Line,
                     ),
                     spaceBetween = spaceBetween,

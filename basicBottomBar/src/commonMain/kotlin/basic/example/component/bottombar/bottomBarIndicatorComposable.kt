@@ -17,14 +17,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import basic.example.component.data.BasicBarPosition
-import org.example.core.bottombar.indicator.BottomBarSelectedIndicator
+import org.example.core.bottombar.indicator.SelectedIndicatorConfig
 import org.example.core.bottombar.indicator.PositionType
 import org.example.core.bottombar.indicator.ShapeType
 
 @Composable
-fun bottomBarIndicatorComposable(
-    config: BottomBarSelectedIndicator,
-    color: Color = Color.Blue,
+internal fun bottomBarIndicatorComposable(
+    config: SelectedIndicatorConfig,
     animatedOffset: State<Dp>,
     spaceBetween: Dp,
     selectedIndex: MutableState<Int>,
@@ -56,7 +55,7 @@ fun bottomBarIndicatorComposable(
                         else 0.dp + (config.padding / 2)
                     )
 
-                    .background(color, RoundedCornerShape(10.dp))
+                    .background(config.color, RoundedCornerShape(10.dp))
 
                     .then(shapeModifier)
             )
@@ -72,9 +71,7 @@ fun bottomBarIndicatorComposable(
                             0.dp + (config.size - config.thickness)
                         else 0.dp + (config.padding / 2)
                     )
-
-                    .background(color, RoundedCornerShape(10.dp))
-
+                    .background(config.color, RoundedCornerShape(10.dp))
                     .then(shapeModifier)
             )
         }

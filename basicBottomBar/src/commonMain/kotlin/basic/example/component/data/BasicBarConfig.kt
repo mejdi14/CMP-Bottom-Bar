@@ -6,11 +6,13 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.example.core.bottombar.data.BottomBarHoverText
+import org.example.core.bottombar.indicator.SelectedIndicatorConfig
 
 data class BasicBarConfig (
     val itemsRadius: Dp = 10.dp,
     val backgroundColor: Color = Color(0xFF1c2437),
     val hoveredBackgroundColor: Color = Color(0xFF293751),
+    val selectedIndicatorConfig: SelectedIndicatorConfig = SelectedIndicatorConfig(),
     val shape: Shape = RoundedCornerShape(10.dp),
     val onSelectItemSizeChangeFriction: Float = 1.3f,
     val onSelectItemSizeChangeDurationMillis: Int = 300,
