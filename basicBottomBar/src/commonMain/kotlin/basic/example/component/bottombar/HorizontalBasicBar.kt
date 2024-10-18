@@ -54,30 +54,33 @@ internal fun HorizontalBasicBar(
 ) {
     Column(parentModifier.padding(horizontal = 50.dp)) {
         if (basicBarConfig.basicBarPosition == BasicBarPosition.HORIZONTAL_BOTTOM)
-        Box(Modifier.width(300.dp).padding(5.dp)) {
-            HoverDescriptionTextComposable(
-                spaceBetween.value,
-                hoverSelectedIndex,
-                bottomBarItems,
-                isHovered,
-                basicBarConfig
-            )
-        }
+            Box(Modifier.width(300.dp).padding(5.dp)) {
+                HoverDescriptionTextComposable(
+                    spaceBetween.value,
+                    hoverSelectedIndex,
+                    bottomBarItems,
+                    isHovered,
+                    basicBarConfig
+                )
+            }
         Box(
-            Modifier.width(400.dp).padding(basicBarConfig.basicBarPadding).height(basicBarConfig.itemSize + (basicBarConfig.basicBarPadding * 2))
+            Modifier.width(400.dp).padding(basicBarConfig.basicBarPadding)
+                .height(basicBarConfig.itemSize + (basicBarConfig.basicBarPadding * 2))
                 .background(color = basicBarConfig.backgroundColor, shape = basicBarConfig.shape)
                 .onGloballyPositioned { layoutCoordinates ->
                     val widthPx = layoutCoordinates.size.width
                     parentWidth.value = with(density) { widthPx.toDp() }
                 }
         ) {
-            spaceBetween.value = ((parentWidth.value - (basicBarConfig.itemSize * (bottomBarItems.size))) / (bottomBarItems.size + 1))
+            spaceBetween.value =
+                ((parentWidth.value - (basicBarConfig.itemSize * (bottomBarItems.size))) / (bottomBarItems.size + 1))
             bottomBarIndicatorComposable(
                 config = basicBarConfig.selectedIndicatorConfig,
                 spaceBetween = spaceBetween.value,
                 animatedOffset = animatedOffset,
                 selectedIndex = selectedIndex,
-                basicBarPosition = basicBarConfig.basicBarPosition
+                basicBarPosition = basicBarConfig.basicBarPosition,
+                itemSize = basicBarConfig.itemSize
             )
             LazyRow(
                 state = lazyListState,
@@ -96,7 +99,7 @@ internal fun HorizontalBasicBar(
                             .clickable(
                                 interactionSource = remember { MutableInteractionSource() },
                                 indication = null
-                            ){
+                            ) {
                                 selectedIndex.value = index
                                 onIconClick(item)
                             }

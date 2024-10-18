@@ -26,7 +26,8 @@ internal fun bottomBarIndicatorComposable(
     animatedOffset: State<Dp>,
     spaceBetween: Dp,
     selectedIndex: MutableState<Int>,
-    basicBarPosition: BasicBarPosition
+    basicBarPosition: BasicBarPosition,
+    itemSize: Dp
 ) {
 
 
@@ -36,27 +37,32 @@ internal fun bottomBarIndicatorComposable(
             config.size - config.padding
         )
 
-        BasicIndicatorShapeType.Line -> Modifier.width(config.size - config.padding).height(config.thickness)
-        BasicIndicatorShapeType.Circle -> Modifier.size(config.size - config.padding).clip(CircleShape)
+        BasicIndicatorShapeType.Line -> Modifier.width(config.size - config.padding)
+            .height(config.thickness)
+
+        BasicIndicatorShapeType.Circle -> Modifier.size(config.size - config.padding)
+            .clip(CircleShape)
+
         BasicIndicatorShapeType.Dot -> Modifier.size(config.thickness).clip(CircleShape)
     }
 
-    when(basicBarPosition) {
+    when (basicBarPosition) {
         BasicBarPosition.HORIZONTAL_BOTTOM, BasicBarPosition.HORIZONTAL_TOP -> {
             Box(
                 modifier = Modifier
                     .offset(
-                        x = (animatedOffset.value + (spaceBetween * (selectedIndex.value + 1))),
+                        x = (animatedOffset.value + (spaceBetween * (selectedIndex.value + 1))) + if (config.shapeType == BasicIndicatorShapeType.Dot) ((itemSize / 2) - (config.thickness / 2)) else 0.dp,
                         y = if ((config.shapeType == BasicIndicatorShapeType.Line || config.shapeType == BasicIndicatorShapeType.Dot)
                             && config.positionType == PositionType.Bottom
                         )
-                            0.dp + (config.size - config.thickness)
+                            0.dp + (config.size - config.thickness) - (if (config.shapeType == BasicIndicatorShapeType.Dot) config.thickness else 0.dp)
                         else 0.dp + (config.padding / 2)
                     )
                     .background(config.color, RoundedCornerShape(10.dp))
                     .then(shapeModifier)
             )
         }
+
         BasicBarPosition.VERTICAL_LEFT, BasicBarPosition.VERTICAL_RIGHT -> {
             Box(
                 modifier = Modifier

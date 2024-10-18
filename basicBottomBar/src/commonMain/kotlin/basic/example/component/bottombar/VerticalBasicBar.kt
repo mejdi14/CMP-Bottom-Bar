@@ -78,7 +78,8 @@ internal fun VerticalBasicBar(
                 spaceBetween = spaceBetween.value,
                 animatedOffset = animatedOffset,
                 selectedIndex = selectedIndex,
-                basicBarPosition = basicBarConfig.basicBarPosition
+                basicBarPosition = basicBarConfig.basicBarPosition,
+                itemSize = basicBarConfig.itemSize
             )
             LazyColumn(
                 state = lazyListState,

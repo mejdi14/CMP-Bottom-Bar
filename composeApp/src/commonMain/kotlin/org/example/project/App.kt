@@ -26,7 +26,7 @@ fun App() {
             BasicBottomBar(
                 bottomBarItems = basicDemoItems,
                 BasicBarConfig(basicBarPosition = BasicBarPosition.HORIZONTAL_TOP,
-                    selectedIndicatorConfig = SelectedIndicatorConfig(shapeType = BasicIndicatorShapeType.Line)),
+                    selectedIndicatorConfig = SelectedIndicatorConfig(shapeType = BasicIndicatorShapeType.Dot)),
                 parentModifier = Modifier.align(
                     Alignment.TopCenter
                 )

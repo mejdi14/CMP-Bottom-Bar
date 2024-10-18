@@ -10,6 +10,6 @@ data class SelectedIndicatorConfig(
     val shapeType: BasicIndicatorShapeType = BasicIndicatorShapeType.Square,
     val positionType: PositionType = PositionType.Bottom,
     val size: Dp = 60.dp,
-    val thickness: Dp = 3.dp,
+    val thickness: Dp = 6.dp,
     val padding: Dp = 10.dp,
 )
