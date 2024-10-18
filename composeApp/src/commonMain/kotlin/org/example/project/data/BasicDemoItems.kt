@@ -47,3 +47,42 @@ val basicDemoItems =
            hoverText = "add more options"
         ),
     )
+
+val basicDemoItems2 =
+    listOf(
+        BasicItem(
+            BottomBarIcon(Res.drawable.home_line, iconTintColor = Color.Black), "Mosque",
+            backgroundColor = Color(0xFFAAB396),
+            hoverText = "Home",
+
+
+
+        ),
+        BasicItem(
+            BottomBarIcon(Res.drawable.papers, iconTintColor = Color.Black), "Papers",
+            backgroundColor = Color(0xFFE6D9A2),
+            hoverText = "read the available papers"
+
+        ),
+
+        BasicItem(
+            BottomBarIcon(Res.drawable.calendar_day, iconTintColor = Color.Black), "Menu",
+            backgroundColor = Color(0xFFFFAF00),
+            hoverText = "this is a hover text"
+        ),
+        BasicItem(
+            BottomBarIcon(Res.drawable.menu_meatballs, iconTintColor = Color.Black), "Mosque",
+            backgroundColor = Color(0xFFAAB396),
+            hoverText = "go to the next page"
+        ),
+        BasicItem(
+            BottomBarIcon(Res.drawable.open_reader, iconTintColor = Color.Black), "Menu",
+            backgroundColor = Color(0xFFFFAF00),
+            hoverText = "read a new book"
+        ),
+        BasicItem(
+            BottomBarIcon(Res.drawable.the_plus_icon, iconTintColor = Color.Black), "Mosque",
+            backgroundColor = Color(0xFFAAB396),
+            hoverText = "add more options"
+        ),
+    )

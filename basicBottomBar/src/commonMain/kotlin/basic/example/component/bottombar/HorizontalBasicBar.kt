@@ -23,6 +23,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.Density
@@ -116,7 +117,7 @@ internal fun HorizontalBasicBar(
                         Icon(
                             painter = painterResource(item.icon.selectedIconDrawable),
                             contentDescription = item.contentDescription,
-                            tint = Color.White,
+                            tint = item.icon.iconTintColor,
                             modifier = Modifier.align(Alignment.Center)
                         )
                     }

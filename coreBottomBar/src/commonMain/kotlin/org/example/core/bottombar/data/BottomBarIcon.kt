@@ -9,7 +9,7 @@ import org.jetbrains.compose.resources.DrawableResource
 class BottomBarIcon(
     val iconDrawable: DrawableResource,
     val selectedIconDrawable: DrawableResource = iconDrawable,
-    val iconTintColor: Color = Color.Unspecified,
+    val iconTintColor: Color = Color.White,
     val selectedIconTint: Color = iconTintColor,
     val contentDescription: String = "bottom bar icon",
     val modifier: Modifier = Modifier,
