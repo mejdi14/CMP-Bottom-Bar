@@ -34,7 +34,7 @@ import basic.example.component.data.BasicItem
 import org.example.core.bottombar.data.BottomBarItem
 import org.example.core.bottombar.indicator.PositionType
 import org.example.core.bottombar.indicator.SelectedIndicatorConfig
-import org.example.core.bottombar.indicator.ShapeType
+import org.example.core.bottombar.indicator.BasicIndicatorShapeType
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -73,10 +73,7 @@ internal fun HorizontalBasicBar(
         ) {
             spaceBetween.value = ((parentWidth.value - (basicBarConfig.itemSize * (bottomBarItems.size))) / (bottomBarItems.size + 1))
             bottomBarIndicatorComposable(
-                config = SelectedIndicatorConfig(
-                    shapeType = ShapeType.Square,
-                    positionType = PositionType.Bottom
-                ),
+                config = basicBarConfig.selectedIndicatorConfig,
                 spaceBetween = spaceBetween.value,
                 animatedOffset = animatedOffset,
                 selectedIndex = selectedIndex,

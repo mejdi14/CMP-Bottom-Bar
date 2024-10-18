@@ -17,7 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.example.core.bottombar.indicator.SelectedIndicatorConfig
-import org.example.core.bottombar.indicator.ShapeType
+import org.example.core.bottombar.indicator.BasicIndicatorShapeType
 
 @Composable
 fun CustomBottomBar(
@@ -29,14 +29,14 @@ fun CustomBottomBar(
 ) {
 
     val shapeModifier = when (config.shapeType) {
-        ShapeType.Square -> Modifier.size(
+        BasicIndicatorShapeType.Square -> Modifier.size(
             config.size - config.padding,
             config.size - config.padding
         )
 
-        ShapeType.Line -> Modifier.width(config.size - config.padding).height(config.thickness)
-        ShapeType.Circle -> Modifier.size(config.size - config.padding).clip(CircleShape)
-        ShapeType.Dot -> Modifier.size(config.thickness).clip(CircleShape)
+        BasicIndicatorShapeType.Line -> Modifier.width(config.size - config.padding).height(config.thickness)
+        BasicIndicatorShapeType.Circle -> Modifier.size(config.size - config.padding).clip(CircleShape)
+        BasicIndicatorShapeType.Dot -> Modifier.size(config.thickness).clip(CircleShape)
     }
 
     Box(

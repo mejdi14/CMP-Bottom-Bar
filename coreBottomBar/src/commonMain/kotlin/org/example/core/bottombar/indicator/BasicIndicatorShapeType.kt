@@ -1,5 +1,5 @@
 package org.example.core.bottombar.indicator
 
-enum class ShapeType {
+enum class BasicIndicatorShapeType {
     Square, Line, Circle, Dot
 }

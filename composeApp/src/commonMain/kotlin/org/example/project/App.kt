@@ -10,6 +10,8 @@ import androidx.compose.ui.graphics.Color
 import basic.example.component.bottombar.BasicBottomBar
 import basic.example.component.data.BasicBarConfig
 import basic.example.component.data.BasicBarPosition
+import org.example.core.bottombar.indicator.SelectedIndicatorConfig
+import org.example.core.bottombar.indicator.BasicIndicatorShapeType
 import org.example.project.data.basicDemoItems
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -23,7 +25,8 @@ fun App() {
             // AztopiaDemo(Modifier.align(Alignment.BottomCenter))
             BasicBottomBar(
                 bottomBarItems = basicDemoItems,
-                BasicBarConfig(basicBarPosition = BasicBarPosition.HORIZONTAL_TOP),
+                BasicBarConfig(basicBarPosition = BasicBarPosition.HORIZONTAL_TOP,
+                    selectedIndicatorConfig = SelectedIndicatorConfig(shapeType = BasicIndicatorShapeType.Line)),
                 parentModifier = Modifier.align(
                     Alignment.TopCenter
                 )
