@@ -65,7 +65,11 @@ fun App() {
                     basicBarPosition = BasicBarPosition.HORIZONTAL_BOTTOM,
                     backgroundColor = Color(0xFFFFEB3B),
                     hoveredBackgroundColor = Color(0xFFFFF59D),
-                    selectedIndicatorConfig = SelectedIndicatorConfig(shapeType = BasicIndicatorShapeType.Line, thickness = 3.dp, color = Color(0xFFEB8317)),
+                    selectedIndicatorConfig = SelectedIndicatorConfig(
+                        shapeType = BasicIndicatorShapeType.Line,
+                        thickness = 3.dp,
+                        color = Color(0xFFEB8317)
+                    ),
                 ),
                 parentModifier = Modifier.align(
                     Alignment.BottomCenter
