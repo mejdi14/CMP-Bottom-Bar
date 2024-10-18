@@ -1,6 +1,6 @@
 package basic.example.component.bottombar
 
-import  androidx.compose.foundation.background
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -13,68 +13,68 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import basic.example.component.data.BasicBarPosition
-import org.example.core.bottombar.indicator.BottomBarSelectedIndicator
 import org.example.core.bottombar.indicator.PositionType
-import org.example.core.bottombar.indicator.ShapeType
+import org.example.core.bottombar.indicator.SelectedIndicatorConfig
+import org.example.core.bottombar.indicator.BasicIndicatorShapeType
 
 @Composable
-fun bottomBarIndicatorComposable(
-    config: BottomBarSelectedIndicator,
-    color: Color = Color.Blue,
+internal fun bottomBarIndicatorComposable(
+    config: SelectedIndicatorConfig,
     animatedOffset: State<Dp>,
     spaceBetween: Dp,
     selectedIndex: MutableState<Int>,
-    basicBarPosition: BasicBarPosition
+    basicBarPosition: BasicBarPosition,
+    itemSize: Dp
 ) {
 
 
     val shapeModifier = when (config.shapeType) {
-        ShapeType.Square -> Modifier.size(
+        BasicIndicatorShapeType.Square -> Modifier.size(
             config.size - config.padding,
             config.size - config.padding
         )
 
-        ShapeType.Line -> Modifier.width(config.size - config.padding).height(config.thickness)
-        ShapeType.Circle -> Modifier.size(config.size - config.padding).clip(CircleShape)
-        ShapeType.Dot -> Modifier.size(config.thickness).clip(CircleShape)
+        BasicIndicatorShapeType.Line -> Modifier.width(config.size - config.padding)
+            .height(config.thickness)
+
+        BasicIndicatorShapeType.Circle -> Modifier.size(config.size - config.padding)
+            .clip(CircleShape)
+
+        BasicIndicatorShapeType.Dot -> Modifier.size(config.thickness).clip(CircleShape)
     }
 
-    when(basicBarPosition) {
+    when (basicBarPosition) {
         BasicBarPosition.HORIZONTAL_BOTTOM, BasicBarPosition.HORIZONTAL_TOP -> {
             Box(
                 modifier = Modifier
                     .offset(
-                        x = (animatedOffset.value + (spaceBetween * (selectedIndex.value + 1))),
-                        y = if ((config.shapeType == ShapeType.Line || config.shapeType == ShapeType.Dot)
+                        x = (animatedOffset.value + (spaceBetween * (selectedIndex.value + 1))) + if (config.shapeType == BasicIndicatorShapeType.Dot) ((itemSize / 2) - (config.thickness / 2)) else 0.dp,
+                        y = if ((config.shapeType == BasicIndicatorShapeType.Line || config.shapeType == BasicIndicatorShapeType.Dot)
                             && config.positionType == PositionType.Bottom
                         )
-                            0.dp + (config.size - config.thickness)
+                            0.dp + (config.size - config.thickness) - (if (config.shapeType == BasicIndicatorShapeType.Dot) config.thickness else 0.dp)
                         else 0.dp + (config.padding / 2)
                     )
-
-                    .background(color, RoundedCornerShape(10.dp))
-
+                    .background(config.color, RoundedCornerShape(10.dp))
                     .then(shapeModifier)
             )
         }
+
         BasicBarPosition.VERTICAL_LEFT, BasicBarPosition.VERTICAL_RIGHT -> {
             Box(
                 modifier = Modifier
                     .offset(
                         y = (animatedOffset.value + (spaceBetween * (selectedIndex.value + 1))),
-                        x = if ((config.shapeType == ShapeType.Line || config.shapeType == ShapeType.Dot)
+                        x = if ((config.shapeType == BasicIndicatorShapeType.Line || config.shapeType == BasicIndicatorShapeType.Dot)
                             && config.positionType == PositionType.Bottom
                         )
                             0.dp + (config.size - config.thickness)
                         else 0.dp + (config.padding / 2)
                     )
-
-                    .background(color, RoundedCornerShape(10.dp))
-
+                    .background(config.color, RoundedCornerShape(10.dp))
                     .then(shapeModifier)
             )
         }

@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -19,8 +19,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import basic.example.component.data.BasicBarConfig
 import basic.example.component.data.BasicBarPosition
 import basic.example.component.data.BasicItem
 
@@ -28,10 +30,9 @@ import basic.example.component.data.BasicItem
 internal fun HoverDescriptionTextComposable(
     spaceBetween: Dp,
     selectedIndex: MutableState<Int>,
-    itemWidth: Dp,
     bottomBarItems: List<BasicItem>,
     isHovered: MutableState<Boolean>,
-    basicBarPosition: BasicBarPosition
+    basicBarConfig: BasicBarConfig
 ) {
     var parentWidth by remember { mutableStateOf(0.dp) }
     var parentHeight by remember { mutableStateOf(0.dp) }
@@ -45,27 +46,32 @@ internal fun HoverDescriptionTextComposable(
                 parentHeight = with(density) { heightPx.toDp() }
             }
             .offset(
-                x = when (basicBarPosition) {
+                x = when (basicBarConfig.basicBarPosition) {
                     BasicBarPosition.HORIZONTAL_TOP, BasicBarPosition.HORIZONTAL_BOTTOM -> {
-                        ((selectedIndex.value * itemWidth.value).dp + (spaceBetween * (selectedIndex.value + 1))) + (itemWidth / 2) - (parentWidth / 2)
+                        ((selectedIndex.value * basicBarConfig.itemSize.value).dp + (spaceBetween * (selectedIndex.value + 1))) + (basicBarConfig.itemSize / 2) - (parentWidth / 2)
                     }
 
                     else -> 0.dp
                 },
-                y = when (basicBarPosition) {
+                y = when (basicBarConfig.basicBarPosition) {
                     BasicBarPosition.VERTICAL_LEFT, BasicBarPosition.VERTICAL_RIGHT -> {
-                        ((selectedIndex.value * itemWidth.value).dp + (spaceBetween * (selectedIndex.value + 1))) + (itemWidth / 2) - (parentHeight / 2)
+                        ((selectedIndex.value * basicBarConfig.itemSize.value).dp + (spaceBetween * (selectedIndex.value + 1))) + (basicBarConfig.itemSize / 2) - (parentHeight / 2)
                     }
 
                     else -> 0.dp
                 }
             )
             .clip(RoundedCornerShape(6.dp)).background(color = Color.Black)
+            .then(basicBarConfig.hoverTextConfig.containerModifier)
         ) {
             Text(
-                bottomBarItems.get(selectedIndex.value).hoverText,
-                color = Color.White,
+                bottomBarItems[selectedIndex.value].hoverText,
                 modifier = Modifier.align(Alignment.Center).padding(4.dp)
+                    .then(basicBarConfig.hoverTextConfig.textModifier),
+                color = basicBarConfig.hoverTextConfig.textColor,
+                style = TextStyle(
+                    fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
+                )
             )
         }
 }

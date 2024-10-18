@@ -22,17 +22,15 @@ fun BasicBottomBar(
 ) {
     val selectedIndex = remember { mutableStateOf(0) }
     val hoverSelectedIndex = remember { mutableStateOf(0) }
-    val itemWidth = 50.dp
 
     val lazyListState = rememberLazyListState()
 
     var parentWidth = remember { mutableStateOf(0.dp) }
     var parentHeight = remember { mutableStateOf(0.dp) }
     val density = LocalDensity.current
-    val bottomBarWidth = itemWidth * bottomBarItems.size + 10.dp
     val isHovered = remember { mutableStateOf(false) }
     val animatedOffset = animateDpAsState(
-        targetValue = (selectedIndex.value * itemWidth.value).dp
+        targetValue = (selectedIndex.value * basicBarConfig.itemSize.value).dp
     )
     var spaceBetween = remember { mutableStateOf(0.dp) }
     when(basicBarConfig.basicBarPosition){
@@ -41,7 +39,6 @@ fun BasicBottomBar(
                 parentModifier,
                 spaceBetween,
                 hoverSelectedIndex,
-                itemWidth,
                 bottomBarItems,
                 isHovered,
                 parentWidth,
@@ -58,7 +55,6 @@ fun BasicBottomBar(
                 parentModifier,
                 spaceBetween,
                 hoverSelectedIndex,
-                itemWidth,
                 bottomBarItems,
                 isHovered,
                 parentHeight,
@@ -69,7 +65,6 @@ fun BasicBottomBar(
                 lazyListState,
                 onIconClick
             )
-
         }
     }
 }
