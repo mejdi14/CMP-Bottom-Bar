@@ -16,7 +16,6 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
@@ -35,7 +34,6 @@ import basic.example.component.data.BasicBarConfig
 import basic.example.component.data.BasicBarPosition
 import basic.example.component.data.BasicItem
 import org.example.core.bottombar.data.BottomBarItem
-import org.jetbrains.compose.resources.painterResource
 
 @Composable
 internal fun HorizontalBasicBar(
@@ -113,7 +111,12 @@ internal fun HorizontalBasicBar(
                                 RoundedCornerShape(10.dp)
                             )
                     ) {
-                        BasicBarIconComposable(item, Modifier.align(Alignment.Center))
+                        BasicBarIconComposable(
+                            basicBarConfig.globalBasicIconConfig,
+                            item,
+                            Modifier.align(Alignment.Center),
+                            selectedIndex.value == index
+                        )
                     }
                 }
             }

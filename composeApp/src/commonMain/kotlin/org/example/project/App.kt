@@ -12,6 +12,8 @@ import androidx.compose.ui.unit.dp
 import basic.example.component.bottombar.BasicBottomBar
 import basic.example.component.data.BasicBarConfig
 import basic.example.component.data.BasicBarPosition
+import org.example.core.bottombar.data.BottomBarIcon
+import org.example.core.bottombar.data.GlobalBottomBarIcon
 import org.example.core.bottombar.indicator.SelectedIndicatorConfig
 import org.example.core.bottombar.indicator.BasicIndicatorShapeType
 import org.example.project.data.basicDemoItems
@@ -65,6 +67,10 @@ fun App() {
                 bottomBarItems = bottomRoundItems,
                 BasicBarConfig(
                     basicBarPosition = BasicBarPosition.HORIZONTAL_BOTTOM,
+                    globalBasicIconConfig = GlobalBottomBarIcon(
+                        iconTintColor = Color.White,
+                        selectedIconTint = Color.Black
+                    ),
                     backgroundColor = Color.Black,
                     hoveredBackgroundColor = Color(0xFFFFF59D),
                     selectedIndicatorConfig = SelectedIndicatorConfig(

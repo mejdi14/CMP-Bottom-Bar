@@ -4,14 +4,26 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import basic.example.component.data.BasicItem
+import org.example.core.bottombar.data.BottomBarIcon
+import org.example.core.bottombar.data.GlobalBottomBarIcon
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-internal fun BasicBarIconComposable(item: BasicItem, modifier: Modifier) {
+internal fun BasicBarIconComposable(
+    globalIconConfig: GlobalBottomBarIcon?,
+    item: BasicItem,
+    modifier: Modifier,
+    isSelectedIndex: Boolean
+) {
     Icon(
-        painter = painterResource(item.icon.selectedIconDrawable),
+        painter = painterResource(
+            if (isSelectedIndex) item.icon.selectedIconDrawable else
+                item.icon.iconDrawable
+        ),
         contentDescription = item.contentDescription,
-        tint = item.icon.iconTintColor,
+        tint = if (isSelectedIndex) (globalIconConfig?.selectedIconTint
+            ?: item.icon.selectedIconTint) else (globalIconConfig?.iconTintColor
+            ?: item.icon.iconTintColor),
         modifier = modifier
     )
 }
