@@ -13,6 +13,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import basic.example.component.data.BasicBarPosition
@@ -29,21 +30,20 @@ internal fun bottomBarIndicatorComposable(
     basicBarPosition: BasicBarPosition,
     itemSize: Dp
 ) {
-
-
     val shapeModifier = when (config.shapeType) {
         BasicIndicatorShapeType.Square -> Modifier.size(
             config.size - config.padding,
             config.size - config.padding
-        )
+        ).background(color = config.color, shape = RoundedCornerShape(10.dp))
 
         BasicIndicatorShapeType.Line -> Modifier.width(config.size - config.padding)
-            .height(config.thickness)
+            .height(config.thickness).background(color = config.color)
 
         BasicIndicatorShapeType.Circle -> Modifier.size(config.size - config.padding)
-            .clip(CircleShape)
+            .clip(CircleShape).background(color = config.color)
 
         BasicIndicatorShapeType.Dot -> Modifier.size(config.thickness).clip(CircleShape)
+            .background(color = config.color)
     }
 
     when (basicBarPosition) {
@@ -58,7 +58,6 @@ internal fun bottomBarIndicatorComposable(
                             0.dp + (config.size - config.thickness) - (if (config.shapeType == BasicIndicatorShapeType.Dot) config.thickness else 0.dp)
                         else 0.dp + (config.padding / 2)
                     )
-                    .background(config.color, RoundedCornerShape(10.dp))
                     .then(shapeModifier)
             )
         }
@@ -74,7 +73,6 @@ internal fun bottomBarIndicatorComposable(
                             0.dp + (config.size - config.thickness)
                         else 0.dp + (config.padding / 2)
                     )
-                    .background(config.color, RoundedCornerShape(10.dp))
                     .then(shapeModifier)
             )
         }
