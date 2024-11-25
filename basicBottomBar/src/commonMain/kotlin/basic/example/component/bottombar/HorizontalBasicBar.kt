@@ -23,19 +23,18 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import basic.example.component.bottombar.hover.HoverDescriptionTextComposable
+import basic.example.component.bottombar.icon.BasicBarIconComposable
+import basic.example.component.bottombar.indicator.bottomBarIndicatorComposable
 import basic.example.component.data.BasicBarConfig
 import basic.example.component.data.BasicBarPosition
 import basic.example.component.data.BasicItem
 import org.example.core.bottombar.data.BottomBarItem
-import org.example.core.bottombar.indicator.PositionType
-import org.example.core.bottombar.indicator.SelectedIndicatorConfig
-import org.example.core.bottombar.indicator.BasicIndicatorShapeType
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -114,12 +113,7 @@ internal fun HorizontalBasicBar(
                                 RoundedCornerShape(10.dp)
                             )
                     ) {
-                        Icon(
-                            painter = painterResource(item.icon.selectedIconDrawable),
-                            contentDescription = item.contentDescription,
-                            tint = item.icon.iconTintColor,
-                            modifier = Modifier.align(Alignment.Center)
-                        )
+                        BasicBarIconComposable(item, Modifier.align(Alignment.Center))
                     }
                 }
             }
@@ -136,3 +130,5 @@ internal fun HorizontalBasicBar(
             }
     }
 }
+
+

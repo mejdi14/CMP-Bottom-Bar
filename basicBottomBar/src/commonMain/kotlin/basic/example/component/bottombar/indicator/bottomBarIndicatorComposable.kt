@@ -1,4 +1,4 @@
-package basic.example.component.bottombar
+package basic.example.component.bottombar.indicator
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

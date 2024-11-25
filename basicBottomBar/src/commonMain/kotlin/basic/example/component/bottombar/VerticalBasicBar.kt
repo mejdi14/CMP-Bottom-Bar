@@ -27,13 +27,12 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import basic.example.component.bottombar.hover.HoverDescriptionTextComposable
+import basic.example.component.bottombar.indicator.bottomBarIndicatorComposable
 import basic.example.component.data.BasicBarConfig
 import basic.example.component.data.BasicBarPosition
 import basic.example.component.data.BasicItem
 import org.example.core.bottombar.data.BottomBarItem
-import org.example.core.bottombar.indicator.PositionType
-import org.example.core.bottombar.indicator.SelectedIndicatorConfig
-import org.example.core.bottombar.indicator.BasicIndicatorShapeType
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
