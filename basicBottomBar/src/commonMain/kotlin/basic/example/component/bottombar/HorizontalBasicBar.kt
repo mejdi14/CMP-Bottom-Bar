@@ -52,7 +52,7 @@ internal fun HorizontalBasicBar(
 ) {
     Column(parentModifier.padding(horizontal = 50.dp)) {
         if (basicBarConfig.basicBarPosition == BasicBarPosition.HORIZONTAL_BOTTOM)
-            Box(Modifier.width(300.dp).padding(5.dp)) {
+            Box(Modifier.padding(5.dp)) {
                 HoverDescriptionTextComposable(
                     spaceBetween.value,
                     hoverSelectedIndex,
@@ -62,7 +62,7 @@ internal fun HorizontalBasicBar(
                 )
             }
         Box(
-            Modifier.width(400.dp).padding(basicBarConfig.basicBarPadding)
+            Modifier.padding(basicBarConfig.basicBarPadding)
                 .height(basicBarConfig.itemSize + (basicBarConfig.basicBarPadding * 2))
                 .background(color = basicBarConfig.backgroundColor, shape = basicBarConfig.shape)
                 .onGloballyPositioned { layoutCoordinates ->
@@ -89,7 +89,8 @@ internal fun HorizontalBasicBar(
                 itemsIndexed(bottomBarItems) { index, item ->
 
                     Box(
-                        modifier = Modifier.size(basicBarConfig.itemSize).align(Alignment.Center)
+                        modifier = Modifier.size(basicBarConfig.itemSize).align(Alignment.Center).background(
+                            Color.Red)
                             .hoverEffect { onHover ->
                                 isHovered.value = onHover
                                 hoverSelectedIndex.value = index
@@ -122,7 +123,7 @@ internal fun HorizontalBasicBar(
             }
         }
         if (basicBarConfig.basicBarPosition == BasicBarPosition.HORIZONTAL_TOP)
-            Box(Modifier.width(300.dp).padding(5.dp)) {
+            Box(Modifier.padding(5.dp)) {
                 HoverDescriptionTextComposable(
                     spaceBetween.value,
                     hoverSelectedIndex,

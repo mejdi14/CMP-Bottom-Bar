@@ -16,6 +16,7 @@ internal fun BasicBarIconComposable(
     isSelectedIndex: Boolean
 ) {
     Icon(
+        modifier = modifier,
         painter = painterResource(
             if (isSelectedIndex) item.icon.selectedIconDrawable else
                 item.icon.iconDrawable
@@ -24,6 +25,5 @@ internal fun BasicBarIconComposable(
         tint = if (isSelectedIndex) (globalIconConfig?.selectedIconTint
             ?: item.icon.selectedIconTint) else (globalIconConfig?.iconTintColor
             ?: item.icon.iconTintColor),
-        modifier = modifier
     )
 }
