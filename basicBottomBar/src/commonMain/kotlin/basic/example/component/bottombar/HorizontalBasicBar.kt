@@ -66,7 +66,7 @@ internal fun HorizontalBasicBar(
             }
         Row(
             Modifier.background(Color.Green).fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceAround,
+            horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Box(Modifier.size(basicBarConfig.itemSize).background(Color.Red))
