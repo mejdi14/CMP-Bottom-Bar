@@ -114,7 +114,7 @@ internal fun HorizontalBasicBar(
                         BasicBarIconComposable(
                             basicBarConfig.globalBasicIconConfig,
                             item,
-                            Modifier.align(Alignment.Center),
+                            Modifier.align(Alignment.Center).size(item.size),
                             selectedIndex.value == index
                         )
                     }
