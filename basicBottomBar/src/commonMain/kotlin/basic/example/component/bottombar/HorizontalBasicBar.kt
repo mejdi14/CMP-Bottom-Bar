@@ -16,27 +16,24 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import basic.example.component.bottombar.hover.HoverDescriptionTextComposable
+import basic.example.component.bottombar.icon.BasicBarIconComposable
+import basic.example.component.bottombar.indicator.bottomBarIndicatorComposable
 import basic.example.component.data.BasicBarConfig
 import basic.example.component.data.BasicBarPosition
 import basic.example.component.data.BasicItem
 import org.example.core.bottombar.data.BottomBarItem
-import org.example.core.bottombar.indicator.PositionType
-import org.example.core.bottombar.indicator.SelectedIndicatorConfig
-import org.example.core.bottombar.indicator.BasicIndicatorShapeType
-import org.jetbrains.compose.resources.painterResource
 
 @Composable
 internal fun HorizontalBasicBar(
@@ -55,7 +52,7 @@ internal fun HorizontalBasicBar(
 ) {
     Column(parentModifier.padding(horizontal = 50.dp)) {
         if (basicBarConfig.basicBarPosition == BasicBarPosition.HORIZONTAL_BOTTOM)
-            Box(Modifier.width(300.dp).padding(5.dp)) {
+            Box(Modifier.padding(5.dp)) {
                 HoverDescriptionTextComposable(
                     spaceBetween.value,
                     hoverSelectedIndex,
@@ -65,7 +62,7 @@ internal fun HorizontalBasicBar(
                 )
             }
         Box(
-            Modifier.width(400.dp).padding(basicBarConfig.basicBarPadding)
+            Modifier.padding(basicBarConfig.basicBarPadding)
                 .height(basicBarConfig.itemSize + (basicBarConfig.basicBarPadding * 2))
                 .background(color = basicBarConfig.backgroundColor, shape = basicBarConfig.shape)
                 .onGloballyPositioned { layoutCoordinates ->
@@ -114,18 +111,18 @@ internal fun HorizontalBasicBar(
                                 RoundedCornerShape(10.dp)
                             )
                     ) {
-                        Icon(
-                            painter = painterResource(item.icon.selectedIconDrawable),
-                            contentDescription = item.contentDescription,
-                            tint = item.icon.iconTintColor,
-                            modifier = Modifier.align(Alignment.Center)
+                        BasicBarIconComposable(
+                            basicBarConfig.globalBasicIconConfig,
+                            item,
+                            Modifier.align(Alignment.Center).size(item.size),
+                            selectedIndex.value == index
                         )
                     }
                 }
             }
         }
         if (basicBarConfig.basicBarPosition == BasicBarPosition.HORIZONTAL_TOP)
-            Box(Modifier.width(300.dp).padding(5.dp)) {
+            Box(Modifier.padding(5.dp)) {
                 HoverDescriptionTextComposable(
                     spaceBetween.value,
                     hoverSelectedIndex,
@@ -136,3 +133,5 @@ internal fun HorizontalBasicBar(
             }
     }
 }
+
+
