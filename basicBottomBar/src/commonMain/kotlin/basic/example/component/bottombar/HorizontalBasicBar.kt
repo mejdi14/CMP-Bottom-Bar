@@ -6,12 +6,15 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -50,7 +53,7 @@ internal fun HorizontalBasicBar(
     lazyListState: LazyListState,
     onIconClick: (BottomBarItem) -> Unit
 ) {
-    Column(parentModifier.padding(horizontal = 50.dp)) {
+    Column(parentModifier.fillMaxWidth().background(Color.Blue).padding(horizontal = 10.dp)) {
         if (basicBarConfig.basicBarPosition == BasicBarPosition.HORIZONTAL_BOTTOM)
             Box(Modifier.padding(5.dp)) {
                 HoverDescriptionTextComposable(
@@ -61,65 +64,80 @@ internal fun HorizontalBasicBar(
                     basicBarConfig
                 )
             }
-        Box(
-            Modifier.padding(basicBarConfig.basicBarPadding)
-                .height(basicBarConfig.itemSize + (basicBarConfig.basicBarPadding * 2))
-                .background(color = basicBarConfig.backgroundColor, shape = basicBarConfig.shape)
-                .onGloballyPositioned { layoutCoordinates ->
-                    val widthPx = layoutCoordinates.size.width
-                    parentWidth.value = with(density) { widthPx.toDp() }
-                }
+        Row(
+            Modifier.background(Color.Green).fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceAround,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            spaceBetween.value =
-                ((parentWidth.value - (basicBarConfig.itemSize * (bottomBarItems.size))) / (bottomBarItems.size + 1))
-            bottomBarIndicatorComposable(
-                config = basicBarConfig.selectedIndicatorConfig,
-                spaceBetween = spaceBetween.value,
-                animatedOffset = animatedOffset,
-                selectedIndex = selectedIndex,
-                basicBarPosition = basicBarConfig.basicBarPosition,
-                itemSize = basicBarConfig.itemSize
-            )
-            LazyRow(
-                state = lazyListState,
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxHeight().fillMaxWidth()
+            Box(Modifier.size(basicBarConfig.itemSize).background(Color.Red))
+            Spacer(Modifier.width(10.dp))
+            Box(
+                Modifier.padding(basicBarConfig.basicBarPadding)
+                    .height(basicBarConfig.itemSize + (basicBarConfig.basicBarPadding * 2))
+                    .background(
+                        color = basicBarConfig.backgroundColor,
+                        shape = basicBarConfig.shape
+                    )
+                    .onGloballyPositioned { layoutCoordinates ->
+                        val widthPx = layoutCoordinates.size.width
+                        parentWidth.value = with(density) { widthPx.toDp() }
+                    }
             ) {
-                itemsIndexed(bottomBarItems) { index, item ->
+                spaceBetween.value =
+                    ((parentWidth.value - (basicBarConfig.itemSize * (bottomBarItems.size))) / (bottomBarItems.size + 1))
+                bottomBarIndicatorComposable(
+                    config = basicBarConfig.selectedIndicatorConfig,
+                    spaceBetween = spaceBetween.value,
+                    animatedOffset = animatedOffset,
+                    selectedIndex = selectedIndex,
+                    basicBarPosition = basicBarConfig.basicBarPosition,
+                    itemSize = basicBarConfig.itemSize
+                )
+                LazyRow(
+                    state = lazyListState,
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxHeight()
+                        .width((basicBarConfig.itemSize * bottomBarItems.size) + (basicBarConfig.spaceBetweenItems * (bottomBarItems.size - 1)))
+                ) {
+                    itemsIndexed(bottomBarItems) { index, item ->
 
-                    Box(
-                        modifier = Modifier.size(basicBarConfig.itemSize).align(Alignment.Center)
-                            .hoverEffect { onHover ->
-                                isHovered.value = onHover
-                                hoverSelectedIndex.value = index
-                            }
-                            .clickable(
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = null
-                            ) {
-                                selectedIndex.value = index
-                                onIconClick(item)
-                            }
-                            .background(
-                                color = if (isHovered.value
-                                    && index == hoverSelectedIndex.value
-                                    && index != selectedIndex.value
-                                ) basicBarConfig.hoveredBackgroundColor
-                                else
-                                    Color.Unspecified,
-                                RoundedCornerShape(10.dp)
+                        Box(
+                            modifier = Modifier.size(basicBarConfig.itemSize)
+                                .align(Alignment.Center)
+                                .hoverEffect { onHover ->
+                                    isHovered.value = onHover
+                                    hoverSelectedIndex.value = index
+                                }
+                                .clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = null
+                                ) {
+                                    selectedIndex.value = index
+                                    onIconClick(item)
+                                }
+                                .background(
+                                    color = if (isHovered.value
+                                        && index == hoverSelectedIndex.value
+                                        && index != selectedIndex.value
+                                    ) basicBarConfig.hoveredBackgroundColor
+                                    else
+                                        Color.Unspecified,
+                                    RoundedCornerShape(10.dp)
+                                )
+                        ) {
+                            BasicBarIconComposable(
+                                basicBarConfig.globalBasicIconConfig,
+                                item,
+                                Modifier.align(Alignment.Center).size(item.size),
+                                selectedIndex.value == index
                             )
-                    ) {
-                        BasicBarIconComposable(
-                            basicBarConfig.globalBasicIconConfig,
-                            item,
-                            Modifier.align(Alignment.Center).size(item.size),
-                            selectedIndex.value == index
-                        )
+                        }
                     }
                 }
             }
+            Spacer(Modifier.width(10.dp))
+            Box(Modifier.size(basicBarConfig.itemSize).background(Color.Red))
         }
         if (basicBarConfig.basicBarPosition == BasicBarPosition.HORIZONTAL_TOP)
             Box(Modifier.padding(5.dp)) {
