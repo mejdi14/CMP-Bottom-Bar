@@ -13,5 +13,5 @@ class BottomBarIcon(
     val selectedIconTint: Color = iconTintColor,
     val contentDescription: String = "bottom bar icon",
     val modifier: Modifier = Modifier,
-    val sizeDifferenceComparedToParent: Dp = 5.dp
+    val sizeDifferenceComparedToParent: Dp = 10.dp
 )

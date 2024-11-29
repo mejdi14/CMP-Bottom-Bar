@@ -89,8 +89,7 @@ internal fun HorizontalBasicBar(
                 itemsIndexed(bottomBarItems) { index, item ->
 
                     Box(
-                        modifier = Modifier.size(basicBarConfig.itemSize).align(Alignment.Center).background(
-                            Color.Red)
+                        modifier = Modifier.size(basicBarConfig.itemSize).align(Alignment.Center)
                             .hoverEffect { onHover ->
                                 isHovered.value = onHover
                                 hoverSelectedIndex.value = index
