@@ -74,7 +74,7 @@ fun App() {
                     shape = RoundedCornerShape(50.dp),
                     globalBasicIconConfig = GlobalBottomBarIcon(
                         iconTintColor = Color.Black,
-                        selectedIconTintColor = Color(0xFFd7ff84)
+                        selectedIconTintColor = Color.Black
                     ),
                     backgroundColor = Color.White,
                     hoveredBackgroundColor = Color(0xFFFFF59D),

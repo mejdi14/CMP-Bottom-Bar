@@ -69,7 +69,7 @@ internal fun HorizontalBasicBar(
             }
         Row(
             Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
+            horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically
         ) {
             AnimatedVisibility(true) {
@@ -83,12 +83,12 @@ internal fun HorizontalBasicBar(
                         Modifier.align(Alignment.Center),
                     )
                 }
-                Spacer(Modifier.width(20.dp))
+                Spacer(Modifier.width(50.dp))
             }
 
             Box(
                 Modifier.padding(basicBarConfig.basicBarPadding)
-                    .height(basicBarConfig.itemSize + (basicBarConfig.basicBarPadding * 2))
+                    .height(basicBarConfig.itemSize)
                     .background(
                         color = basicBarConfig.backgroundColor,
                         shape = basicBarConfig.shape

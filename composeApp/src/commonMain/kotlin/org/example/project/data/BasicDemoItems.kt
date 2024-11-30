@@ -4,6 +4,8 @@ import androidx.compose.ui.graphics.Color
 import basic.example.component.data.BasicItem
 import kmp_bottom_bar.composeapp.generated.resources.Res
 import kmp_bottom_bar.composeapp.generated.resources.calendar_day
+import kmp_bottom_bar.composeapp.generated.resources.home_black
+import kmp_bottom_bar.composeapp.generated.resources.home_filled
 import kmp_bottom_bar.composeapp.generated.resources.home_line
 import kmp_bottom_bar.composeapp.generated.resources.menu_meatballs
 import kmp_bottom_bar.composeapp.generated.resources.open_reader
@@ -90,7 +92,7 @@ val basicDemoItems2 =
 val bottomRoundItems =
     listOf(
         BasicItem(
-            BottomBarIcon(Res.drawable.home_line, iconTintColor = Color.White, selectedIconTint = Color.Black), "Mosque",
+            BottomBarIcon(Res.drawable.home_black, iconTintColor = Color.White, selectedIconTint = Color.Black), "Mosque",
             backgroundColor = Color(0xFFAAB396),
             ),
         BasicItem(
