@@ -18,7 +18,7 @@ import org.example.core.bottombar.listener.emptyHoverActionListener
 
 data class BasicItem(
     override val icon: BottomBarIcon,
-    override val contentDescription: String,
+    override val contentDescription: String = "bottom bar icon",
     override val size: Dp = 50.dp,
     override val backgroundColor: Color = Color.Blue,
     override val selectedBackgroundColor: Color = backgroundColor,

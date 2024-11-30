@@ -15,11 +15,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
@@ -38,6 +38,7 @@ import basic.example.component.data.BasicBarConfig
 import basic.example.component.data.BasicBarPosition
 import basic.example.component.data.BasicItem
 import org.example.core.bottombar.data.BottomBarItem
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 internal fun HorizontalBasicBar(
@@ -52,6 +53,7 @@ internal fun HorizontalBasicBar(
     selectedIndex: MutableState<Int>,
     basicBarConfig: BasicBarConfig,
     lazyListState: LazyListState,
+    additionalItem: BasicItem,
     onIconClick: (BottomBarItem) -> Unit
 ) {
     Column(parentModifier.fillMaxWidth().padding(horizontal = 10.dp)) {
@@ -70,9 +72,18 @@ internal fun HorizontalBasicBar(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            AnimatedVisibility(false) {
-                Box(Modifier.size(basicBarConfig.itemSize).background(Color.Red))
-                Spacer(Modifier.width(10.dp))
+            AnimatedVisibility(true) {
+                Box(
+                    Modifier.size(basicBarConfig.itemSize)
+                        .background(Color.White, shape = RoundedCornerShape(50.dp))
+                ) {
+                    Icon(
+                        painter = painterResource(additionalItem.icon.iconDrawable),
+                        contentDescription = additionalItem.contentDescription,
+                        Modifier.align(Alignment.Center),
+                    )
+                }
+                Spacer(Modifier.width(20.dp))
             }
 
             Box(
@@ -140,9 +151,9 @@ internal fun HorizontalBasicBar(
                     }
                 }
             }
-            AnimatedVisibility(false) {
-                Spacer(Modifier.width(10.dp))
-                Box(Modifier.size(basicBarConfig.itemSize).background(Color.Red))
+            AnimatedVisibility(true) {
+                Spacer(Modifier.width(20.dp))
+                Box(Modifier.size(basicBarConfig.itemSize).background(Color.Unspecified))
             }
         }
         if (basicBarConfig.basicBarPosition == BasicBarPosition.HORIZONTAL_TOP)

@@ -13,6 +13,10 @@ import androidx.compose.ui.unit.dp
 import basic.example.component.bottombar.BasicBottomBar
 import basic.example.component.data.BasicBarConfig
 import basic.example.component.data.BasicBarPosition
+import basic.example.component.data.BasicItem
+import kmp_bottom_bar.composeapp.generated.resources.Res
+import kmp_bottom_bar.composeapp.generated.resources.the_plus_icon
+import org.example.core.bottombar.data.BottomBarIcon
 import org.example.core.bottombar.data.GlobalBottomBarIcon
 import org.example.core.bottombar.indicator.SelectedIndicatorConfig
 import org.example.core.bottombar.indicator.BasicIndicatorShapeType
@@ -64,6 +68,7 @@ fun App() {
             }*/
             BasicBottomBar(
                 bottomBarItems = bottomRoundItems,
+                additionalItem = BasicItem(icon = BottomBarIcon(Res.drawable.the_plus_icon)),
                 BasicBarConfig(
                     basicBarPosition = BasicBarPosition.HORIZONTAL_BOTTOM,
                     shape = RoundedCornerShape(50.dp),
@@ -71,19 +76,18 @@ fun App() {
                         iconTintColor = Color.Black,
                         selectedIconTintColor = Color(0xFFd7ff84)
                     ),
-                    backgroundColor = Color(0xFFbb96ff),
+                    backgroundColor = Color.White,
                     hoveredBackgroundColor = Color(0xFFFFF59D),
                     selectedIndicatorConfig = SelectedIndicatorConfig(
                         shapeType = BasicIndicatorShapeType.Circle,
                         thickness = 3.dp,
-                        color = Color(0xFF361e7c)
+                        color = Color.Unspecified
                     ),
                 ),
                 parentModifier = Modifier.align(
                     Alignment.BottomCenter
                 )
             ) {
-
             }
         }
     }
