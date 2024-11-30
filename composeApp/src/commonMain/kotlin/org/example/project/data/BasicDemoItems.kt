@@ -102,5 +102,9 @@ val bottomRoundItems =
             BottomBarIcon(Res.drawable.menu_meatballs, iconTintColor = Color.Black), "Mosque",
             backgroundColor = Color(0xFFAAB396),
         ),
+        BasicItem(
+            BottomBarIcon(Res.drawable.the_plus_icon, iconTintColor = Color.Black), "Mosque",
+            backgroundColor = Color(0xFFAAB396),
+        ),
 
     )

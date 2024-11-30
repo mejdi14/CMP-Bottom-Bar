@@ -1,5 +1,6 @@
 package basic.example.component.bottombar
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -53,7 +54,7 @@ internal fun HorizontalBasicBar(
     lazyListState: LazyListState,
     onIconClick: (BottomBarItem) -> Unit
 ) {
-    Column(parentModifier.fillMaxWidth().background(Color.Blue).padding(horizontal = 10.dp)) {
+    Column(parentModifier.fillMaxWidth().padding(horizontal = 10.dp)) {
         if (basicBarConfig.basicBarPosition == BasicBarPosition.HORIZONTAL_BOTTOM)
             Box(Modifier.padding(5.dp)) {
                 HoverDescriptionTextComposable(
@@ -65,12 +66,15 @@ internal fun HorizontalBasicBar(
                 )
             }
         Row(
-            Modifier.background(Color.Green).fillMaxWidth(),
+            Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(Modifier.size(basicBarConfig.itemSize).background(Color.Red))
-            Spacer(Modifier.width(10.dp))
+            AnimatedVisibility(false) {
+                Box(Modifier.size(basicBarConfig.itemSize).background(Color.Red))
+                Spacer(Modifier.width(10.dp))
+            }
+
             Box(
                 Modifier.padding(basicBarConfig.basicBarPadding)
                     .height(basicBarConfig.itemSize + (basicBarConfig.basicBarPadding * 2))
@@ -136,8 +140,10 @@ internal fun HorizontalBasicBar(
                     }
                 }
             }
-            Spacer(Modifier.width(10.dp))
-            Box(Modifier.size(basicBarConfig.itemSize).background(Color.Red))
+            AnimatedVisibility(false) {
+                Spacer(Modifier.width(10.dp))
+                Box(Modifier.size(basicBarConfig.itemSize).background(Color.Red))
+            }
         }
         if (basicBarConfig.basicBarPosition == BasicBarPosition.HORIZONTAL_TOP)
             Box(Modifier.padding(5.dp)) {

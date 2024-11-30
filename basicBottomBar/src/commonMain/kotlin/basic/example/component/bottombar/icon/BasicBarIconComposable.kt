@@ -4,9 +4,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import basic.example.component.data.BasicItem
-import org.example.core.bottombar.data.BottomBarIcon
 import org.example.core.bottombar.data.GlobalBottomBarIcon
 import org.jetbrains.compose.resources.painterResource
 
@@ -24,7 +22,7 @@ internal fun BasicBarIconComposable(
                     item.icon.iconDrawable
             ),
             contentDescription = item.contentDescription,
-            tint = if (isSelectedIndex) (globalIconConfig?.selectedIconTint
+            tint = if (isSelectedIndex) (globalIconConfig?.selectedIconTintColor
                 ?: item.icon.selectedIconTint) else (globalIconConfig?.iconTintColor
                 ?: item.icon.iconTintColor),
         )
