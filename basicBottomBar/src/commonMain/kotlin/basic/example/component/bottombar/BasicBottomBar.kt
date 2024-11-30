@@ -16,6 +16,7 @@ import org.example.core.bottombar.data.BottomBarItem
 @Composable
 fun BasicBottomBar(
     bottomBarItems: List<BasicItem>,
+    additionalItem: BasicItem,
     basicBarConfig: BasicBarConfig,
     parentModifier: Modifier,
     onIconClick: (BottomBarItem) -> Unit
@@ -47,6 +48,7 @@ fun BasicBottomBar(
                 selectedIndex,
                 basicBarConfig,
                 lazyListState,
+                additionalItem,
                 onIconClick
             )
         }
