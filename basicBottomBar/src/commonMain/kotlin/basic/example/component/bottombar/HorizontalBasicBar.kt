@@ -68,7 +68,7 @@ internal fun HorizontalBasicBar(
             }
         Row(
             Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceAround,
+            horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
             if(basicBarConfig.additionalItems?.leftTopItem != null) {
@@ -90,7 +90,7 @@ internal fun HorizontalBasicBar(
                             )
                         }
                     }
-                    Spacer(Modifier.width(basicBarConfig.itemSize + basicBarConfig.spaceBetweenItems))
+                    Spacer(Modifier.width(basicBarConfig.spaceBetweenItems))
                 }
             } else if(basicBarConfig.additionalItems?.rightBottomItem != null){
                 Spacer(Modifier.width(basicBarConfig.itemSize + basicBarConfig.spaceBetweenItems))
@@ -162,26 +162,29 @@ internal fun HorizontalBasicBar(
                 }
             }
             if(basicBarConfig.additionalItems?.rightBottomItem != null) {
-                Box(
-                    Modifier.size(basicBarConfig.itemSize)
-                        .background(
-                            Color.White,
-                            shape = basicBarConfig.additionalItems.rightBottomItem?.itemShape
-                                ?: RoundedCornerShape(10.dp)
-                        )
-                ) {
-                    val currentAdditionalIcon =
-                        basicBarConfig.additionalItems.rightBottomItem?.icon
-                    if (currentAdditionalIcon != null) {
-                        Icon(
-                            painter = painterResource(currentAdditionalIcon.iconDrawable),
-                            contentDescription = currentAdditionalIcon.contentDescription,
-                            Modifier.align(Alignment.Center),
-                        )
+                Row {
+                    Spacer(Modifier.width(basicBarConfig.spaceBetweenItems))
+                    Box(
+                        Modifier.size(basicBarConfig.itemSize)
+                            .background(
+                                Color.White,
+                                shape = basicBarConfig.additionalItems.rightBottomItem?.itemShape
+                                    ?: RoundedCornerShape(10.dp)
+                            )
+                    ) {
+                        val currentAdditionalIcon =
+                            basicBarConfig.additionalItems.rightBottomItem?.icon
+                        if (currentAdditionalIcon != null) {
+                            Icon(
+                                painter = painterResource(currentAdditionalIcon.iconDrawable),
+                                contentDescription = currentAdditionalIcon.contentDescription,
+                                Modifier.align(Alignment.Center),
+                            )
+                        }
                     }
                 }
             } else if(basicBarConfig.additionalItems?.leftTopItem != null){
-                Spacer(Modifier.width(basicBarConfig.itemSize))
+                Spacer(Modifier.width(basicBarConfig.itemSize + basicBarConfig.spaceBetweenItems))
             }
         }
         if (basicBarConfig.basicBarPosition == BasicBarPosition.HORIZONTAL_TOP)
