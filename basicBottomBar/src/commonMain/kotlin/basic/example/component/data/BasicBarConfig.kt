@@ -5,6 +5,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import org.example.core.bottombar.data.BottomBarAdditionalItems
 import org.example.core.bottombar.data.BottomBarHoverText
 import org.example.core.bottombar.data.BottomBarIcon
 import org.example.core.bottombar.data.GlobalBottomBarIcon
@@ -23,6 +24,7 @@ data class BasicBarConfig (
     val onSelectItemSizeChangeDurationMillis: Int = 300,
     val hoverCancelDurationMillis: Long = 8,
     val spaceBetweenItems: Dp = 10.dp,
+    val additionalItems: BottomBarAdditionalItems? = null,
     val basicBarPosition: BasicBarPosition = BasicBarPosition.HORIZONTAL_BOTTOM,
     val hoverTextConfig: BottomBarHoverText = BottomBarHoverText()
 )

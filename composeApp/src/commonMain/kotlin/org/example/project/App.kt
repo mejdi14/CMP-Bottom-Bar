@@ -16,6 +16,7 @@ import basic.example.component.data.BasicBarPosition
 import basic.example.component.data.BasicItem
 import kmp_bottom_bar.composeapp.generated.resources.Res
 import kmp_bottom_bar.composeapp.generated.resources.the_plus_icon
+import org.example.core.bottombar.data.BottomBarAdditionalItems
 import org.example.core.bottombar.data.BottomBarIcon
 import org.example.core.bottombar.data.GlobalBottomBarIcon
 import org.example.core.bottombar.indicator.SelectedIndicatorConfig
@@ -68,7 +69,6 @@ fun App() {
             }*/
             BasicBottomBar(
                 bottomBarItems = bottomRoundItems,
-                additionalItem = BasicItem(icon = BottomBarIcon(Res.drawable.the_plus_icon)),
                 BasicBarConfig(
                     basicBarPosition = BasicBarPosition.HORIZONTAL_BOTTOM,
                     shape = RoundedCornerShape(50.dp),
@@ -76,6 +76,7 @@ fun App() {
                         iconTintColor = Color.Black,
                         selectedIconTintColor = Color.Black
                     ),
+                    additionalItems = BottomBarAdditionalItems(leftTopItem = BasicItem(icon = BottomBarIcon(Res.drawable.the_plus_icon))),
                     backgroundColor = Color.White,
                     hoveredBackgroundColor = Color(0xFFFFF59D),
                     selectedIndicatorConfig = SelectedIndicatorConfig(
