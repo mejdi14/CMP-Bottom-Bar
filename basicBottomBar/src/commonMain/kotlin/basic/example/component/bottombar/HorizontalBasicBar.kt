@@ -71,12 +71,16 @@ internal fun HorizontalBasicBar(
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            AnimatedVisibility(basicBarConfig.additionalItems?.leftTopItem != null) {
+            if(basicBarConfig.additionalItems?.leftTopItem != null) {
                 Box(
                     Modifier.size(basicBarConfig.itemSize)
-                        .background(Color.White, shape = RoundedCornerShape(50.dp))
+                        .background(
+                            Color.White,
+                            shape = basicBarConfig.additionalItems.leftTopItem?.itemShape
+                                ?: RoundedCornerShape(10.dp)
+                        )
                 ) {
-                    val currentAdditionalIcon = basicBarConfig.additionalItems?.leftTopItem?.icon
+                    val currentAdditionalIcon = basicBarConfig.additionalItems.leftTopItem?.icon
                     if (currentAdditionalIcon != null) {
                         Icon(
                             painter = painterResource(currentAdditionalIcon.iconDrawable),
@@ -84,90 +88,110 @@ internal fun HorizontalBasicBar(
                             Modifier.align(Alignment.Center),
                         )
                     }
-                    Spacer(Modifier.width(50.dp))
                 }
+            } else if(basicBarConfig.additionalItems?.rightBottomItem != null){
+                Spacer(Modifier.width(basicBarConfig.itemSize))
+            }
 
-                Box(
-                    Modifier.padding(basicBarConfig.basicBarPadding)
-                        .height(basicBarConfig.itemSize)
-                        .background(
-                            color = basicBarConfig.backgroundColor,
-                            shape = basicBarConfig.shape
-                        )
-                        .onGloballyPositioned { layoutCoordinates ->
-                            val widthPx = layoutCoordinates.size.width
-                            parentWidth.value = with(density) { widthPx.toDp() }
-                        }
-                ) {
-                    spaceBetween.value =
-                        ((parentWidth.value - (basicBarConfig.itemSize * (bottomBarItems.size))) / (bottomBarItems.size + 1))
-                    bottomBarIndicatorComposable(
-                        config = basicBarConfig.selectedIndicatorConfig,
-                        spaceBetween = spaceBetween.value,
-                        animatedOffset = animatedOffset,
-                        selectedIndex = selectedIndex,
-                        basicBarPosition = basicBarConfig.basicBarPosition,
-                        itemSize = basicBarConfig.itemSize
+            Box(
+                Modifier.padding(basicBarConfig.basicBarPadding)
+                    .height(basicBarConfig.itemSize)
+                    .background(
+                        color = basicBarConfig.backgroundColor,
+                        shape = basicBarConfig.shape
                     )
-                    LazyRow(
-                        state = lazyListState,
-                        horizontalArrangement = Arrangement.SpaceEvenly,
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.fillMaxHeight()
-                            .width((basicBarConfig.itemSize * bottomBarItems.size) + (basicBarConfig.spaceBetweenItems * (bottomBarItems.size - 1)))
-                    ) {
-                        itemsIndexed(bottomBarItems) { index, item ->
+                    .onGloballyPositioned { layoutCoordinates ->
+                        val widthPx = layoutCoordinates.size.width
+                        parentWidth.value = with(density) { widthPx.toDp() }
+                    }
+            ) {
+                spaceBetween.value =
+                    ((parentWidth.value - (basicBarConfig.itemSize * (bottomBarItems.size))) / (bottomBarItems.size + 1))
+                bottomBarIndicatorComposable(
+                    config = basicBarConfig.selectedIndicatorConfig,
+                    spaceBetween = spaceBetween.value,
+                    animatedOffset = animatedOffset,
+                    selectedIndex = selectedIndex,
+                    basicBarPosition = basicBarConfig.basicBarPosition,
+                    itemSize = basicBarConfig.itemSize
+                )
+                LazyRow(
+                    state = lazyListState,
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxHeight()
+                        .width((basicBarConfig.itemSize * bottomBarItems.size) + (basicBarConfig.spaceBetweenItems * (bottomBarItems.size - 1)))
+                ) {
+                    itemsIndexed(bottomBarItems) { index, item ->
 
-                            Box(
-                                modifier = Modifier.size(basicBarConfig.itemSize)
-                                    .align(Alignment.Center)
-                                    .hoverEffect { onHover ->
-                                        isHovered.value = onHover
-                                        hoverSelectedIndex.value = index
-                                    }
-                                    .clickable(
-                                        interactionSource = remember { MutableInteractionSource() },
-                                        indication = null
-                                    ) {
-                                        selectedIndex.value = index
-                                        onIconClick(item)
-                                    }
-                                    .background(
-                                        color = if (isHovered.value
-                                            && index == hoverSelectedIndex.value
-                                            && index != selectedIndex.value
-                                        ) basicBarConfig.hoveredBackgroundColor
-                                        else
-                                            Color.Unspecified,
-                                        RoundedCornerShape(10.dp)
-                                    )
-                            ) {
-                                BasicBarIconComposable(
-                                    basicBarConfig.globalBasicIconConfig,
-                                    item,
-                                    Modifier.align(Alignment.Center).size(item.size),
-                                    selectedIndex.value == index
+                        Box(
+                            modifier = Modifier.size(basicBarConfig.itemSize)
+                                .align(Alignment.Center)
+                                .hoverEffect { onHover ->
+                                    isHovered.value = onHover
+                                    hoverSelectedIndex.value = index
+                                }
+                                .clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = null
+                                ) {
+                                    selectedIndex.value = index
+                                    onIconClick(item)
+                                }
+                                .background(
+                                    color = if (isHovered.value
+                                        && index == hoverSelectedIndex.value
+                                        && index != selectedIndex.value
+                                    ) basicBarConfig.hoveredBackgroundColor
+                                    else
+                                        Color.Unspecified,
+                                    RoundedCornerShape(10.dp)
                                 )
-                            }
+                        ) {
+                            BasicBarIconComposable(
+                                basicBarConfig.globalBasicIconConfig,
+                                item,
+                                Modifier.align(Alignment.Center).size(item.size),
+                                selectedIndex.value == index
+                            )
                         }
                     }
                 }
-                AnimatedVisibility(true) {
-                    Spacer(Modifier.width(20.dp))
-                    Box(Modifier.size(basicBarConfig.itemSize).background(Color.Unspecified))
-                }
             }
-            if (basicBarConfig.basicBarPosition == BasicBarPosition.HORIZONTAL_TOP)
-                Box(Modifier.padding(5.dp)) {
-                    HoverDescriptionTextComposable(
-                        spaceBetween.value,
-                        hoverSelectedIndex,
-                        bottomBarItems,
-                        isHovered,
-                        basicBarConfig
-                    )
+            if(basicBarConfig.additionalItems?.rightBottomItem != null) {
+                Box(
+                    Modifier.size(basicBarConfig.itemSize)
+                        .background(
+                            Color.White,
+                            shape = basicBarConfig.additionalItems.rightBottomItem?.itemShape
+                                ?: RoundedCornerShape(10.dp)
+                        )
+                ) {
+                    val currentAdditionalIcon =
+                        basicBarConfig.additionalItems.rightBottomItem?.icon
+                    if (currentAdditionalIcon != null) {
+                        Icon(
+                            painter = painterResource(currentAdditionalIcon.iconDrawable),
+                            contentDescription = currentAdditionalIcon.contentDescription,
+                            Modifier.align(Alignment.Center),
+                        )
+                    }
                 }
+            } else if(basicBarConfig.additionalItems?.leftTopItem != null){
+                Spacer(Modifier.width(basicBarConfig.itemSize))
+            }
         }
+        if (basicBarConfig.basicBarPosition == BasicBarPosition.HORIZONTAL_TOP)
+            Box(Modifier.padding(5.dp)) {
+                HoverDescriptionTextComposable(
+                    spaceBetween.value,
+                    hoverSelectedIndex,
+                    bottomBarItems,
+                    isHovered,
+                    basicBarConfig
+                )
+            }
     }
+}
 
 
