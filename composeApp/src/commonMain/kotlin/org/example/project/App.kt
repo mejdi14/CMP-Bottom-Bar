@@ -70,7 +70,7 @@ fun App() {
             BasicBottomBar(
                 bottomBarItems = bottomRoundItems,
                 BasicBarConfig(
-                    basicBarPosition = BasicBarPosition.HORIZONTAL_BOTTOM,
+                    basicBarPosition = BasicBarPosition.VERTICAL_LEFT,
                     shape = RoundedCornerShape(50.dp),
                     globalBasicIconConfig = GlobalBottomBarIcon(
                         iconTintColor = Color.Black,
@@ -86,7 +86,7 @@ fun App() {
                     ),
                 ),
                 parentModifier = Modifier.align(
-                    Alignment.BottomCenter
+                    Alignment.CenterStart
                 )
             ) {
             }
