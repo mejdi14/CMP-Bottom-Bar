@@ -72,25 +72,28 @@ internal fun HorizontalBasicBar(
             verticalAlignment = Alignment.CenterVertically
         ) {
             if(basicBarConfig.additionalItems?.leftTopItem != null) {
-                Box(
-                    Modifier.size(basicBarConfig.itemSize)
-                        .background(
-                            Color.White,
-                            shape = basicBarConfig.additionalItems.leftTopItem?.itemShape
-                                ?: RoundedCornerShape(10.dp)
-                        )
-                ) {
-                    val currentAdditionalIcon = basicBarConfig.additionalItems.leftTopItem?.icon
-                    if (currentAdditionalIcon != null) {
-                        Icon(
-                            painter = painterResource(currentAdditionalIcon.iconDrawable),
-                            contentDescription = currentAdditionalIcon.contentDescription,
-                            Modifier.align(Alignment.Center),
-                        )
+                Row {
+                    Box(
+                        Modifier.size(basicBarConfig.itemSize)
+                            .background(
+                                Color.White,
+                                shape = basicBarConfig.additionalItems.leftTopItem?.itemShape
+                                    ?: RoundedCornerShape(10.dp)
+                            )
+                    ) {
+                        val currentAdditionalIcon = basicBarConfig.additionalItems.leftTopItem?.icon
+                        if (currentAdditionalIcon != null) {
+                            Icon(
+                                painter = painterResource(currentAdditionalIcon.iconDrawable),
+                                contentDescription = currentAdditionalIcon.contentDescription,
+                                Modifier.align(Alignment.Center),
+                            )
+                        }
                     }
+                    Spacer(Modifier.width(basicBarConfig.itemSize + basicBarConfig.spaceBetweenItems))
                 }
             } else if(basicBarConfig.additionalItems?.rightBottomItem != null){
-                Spacer(Modifier.width(basicBarConfig.itemSize))
+                Spacer(Modifier.width(basicBarConfig.itemSize + basicBarConfig.spaceBetweenItems))
             }
 
             Box(
