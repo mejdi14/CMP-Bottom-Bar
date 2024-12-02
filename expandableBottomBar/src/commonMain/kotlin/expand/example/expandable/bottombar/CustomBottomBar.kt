@@ -1,6 +1,6 @@
 package expand.example.expandable.bottombar
 
-import  androidx.compose.foundation.background
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -16,8 +16,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import org.example.core.bottombar.indicator.SelectedIndicatorConfig
 import org.example.core.bottombar.indicator.BasicIndicatorShapeType
+import org.example.core.bottombar.indicator.SelectedIndicatorConfig
 
 @Composable
 fun CustomBottomBar(

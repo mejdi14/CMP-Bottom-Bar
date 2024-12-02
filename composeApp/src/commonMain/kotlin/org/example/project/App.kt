@@ -19,9 +19,8 @@ import kmp_bottom_bar.composeapp.generated.resources.the_plus_icon
 import org.example.core.bottombar.data.BottomBarAdditionalItems
 import org.example.core.bottombar.data.BottomBarIcon
 import org.example.core.bottombar.data.GlobalBottomBarIcon
-import org.example.core.bottombar.indicator.SelectedIndicatorConfig
 import org.example.core.bottombar.indicator.BasicIndicatorShapeType
-import org.example.project.data.basicDemoItems
+import org.example.core.bottombar.indicator.SelectedIndicatorConfig
 import org.example.project.data.bottomRoundItems
 import org.jetbrains.compose.ui.tooling.preview.Preview
 

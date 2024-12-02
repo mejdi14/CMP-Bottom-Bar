@@ -7,7 +7,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.example.core.bottombar.data.BottomBarAdditionalItems
 import org.example.core.bottombar.data.BottomBarHoverText
-import org.example.core.bottombar.data.BottomBarIcon
 import org.example.core.bottombar.data.GlobalBottomBarIcon
 import org.example.core.bottombar.indicator.SelectedIndicatorConfig
 
