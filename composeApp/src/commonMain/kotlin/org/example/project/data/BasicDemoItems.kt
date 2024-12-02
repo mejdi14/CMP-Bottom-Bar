@@ -5,7 +5,6 @@ import basic.example.component.data.BasicItem
 import kmp_bottom_bar.composeapp.generated.resources.Res
 import kmp_bottom_bar.composeapp.generated.resources.calendar_day
 import kmp_bottom_bar.composeapp.generated.resources.home_black
-import kmp_bottom_bar.composeapp.generated.resources.home_filled
 import kmp_bottom_bar.composeapp.generated.resources.home_line
 import kmp_bottom_bar.composeapp.generated.resources.menu_meatballs
 import kmp_bottom_bar.composeapp.generated.resources.open_reader

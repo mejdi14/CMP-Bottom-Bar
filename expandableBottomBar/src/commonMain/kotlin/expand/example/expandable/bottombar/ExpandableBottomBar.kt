@@ -28,8 +28,8 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import org.example.core.bottombar.data.BottomBarItem
-import org.example.core.bottombar.indicator.SelectedIndicatorConfig
 import org.example.core.bottombar.indicator.BasicIndicatorShapeType
+import org.example.core.bottombar.indicator.SelectedIndicatorConfig
 import org.jetbrains.compose.resources.painterResource
 
 @Composable

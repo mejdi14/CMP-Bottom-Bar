@@ -1,6 +1,5 @@
 package basic.example.component.bottombar
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -53,7 +52,6 @@ internal fun HorizontalBasicBar(
     selectedIndex: MutableState<Int>,
     basicBarConfig: BasicBarConfig,
     lazyListState: LazyListState,
-    additionalItem: BasicItem,
     onIconClick: (BottomBarItem) -> Unit
 ) {
     Column(parentModifier.fillMaxWidth().padding(horizontal = 10.dp)) {
@@ -69,21 +67,32 @@ internal fun HorizontalBasicBar(
             }
         Row(
             Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceAround,
+            horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            AnimatedVisibility(true) {
-                Box(
-                    Modifier.size(basicBarConfig.itemSize)
-                        .background(Color.White, shape = RoundedCornerShape(50.dp))
-                ) {
-                    Icon(
-                        painter = painterResource(additionalItem.icon.iconDrawable),
-                        contentDescription = additionalItem.contentDescription,
-                        Modifier.align(Alignment.Center),
-                    )
+            if(basicBarConfig.additionalItems?.leftTopItem != null) {
+                Row {
+                    Box(
+                        Modifier.size(basicBarConfig.itemSize)
+                            .background(
+                                Color.White,
+                                shape = basicBarConfig.additionalItems.leftTopItem?.itemShape
+                                    ?: RoundedCornerShape(10.dp)
+                            )
+                    ) {
+                        val currentAdditionalIcon = basicBarConfig.additionalItems.leftTopItem?.icon
+                        if (currentAdditionalIcon != null) {
+                            Icon(
+                                painter = painterResource(currentAdditionalIcon.iconDrawable),
+                                contentDescription = currentAdditionalIcon.contentDescription,
+                                Modifier.align(Alignment.Center),
+                            )
+                        }
+                    }
+                    Spacer(Modifier.width(basicBarConfig.spaceBetweenItems))
                 }
-                Spacer(Modifier.width(50.dp))
+            } else if(basicBarConfig.additionalItems?.rightBottomItem != null){
+                Spacer(Modifier.width(basicBarConfig.itemSize + basicBarConfig.spaceBetweenItems))
             }
 
             Box(
@@ -151,9 +160,30 @@ internal fun HorizontalBasicBar(
                     }
                 }
             }
-            AnimatedVisibility(true) {
-                Spacer(Modifier.width(20.dp))
-                Box(Modifier.size(basicBarConfig.itemSize).background(Color.Unspecified))
+            if(basicBarConfig.additionalItems?.rightBottomItem != null) {
+                Row {
+                    Spacer(Modifier.width(basicBarConfig.spaceBetweenItems))
+                    Box(
+                        Modifier.size(basicBarConfig.itemSize)
+                            .background(
+                                Color.White,
+                                shape = basicBarConfig.additionalItems.rightBottomItem?.itemShape
+                                    ?: RoundedCornerShape(10.dp)
+                            )
+                    ) {
+                        val currentAdditionalIcon =
+                            basicBarConfig.additionalItems.rightBottomItem?.icon
+                        if (currentAdditionalIcon != null) {
+                            Icon(
+                                painter = painterResource(currentAdditionalIcon.iconDrawable),
+                                contentDescription = currentAdditionalIcon.contentDescription,
+                                Modifier.align(Alignment.Center),
+                            )
+                        }
+                    }
+                }
+            } else if(basicBarConfig.additionalItems?.leftTopItem != null){
+                Spacer(Modifier.width(basicBarConfig.itemSize + basicBarConfig.spaceBetweenItems))
             }
         }
         if (basicBarConfig.basicBarPosition == BasicBarPosition.HORIZONTAL_TOP)
