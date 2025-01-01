@@ -71,6 +71,7 @@ kotlin {
             implementation(project(":tinyGlideBottomBar"))
             implementation(project(":aztopiaBottomBar"))
             implementation(project(":basicBottomBar"))
+            implementation(project(":gooeyBottomBar"))
             implementation(libs.kermit)
         }
         desktopMain.dependencies {
