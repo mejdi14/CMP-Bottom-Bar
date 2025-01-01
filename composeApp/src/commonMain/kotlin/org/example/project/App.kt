@@ -88,7 +88,6 @@ fun App() {
             ) {
             }*/
             var separated = remember { mutableStateOf(false) }
-            // Animate the separation with a spring, just for demonstration:
             val separationAnim = animateDpAsState(
                 targetValue = if (separated.value) 30.dp else 0.dp,
                 animationSpec = spring()
@@ -99,15 +98,10 @@ fun App() {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                // Show the Gooey bar with the current animated distance
                 GooeyBottomBar(
                     separationDp = separationAnim.value.value
                 )
-                Spacer(Modifier.height(16.dp))
 
-                Button(onClick = { separated.value = !separated.value }) {
-                    Text(if (separated.value) "Bring them together" else "Separate them")
-                }
             }
         }
     }
