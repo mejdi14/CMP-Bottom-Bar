@@ -27,7 +27,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Preview
 fun App() {
     MaterialTheme {
-        Box(Modifier.fillMaxSize().background(Color.Black)) {
+        Box(Modifier.fillMaxSize().background(Color.White)) {
             //TinyGlideDemo(Modifier.align(Alignment.BottomCenter))
             // AztopiaDemo(Modifier.align(Alignment.BottomCenter))
             /*BasicBottomBar(
