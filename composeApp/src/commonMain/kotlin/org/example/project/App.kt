@@ -27,7 +27,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Preview
 fun App() {
     MaterialTheme {
-        Box(Modifier.fillMaxSize().background(Color(0xFF371f7d))) {
+        Box(Modifier.fillMaxSize().background(Color.Black)) {
             //TinyGlideDemo(Modifier.align(Alignment.BottomCenter))
             // AztopiaDemo(Modifier.align(Alignment.BottomCenter))
             /*BasicBottomBar(
@@ -90,7 +90,7 @@ fun App() {
             var separated = remember { mutableStateOf(false) }
             // Animate the separation with a spring, just for demonstration:
             val separationAnim = animateDpAsState(
-                targetValue = if (separated.value) 44.dp else -10.dp,
+                targetValue = if (separated.value) 30.dp else 0.dp,
                 animationSpec = spring()
             )
 
