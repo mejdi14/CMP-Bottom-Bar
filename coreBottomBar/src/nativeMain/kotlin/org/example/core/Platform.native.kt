@@ -1,5 +1,5 @@
 package org.example.core
 
-actual fun getPlatform(): Platform {
-    TODO("Not yet implemented")
+actual fun getPlatform(): Platform = object : Platform {
+    override val name: String = "Native"
 }
