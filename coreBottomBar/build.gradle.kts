@@ -8,7 +8,7 @@ plugins {
     alias(libs.plugins.androidLibrary )
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
-    id("com.vanniktech.maven.publish") version "0.30.0"
+    id("maven-publish")  // 🔹 Add this
     signing
 }
 
@@ -22,7 +22,6 @@ kotlin {
                 outputFileName = "composeApp.js"
                 devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
                     static = (static ?: mutableListOf()).apply {
-                        // Serve sources to debug inside browser
                         add(projectDirPath)
                     }
                 }
@@ -30,16 +29,16 @@ kotlin {
         }
         binaries.executable()
     }
-    
+
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    
+
     jvm("desktop")
-    
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -50,10 +49,10 @@ kotlin {
             isStatic = true
         }
     }
-    
+
     sourceSets {
         val desktopMain by getting
-        
+
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
@@ -109,10 +108,67 @@ android {
     }
 }
 
-if ((project.findProperty("RELEASE_SIGNING_ENABLED")?.toString() ?: "false").toBoolean()) {
-    signing {
-        useGpgCmd()
-        sign(publishing.publications)
+// 🔹 Group and Version
+group = "io.github.mejdi14"
+version = "1.0.0-SNAPSHOT"
+
+// 🔹 Override version if using CI/CD
+if (project.hasProperty("VERSION_NAME")) {
+    version = project.property("VERSION_NAME") as String
+}
+
+// 🔹 Define **publishing** (works with `maven-publish` plugin)
+publishing {
+    publications {
+        create<MavenPublication>("release") {
+            from(components["kotlin"])  // Ensures multiplatform support
+            groupId = "io.github.mejdi14"
+            artifactId = "kmp-core-bottombar"  // Ensure lowercase for Maven compatibility
+            version = project.version.toString()
+
+            pom {
+                name.set("KMP Core BottomBar")
+                description.set("A Kotlin Multiplatform Bottom Bar UI component.")
+                url.set("https://github.com/mejdi14/KMP-Bottom-Bar")
+
+                licenses {
+                    license {
+                        name.set("Apache-2.0")
+                        url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
+                    }
+                }
+
+                scm {
+                    url.set("https://github.com/mejdi14/KMP-Bottom-Bar")
+                    connection.set("scm:git:git://github.com/mejdi14/KMP-Bottom-Bar.git")
+                    developerConnection.set("scm:git:ssh://git@github.com/mejdi14/KMP-Bottom-Bar.git")
+                }
+
+                developers {
+                    developer {
+                        id.set("mejdi14")
+                        name.set("Mejdi Hafiene")
+                        email.set("mejdihafiane@gmail.com")
+                    }
+                }
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            name = "MavenCentral"
+            url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+            credentials {
+                username = findProperty("MAVEN_CENTRAL_USERNAME") as String?
+                password = findProperty("MAVEN_CENTRAL_PASSWORD") as String?
+            }
+        }
     }
 }
 
+// 🔹 **Configure signing (ensure it's at the end)**
+signing {
+    useGpgCmd()
+    sign(publishing.publications)
+}
