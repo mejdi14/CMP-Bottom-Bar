@@ -160,8 +160,8 @@ publishing {
             name = "MavenCentral"
             url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
             credentials {
-                username = findProperty("MAVEN_CENTRAL_USERNAME") as String?
-                password = findProperty("MAVEN_CENTRAL_PASSWORD") as String?
+                username = findProperty("mavenCentralUsername") as String?
+                password = findProperty("mavenCentralPassword") as String?
             }
         }
     }
