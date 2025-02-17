@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
     id("com.vanniktech.maven.publish") version "0.30.0"
+    signing
 }
 
 kotlin {
@@ -105,6 +106,13 @@ android {
     }
     dependencies {
         debugImplementation(compose.uiTooling)
+    }
+}
+
+if ((project.findProperty("RELEASE_SIGNING_ENABLED")?.toString() ?: "false").toBoolean()) {
+    signing {
+        useGpgCmd()
+        sign(publishing.publications)
     }
 }
 
