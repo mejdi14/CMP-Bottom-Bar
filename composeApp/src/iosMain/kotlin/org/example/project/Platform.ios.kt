@@ -1,6 +1,5 @@
-package org.example.core
+package org.example.project
 
-import org.example.project.Platform
 import platform.UIKit.UIDevice
 
 class IOSPlatform: Platform {
