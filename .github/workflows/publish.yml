@@ -62,7 +62,7 @@ jobs:
             -PVERSION_NAME="$VERSION_NAME" \
             -PGROUP="$GROUP" \
             -PMAVEN_CENTRAL_USERNAME="${{ secrets.MAVEN_CENTRAL_USERNAME }}" \
-            -PMAVEN_CENTRAL_PASSWORD="${{ secrets.MAVEN_CENTRAL_PASSWORD }}" \          
+            -PMAVEN_CENTRAL_PASSWORD="${{ secrets.MAVEN_CENTRAL_PASSWORD }}" \
             -PPOM_ARTIFACT_ID="$POM_ARTIFACT_ID" \
             -PPOM_NAME="$POM_NAME" \
             -PPOM_DESCRIPTION="$POM_DESCRIPTION" \
