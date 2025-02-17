@@ -129,7 +129,7 @@ publishing {
             pom {
                 name.set("KMP Core BottomBar")
                 description.set("A Kotlin Multiplatform Bottom Bar UI component.")
-                url.set("https://github.com/mejdi14/KMP-Bottom-Bar")
+                url.set("https://github.com/mejdi14/CMP-Bottom-Bar")
 
                 licenses {
                     license {
@@ -139,9 +139,9 @@ publishing {
                 }
 
                 scm {
-                    url.set("https://github.com/mejdi14/KMP-Bottom-Bar")
-                    connection.set("scm:git:git://github.com/mejdi14/KMP-Bottom-Bar.git")
-                    developerConnection.set("scm:git:ssh://git@github.com/mejdi14/KMP-Bottom-Bar.git")
+                    url.set("https://github.com/mejdi14/CMP-Bottom-Bar")
+                    connection.set("scm:git:git://github.com/mejdi14/CMP-Bottom-Bar.git")
+                    developerConnection.set("scm:git:ssh://git@github.com/mejdi14/CMP-Bottom-Bar.git")
                 }
 
                 developers {
@@ -156,14 +156,7 @@ publishing {
     }
 
     repositories {
-        maven {
-            name = "MavenCentral"
-            url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
-            credentials {
-                username = findProperty("mavenCentralUsername") as String?
-                password = findProperty("mavenCentralPassword") as String?
-            }
-        }
+        mavenCentral()
     }
 }
 
