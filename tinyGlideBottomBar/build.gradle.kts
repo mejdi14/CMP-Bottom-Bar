@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.androidLibrary )
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
+    id("com.vanniktech.maven.publish") version "0.30.0"
 }
 
 kotlin {
