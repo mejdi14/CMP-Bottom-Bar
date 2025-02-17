@@ -156,7 +156,14 @@ publishing {
     }
 
     repositories {
-        mavenCentral()
+        maven {
+            name = "MavenCentral"
+            url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/") // Correct URL for Sonatype
+            credentials {
+                username = findProperty("mavenCentralUsername") as String? ?: System.getenv("MAVEN_CENTRAL_USERNAME")
+                password = findProperty("mavenCentralPassword") as String? ?: System.getenv("MAVEN_CENTRAL_PASSWORD")
+            }
+        }
     }
 }
 
