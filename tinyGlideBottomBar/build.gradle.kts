@@ -8,6 +8,8 @@ plugins {
     alias(libs.plugins.androidLibrary )
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
+    id("com.vanniktech.maven.publish") version "0.30.0"
+    signing
 }
 
 kotlin {
@@ -65,8 +67,7 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.runtime.compose)
-            api(project(":coreBottomBar"))
-            implementation(libs.kermit)
+            implementation("io.github.mejdi14:cmp-bottombar-core:0.3.0")
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
@@ -108,3 +109,42 @@ android {
     }
 }
 
+if ((project.findProperty("RELEASE_SIGNING_ENABLED")?.toString() ?: "false").toBoolean()) {
+    signing {
+        useGpgCmd()
+        sign(publishing.publications)
+    }
+}
+
+mavenPublishing {
+    coordinates(
+        artifactId = "cmp-bottombar-tinyGlide",
+    )
+
+    pom {
+        name.set("CMP Bottom Bar - TinyGlide")
+        description.set("TinyGlide library for the CMP Bottom Bar multi-platform library.")
+        url.set("https://github.com/mejdi14/CMP-Bottom-Bar")
+
+        licenses {
+            license {
+                name.set("Apache-2.0")
+                url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
+                distribution.set("repo")
+            }
+        }
+        scm {
+            url.set("https://github.com/mejdi14/CMP-Bottom-Bar")
+            connection.set("scm:git:git://github.com/mejdi14/CMP-Bottom-Bar.git")
+            developerConnection.set("scm:git:ssh://git@github.com/mejdi14/CMP-Bottom-Bar.git")
+        }
+        developers {
+            developer {
+                id.set("mejdi14")
+                name.set("mejdi hafiene")
+                url.set("https://github.com/mejdi14/")
+                email.set("mejdihafiane@gmail.com")
+            }
+        }
+    }
+}
