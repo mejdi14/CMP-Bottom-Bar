@@ -118,7 +118,6 @@ if ((project.findProperty("RELEASE_SIGNING_ENABLED")?.toString() ?: "false").toB
 mavenPublishing {
     coordinates(
         artifactId = "cmp-bottombar-core",
-        version = project.version.toString()
     )
 
     pom {
