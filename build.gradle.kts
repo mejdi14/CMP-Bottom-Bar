@@ -7,3 +7,16 @@ plugins {
     alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.kotlinMultiplatform) apply false
 }
+
+group = "io.github.mejdi14"
+
+val versionName = project.findProperty("VERSION_NAME") as String? ?: "0.2.8"
+version = versionName
+
+subprojects {
+    afterEvaluate {
+        if (this.version.toString() == "unspecified") {
+            this.version = versionName
+        }
+    }
+}
