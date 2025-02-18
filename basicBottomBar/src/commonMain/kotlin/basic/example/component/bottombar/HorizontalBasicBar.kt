@@ -70,7 +70,7 @@ internal fun HorizontalBasicBar(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            if(basicBarConfig.additionalItems?.leftTopItem != null) {
+            if (basicBarConfig.additionalItems?.leftTopItem != null) {
                 Row {
                     Box(
                         Modifier.size(basicBarConfig.itemSize)
@@ -91,13 +91,13 @@ internal fun HorizontalBasicBar(
                     }
                     Spacer(Modifier.width(basicBarConfig.spaceBetweenItems))
                 }
-            } else if(basicBarConfig.additionalItems?.rightBottomItem != null){
+            } else if (basicBarConfig.additionalItems?.rightBottomItem != null) {
                 Spacer(Modifier.width(basicBarConfig.itemSize + basicBarConfig.spaceBetweenItems))
             }
 
             Box(
                 Modifier.padding(basicBarConfig.basicBarPadding)
-                    .height(basicBarConfig.itemSize)
+                    .height(basicBarConfig.itemSize + (basicBarConfig.basicBarPadding * 2))
                     .background(
                         color = basicBarConfig.backgroundColor,
                         shape = basicBarConfig.shape
@@ -160,7 +160,7 @@ internal fun HorizontalBasicBar(
                     }
                 }
             }
-            if(basicBarConfig.additionalItems?.rightBottomItem != null) {
+            if (basicBarConfig.additionalItems?.rightBottomItem != null) {
                 Row {
                     Spacer(Modifier.width(basicBarConfig.spaceBetweenItems))
                     Box(
@@ -182,7 +182,7 @@ internal fun HorizontalBasicBar(
                         }
                     }
                 }
-            } else if(basicBarConfig.additionalItems?.leftTopItem != null){
+            } else if (basicBarConfig.additionalItems?.leftTopItem != null) {
                 Spacer(Modifier.width(basicBarConfig.itemSize + basicBarConfig.spaceBetweenItems))
             }
         }
