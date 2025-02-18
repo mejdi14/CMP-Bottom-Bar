@@ -1,5 +1,6 @@
-package org.example.core
+package org.example.tinyGlide
 
+import org.example.core.Platform
 import platform.UIKit.UIDevice
 
 class IOSPlatform: Platform {

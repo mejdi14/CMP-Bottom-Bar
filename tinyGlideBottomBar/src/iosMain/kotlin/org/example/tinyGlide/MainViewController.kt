@@ -1,4 +1,4 @@
-package org.example.core
+package org.example.tinyGlide
 
 import androidx.compose.ui.window.ComposeUIViewController
 
