@@ -67,7 +67,7 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.runtime.compose)
-            api(project(":coreBottomBar"))
+            api("io.github.mejdi14:cmp-bottombar-core:0.3.6")
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
