@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import org.example.gooey.GooeyBottomBar
+import org.example.project.demo.AztopiaDemo
 import org.example.project.demo.TinyGlideDemo
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -30,7 +31,7 @@ fun App() {
     MaterialTheme {
         Box(Modifier.fillMaxSize().background(Color.White)) {
             TinyGlideDemo(Modifier.align(Alignment.BottomCenter))
-            // AztopiaDemo(Modifier.align(Alignment.BottomCenter))
+             //AztopiaDemo(Modifier.align(Alignment.BottomCenter))
             /*BasicBottomBar(
                 bottomBarItems = basicDemoItems,
                 BasicBarConfig(

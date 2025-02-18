@@ -28,7 +28,7 @@ val tinyGlideItems =
             BottomBarIcon(Res.drawable.icon3), "Papers",
             backgroundColor = Color(0xFFE6D9A2),
             subTinyGlideItems = listOf(
-                TinyGlideItem(BottomBarIcon(Res.drawable.icon4), "Papers"),
+                TinyGlideItem(BottomBarIcon(Res.drawable.home_line), "Papers"),
                 TinyGlideItem(BottomBarIcon(Res.drawable.icon5), "Papers"),
                 TinyGlideItem(BottomBarIcon(Res.drawable.icon6), "Papers"),
                 TinyGlideItem(BottomBarIcon(Res.drawable.icon7), "Papers"),
