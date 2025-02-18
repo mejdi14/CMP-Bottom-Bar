@@ -13,7 +13,7 @@ plugins {
 kotlin {
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
-        moduleName = "composeApp"
+        moduleName = "expandableBottomBar"
         browser {
             val projectDirPath = project.projectDir.path
             commonWebpackConfig {

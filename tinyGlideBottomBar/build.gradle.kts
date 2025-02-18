@@ -15,7 +15,7 @@ plugins {
 kotlin {
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
-        moduleName = "composeApp"
+        moduleName = "tinyGlideBottomBar"
         browser {
             val projectDirPath = project.projectDir.path
             commonWebpackConfig {
