@@ -87,15 +87,15 @@ fun App() {
                     shape = RoundedCornerShape(50.dp),
                     globalBasicIconConfig = GlobalBottomBarIcon(
                         iconTintColor = Color.Black,
-                        selectedIconTintColor = Color.Black
+                        selectedIconTintColor = Color.Red
                     ),
                     additionalItems = BottomBarAdditionalItems(leftTopItem = BasicItem(icon = BottomBarIcon(Res.drawable.the_plus_icon))),
-                    backgroundColor = Color.White,
+                    backgroundColor = Color.Green,
                     hoveredBackgroundColor = Color(0xFFFFF59D),
                     selectedIndicatorConfig = SelectedIndicatorConfig(
                         shapeType = BasicIndicatorShapeType.Circle,
                         thickness = 3.dp,
-                        color = Color.Unspecified
+                        color = Color.Black
                     ),
                 ),
                 parentModifier = Modifier.align(
