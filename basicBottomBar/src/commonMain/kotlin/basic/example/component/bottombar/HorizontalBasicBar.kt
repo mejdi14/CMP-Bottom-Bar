@@ -75,7 +75,8 @@ internal fun HorizontalBasicBar(
                     Box(
                         Modifier.size(basicBarConfig.itemSize)
                             .background(
-                                Color.White,
+                                color = basicBarConfig.additionalItems.leftTopItem?.backgroundColor
+                                    ?: Color.White,
                                 shape = basicBarConfig.additionalItems.leftTopItem?.itemShape
                                     ?: RoundedCornerShape(10.dp)
                             )
@@ -86,6 +87,7 @@ internal fun HorizontalBasicBar(
                                 painter = painterResource(currentAdditionalIcon.iconDrawable),
                                 contentDescription = currentAdditionalIcon.contentDescription,
                                 Modifier.align(Alignment.Center),
+                                tint = currentAdditionalIcon.iconTintColor,
                             )
                         }
                     }
@@ -166,7 +168,8 @@ internal fun HorizontalBasicBar(
                     Box(
                         Modifier.size(basicBarConfig.itemSize)
                             .background(
-                                Color.White,
+                                color = basicBarConfig.additionalItems.leftTopItem?.backgroundColor
+                                    ?: Color.White,
                                 shape = basicBarConfig.additionalItems.rightBottomItem?.itemShape
                                     ?: RoundedCornerShape(10.dp)
                             )
@@ -178,6 +181,7 @@ internal fun HorizontalBasicBar(
                                 painter = painterResource(currentAdditionalIcon.iconDrawable),
                                 contentDescription = currentAdditionalIcon.contentDescription,
                                 Modifier.align(Alignment.Center),
+                                tint = currentAdditionalIcon.iconTintColor,
                             )
                         }
                     }
