@@ -73,8 +73,12 @@ internal fun VerticalBasicBar(
                 Column {
                     Box(
                         Modifier.size(basicBarConfig.itemSize)
+                            .clickable {
+                                (basicBarConfig.additionalItems.leftTopItem as BasicItem).clickActionListener.onItemClickListener()
+                            }
                             .background(
-                                Color.White,
+                                basicBarConfig.additionalItems.leftTopItem?.backgroundColor
+                                    ?: Color.White,
                                 shape = basicBarConfig.additionalItems.leftTopItem?.itemShape
                                     ?: RoundedCornerShape(10.dp)
                             )
@@ -163,8 +167,12 @@ internal fun VerticalBasicBar(
                     Spacer(Modifier.height(basicBarConfig.spaceBetweenItems))
                     Box(
                         Modifier.size(basicBarConfig.itemSize)
+                            .clickable {
+                                (basicBarConfig.additionalItems.rightBottomItem as BasicItem).clickActionListener.onItemClickListener()
+                            }
                             .background(
-                                Color.White,
+                                basicBarConfig.additionalItems.rightBottomItem?.backgroundColor
+                                    ?: Color.White,
                                 shape = basicBarConfig.additionalItems.rightBottomItem?.itemShape
                                     ?: RoundedCornerShape(10.dp)
                             )

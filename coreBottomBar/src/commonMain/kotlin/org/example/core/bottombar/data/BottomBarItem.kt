@@ -15,5 +15,6 @@ abstract class BottomBarItem{
     abstract val index: Int
     abstract val disableClickIfAlreadySelected : Boolean
     abstract val withTitleShown : Boolean
+    abstract val OnItemClick : Boolean
 }
 

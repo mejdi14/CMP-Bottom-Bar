@@ -74,6 +74,9 @@ internal fun HorizontalBasicBar(
                 Row {
                     Box(
                         Modifier.size(basicBarConfig.itemSize)
+                            .clickable{
+                                (basicBarConfig.additionalItems.rightBottomItem as BasicItem).clickActionListener.onItemClickListener()
+                            }
                             .background(
                                 color = basicBarConfig.additionalItems.leftTopItem?.backgroundColor
                                     ?: Color.White,
@@ -167,8 +170,11 @@ internal fun HorizontalBasicBar(
                     Spacer(Modifier.width(basicBarConfig.spaceBetweenItems))
                     Box(
                         Modifier.size(basicBarConfig.itemSize)
+                            .clickable{
+                                (basicBarConfig.additionalItems.rightBottomItem as BasicItem).clickActionListener.onItemClickListener()
+                            }
                             .background(
-                                color = basicBarConfig.additionalItems.leftTopItem?.backgroundColor
+                                color = basicBarConfig.additionalItems.rightBottomItem?.backgroundColor
                                     ?: Color.White,
                                 shape = basicBarConfig.additionalItems.rightBottomItem?.itemShape
                                     ?: RoundedCornerShape(10.dp)

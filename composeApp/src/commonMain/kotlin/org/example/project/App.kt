@@ -45,7 +45,7 @@ fun App() {
     MaterialTheme {
         Box(Modifier.fillMaxSize().background(Color.White)) {
             //TinyGlideDemo(Modifier.align(Alignment.BottomCenter))
-             //AztopiaDemo(Modifier.align(Alignment.BottomCenter))
+            //AztopiaDemo(Modifier.align(Alignment.BottomCenter))
             BasicBottomBar(
                 bottomBarItems = basicDemoItems,
                 BasicBarConfig(
@@ -89,7 +89,14 @@ fun App() {
                         iconTintColor = Color.Black,
                         selectedIconTintColor = Color.Red
                     ),
-                    additionalItems = BottomBarAdditionalItems(leftTopItem = BasicItem(icon = BottomBarIcon(Res.drawable.the_plus_icon))),
+                    additionalItems = BottomBarAdditionalItems(
+                        rightBottomItem = BasicItem(
+                            backgroundColor = Color.Red,
+                            icon = BottomBarIcon(
+                                Res.drawable.the_plus_icon
+                            )
+                        )
+                    ),
                     backgroundColor = Color.Green,
                     hoveredBackgroundColor = Color(0xFFFFF59D),
                     selectedIndicatorConfig = SelectedIndicatorConfig(
