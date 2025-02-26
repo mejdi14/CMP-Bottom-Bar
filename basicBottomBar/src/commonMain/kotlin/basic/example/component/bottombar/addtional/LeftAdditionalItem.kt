@@ -18,27 +18,29 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 internal fun LeftAdditionalItem(
     basicBarConfig: BasicBarConfig,
-    basicItem: BasicItem,
+    basicItem: BasicItem?,
 ) {
     if (basicBarConfig.additionalItems?.leftTopItem != null) {
         Row {
             Box(
                 Modifier.size(basicBarConfig.itemSize)
                     .clickable {
-                        basicItem.clickActionListener.onItemClickListener()
+                        basicItem?.clickActionListener?.onItemClickListener()
                     }
                     .background(
-                        color = basicItem.backgroundColor,
-                        shape = basicItem.itemShape
+                        color = basicItem?.backgroundColor ?: basicBarConfig.backgroundColor,
+                        shape = basicItem?.itemShape ?: basicBarConfig.shape
                     )
             ) {
-                val currentAdditionalIcon = basicItem.icon
-                Icon(
-                    painter = painterResource(currentAdditionalIcon.iconDrawable),
-                    contentDescription = currentAdditionalIcon.contentDescription,
-                    Modifier.align(Alignment.Center),
-                    tint = currentAdditionalIcon.iconTintColor,
-                )
+                if (basicItem?.icon != null) {
+                    val currentAdditionalIcon = basicItem.icon
+                    Icon(
+                        painter = painterResource(currentAdditionalIcon.iconDrawable),
+                        contentDescription = currentAdditionalIcon.contentDescription,
+                        Modifier.align(Alignment.Center),
+                        tint = currentAdditionalIcon.iconTintColor,
+                    )
+                }
             }
             Spacer(Modifier.width(basicBarConfig.spaceBetweenItems))
         }

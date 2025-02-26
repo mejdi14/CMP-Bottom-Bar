@@ -74,7 +74,7 @@ internal fun HorizontalBasicBar(
         ) {
             LeftAdditionalItem(
                 basicBarConfig,
-                basicBarConfig.additionalItems?.leftTopItem as BasicItem,
+                basicBarConfig.additionalItems?.leftTopItem as BasicItem?,
             )
 
             Box(
@@ -145,7 +145,7 @@ internal fun HorizontalBasicBar(
             extracted(
                 basicBarConfig.additionalItems,
                 basicBarConfig,
-                basicBarConfig.additionalItems.rightBottomItem as BasicItem,
+                basicBarConfig.additionalItems?.rightBottomItem as BasicItem?,
             )
         }
         if (basicBarConfig.basicBarPosition == BasicBarPosition.HORIZONTAL_TOP)
@@ -163,32 +163,36 @@ internal fun HorizontalBasicBar(
 
 @Composable
 private fun extracted(
-    additionalItems: BottomBarAdditionalItems,
+    additionalItems: BottomBarAdditionalItems?,
     basicBarConfig: BasicBarConfig,
-    rightBottomItem: BasicItem,
+    rightBottomItem: BasicItem?,
 ) {
-    if (additionalItems.rightBottomItem != null) {
+    if (additionalItems?.rightBottomItem != null) {
         Row {
             Spacer(Modifier.width(basicBarConfig.spaceBetweenItems))
             Box(
                 Modifier.size(basicBarConfig.itemSize)
                     .clickable {
-                        rightBottomItem.clickActionListener.onItemClickListener()
+                        rightBottomItem?.clickActionListener?.onItemClickListener()
                     }
                     .background(
-                        color = rightBottomItem.backgroundColor,
-                        shape = rightBottomItem.itemShape
+                        color = rightBottomItem?.backgroundColor ?: basicBarConfig.backgroundColor,
+                        shape = rightBottomItem?.itemShape ?: basicBarConfig.shape
                     )
             ) {
-                val currentAdditionalIcon =
-                    rightBottomItem.icon
+                if (rightBottomItem?.icon != null) {
 
-                Icon(
-                    painter = painterResource(currentAdditionalIcon.iconDrawable),
-                    contentDescription = currentAdditionalIcon.contentDescription,
-                    Modifier.align(Alignment.Center),
-                    tint = currentAdditionalIcon.iconTintColor,
-                )
+
+                    val currentAdditionalIcon =
+                        rightBottomItem.icon
+
+                    Icon(
+                        painter = painterResource(currentAdditionalIcon.iconDrawable),
+                        contentDescription = currentAdditionalIcon.contentDescription,
+                        Modifier.align(Alignment.Center),
+                        tint = currentAdditionalIcon.iconTintColor,
+                    )
+                }
             }
         }
     } else if (basicBarConfig.additionalItems?.leftTopItem != null) {

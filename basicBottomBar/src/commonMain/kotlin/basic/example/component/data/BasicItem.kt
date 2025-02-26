@@ -39,5 +39,7 @@ data class BasicItem(
     val clickActionListener: ClickActionListener = EmptyClickActionListener
 ) : BottomBarItem() {
     override val withTitleShown: Boolean = false
+    override val OnItemClick: Boolean
+        get() = TODO("Not yet implemented")
     override val title: BottomBarTitle = BottomBarTitle("bottomBarTitle")
 }
