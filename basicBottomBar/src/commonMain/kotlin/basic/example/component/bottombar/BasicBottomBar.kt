@@ -1,4 +1,4 @@
-package basic.example.component.bottombar
+package basic.mejdi14.component.bottombar
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -8,10 +8,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
-import basic.example.component.data.BasicBarConfig
-import basic.example.component.data.BasicBarPosition
-import basic.example.component.data.BasicItem
-import org.example.core.bottombar.data.BottomBarItem
+import basic.mejdi14.component.data.BasicBarConfig
+import basic.mejdi14.component.data.BasicBarPosition
+import basic.mejdi14.component.data.BasicItem
+import org.mejdi14.core.bottombar.data.BottomBarItem
 
 @Composable
 fun BasicBottomBar(

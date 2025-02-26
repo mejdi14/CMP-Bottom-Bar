@@ -1,4 +1,4 @@
-package basic.example.component.bottombar.hover
+package basic.mejdi14.component.bottombar.hover
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -22,9 +22,9 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import basic.example.component.data.BasicBarConfig
-import basic.example.component.data.BasicBarPosition
-import basic.example.component.data.BasicItem
+import basic.mejdi14.component.data.BasicBarConfig
+import basic.mejdi14.component.data.BasicBarPosition
+import basic.mejdi14.component.data.BasicItem
 
 @Composable
 internal fun HoverDescriptionTextComposable(

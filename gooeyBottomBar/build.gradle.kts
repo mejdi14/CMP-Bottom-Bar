@@ -75,7 +75,7 @@ kotlin {
 }
 
 android {
-    namespace = "org.example.gooey"
+    namespace = "org.mejdi14.gooey"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")

@@ -1,4 +1,4 @@
-package basic.example.component.bottombar
+package basic.mejdi14.component.bottombar
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -29,13 +29,13 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import basic.example.component.bottombar.hover.HoverDescriptionTextComposable
-import basic.example.component.bottombar.icon.BasicBarIconComposable
-import basic.example.component.bottombar.indicator.bottomBarIndicatorComposable
-import basic.example.component.data.BasicBarConfig
-import basic.example.component.data.BasicBarPosition
-import basic.example.component.data.BasicItem
-import org.example.core.bottombar.data.BottomBarItem
+import basic.mejdi14.component.bottombar.hover.HoverDescriptionTextComposable
+import basic.mejdi14.component.bottombar.icon.BasicBarIconComposable
+import basic.mejdi14.component.bottombar.indicator.bottomBarIndicatorComposable
+import basic.mejdi14.component.data.BasicBarConfig
+import basic.mejdi14.component.data.BasicBarPosition
+import basic.mejdi14.component.data.BasicItem
+import org.mejdi14.core.bottombar.data.BottomBarItem
 import org.jetbrains.compose.resources.painterResource
 
 @Composable

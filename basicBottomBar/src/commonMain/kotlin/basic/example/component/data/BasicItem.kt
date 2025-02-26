@@ -1,4 +1,4 @@
-package basic.example.component.data
+package basic.mejdi14.component.data
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.MutableState
@@ -8,13 +8,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import org.example.core.bottombar.data.BottomBarIcon
-import org.example.core.bottombar.data.BottomBarItem
-import org.example.core.bottombar.data.BottomBarTitle
-import org.example.core.bottombar.listener.ClickActionListener
-import org.example.core.bottombar.listener.EmptyClickActionListener
-import org.example.core.bottombar.listener.HoverActionListener
-import org.example.core.bottombar.listener.emptyHoverActionListener
+import org.mejdi14.core.bottombar.data.BottomBarIcon
+import org.mejdi14.core.bottombar.data.BottomBarItem
+import org.mejdi14.core.bottombar.data.BottomBarTitle
+import org.mejdi14.core.bottombar.listener.ClickActionListener
+import org.mejdi14.core.bottombar.listener.EmptyClickActionListener
+import org.mejdi14.core.bottombar.listener.HoverActionListener
+import org.mejdi14.core.bottombar.listener.emptyHoverActionListener
 
 data class BasicItem(
     override val icon: BottomBarIcon,

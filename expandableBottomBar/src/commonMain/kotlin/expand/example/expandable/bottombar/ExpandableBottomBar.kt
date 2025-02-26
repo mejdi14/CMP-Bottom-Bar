@@ -1,4 +1,4 @@
-package expand.example.expandable.bottombar
+package expand.mejdi14.expandable.bottombar
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
@@ -27,9 +27,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
-import org.example.core.bottombar.data.BottomBarItem
-import org.example.core.bottombar.indicator.BasicIndicatorShapeType
-import org.example.core.bottombar.indicator.SelectedIndicatorConfig
+import org.mejdi14.core.bottombar.data.BottomBarItem
+import org.mejdi14.core.bottombar.indicator.BasicIndicatorShapeType
+import org.mejdi14.core.bottombar.indicator.SelectedIndicatorConfig
 import org.jetbrains.compose.resources.painterResource
 
 @Composable

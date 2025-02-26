@@ -75,7 +75,7 @@ kotlin {
 }
 
 android {
-    namespace = "expand.example.expandable"
+    namespace = "expand.mejdi14.expandable"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")

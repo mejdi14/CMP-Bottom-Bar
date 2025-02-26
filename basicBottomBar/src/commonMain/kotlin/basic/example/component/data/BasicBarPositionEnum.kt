@@ -1,4 +1,4 @@
-package basic.example.component.data
+package basic.mejdi14.component.data
 
 enum class BasicBarPosition {
     HORIZONTAL_BOTTOM,

@@ -1,4 +1,4 @@
-package expand.example.expandable.bottombar
+package expand.mejdi14.expandable.bottombar
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -16,8 +16,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import org.example.core.bottombar.indicator.BasicIndicatorShapeType
-import org.example.core.bottombar.indicator.SelectedIndicatorConfig
+import org.mejdi14.core.bottombar.indicator.BasicIndicatorShapeType
+import org.mejdi14.core.bottombar.indicator.SelectedIndicatorConfig
 
 @Composable
 fun CustomBottomBar(

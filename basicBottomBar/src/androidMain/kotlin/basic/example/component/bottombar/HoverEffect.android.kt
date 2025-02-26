@@ -1,4 +1,4 @@
-package basic.example.component.bottombar
+package basic.mejdi14.component.bottombar
 
 import androidx.compose.ui.Modifier
 

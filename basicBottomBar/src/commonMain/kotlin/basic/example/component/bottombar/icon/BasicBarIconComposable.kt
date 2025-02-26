@@ -1,11 +1,11 @@
-package basic.example.component.bottombar.icon
+package basic.mejdi14.component.bottombar.icon
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import basic.example.component.data.BasicItem
-import org.example.core.bottombar.data.GlobalBottomBarIcon
+import basic.mejdi14.component.data.BasicItem
+import org.mejdi14.core.bottombar.data.GlobalBottomBarIcon
 import org.jetbrains.compose.resources.painterResource
 
 @Composable

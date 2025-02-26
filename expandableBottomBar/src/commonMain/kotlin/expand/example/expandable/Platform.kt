@@ -1,4 +1,4 @@
-package expand.example.expandable
+package expand.mejdi14.expandable
 
 interface Platform {
     val name: String

@@ -77,7 +77,7 @@ kotlin {
 }
 
 android {
-    namespace = "org.example.aztopia"
+    namespace = "org.mejdi14.aztopia"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
