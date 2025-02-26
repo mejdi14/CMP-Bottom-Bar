@@ -5,12 +5,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import org.example.core.bottombar.data.BottomBarIcon
+import org.example.core.bottombar.data.BottomBarTitle
 import org.mejdi14.aztopia.helper.AztopiaTrio
-import org.mejdi14.core.bottombar.data.BottomBarIcon
-import org.mejdi14.core.bottombar.data.BottomBarItem
-import org.mejdi14.core.bottombar.data.BottomBarTitle
-import org.mejdi14.core.bottombar.listener.ClickActionListener
-import org.mejdi14.core.bottombar.listener.EmptyClickActionListener
 
 data class AztopiaAnimatedComposable (
     override val icon: BottomBarIcon,
