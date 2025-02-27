@@ -74,9 +74,9 @@ fun App() {
                     backgroundColor = Color(0xFF3841e6),
                     hoveredBackgroundColor = Color(0xFF6067eb),
                     selectedIndicatorConfig = SelectedIndicatorConfig(
-                        shapeType = BasicIndicatorShapeType.Dot,
+                        shapeType = BasicIndicatorShapeType.Line,
                         thickness = 3.dp,
-                        color = Color.White
+                        color = Color.Red
                     ),
                 ),
                 parentModifier = Modifier.align(

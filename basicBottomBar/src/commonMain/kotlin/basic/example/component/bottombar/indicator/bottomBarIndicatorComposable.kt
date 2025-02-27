@@ -35,8 +35,16 @@ internal fun bottomBarIndicatorComposable(
             itemSize
         ).background(color = config.color, shape = config.shape)
 
-        BasicIndicatorShapeType.Line -> Modifier.width(itemSize)
-            .height(config.thickness).background(color = config.color)
+        BasicIndicatorShapeType.Line ->
+            when (basicBarPosition) {
+                BasicBarPosition.HORIZONTAL_BOTTOM, BasicBarPosition.HORIZONTAL_TOP -> Modifier.width(
+                    itemSize
+                ).height(config.thickness).background(color = config.color, shape = config.shape)
+
+                BasicBarPosition.VERTICAL_LEFT, BasicBarPosition.VERTICAL_RIGHT -> Modifier.height(
+                    itemSize
+                ).width(config.thickness).background(color = config.color, shape = config.shape)
+            }
 
         BasicIndicatorShapeType.Circle -> Modifier.size(itemSize)
             .clip(CircleShape).background(color = config.color)
