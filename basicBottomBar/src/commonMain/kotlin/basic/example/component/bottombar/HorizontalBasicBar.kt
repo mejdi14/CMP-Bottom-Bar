@@ -58,15 +58,7 @@ internal fun HorizontalBasicBar(
 ) {
     Column(parentModifier.fillMaxWidth().padding(horizontal = basicBarConfig.aroundItemsPadding)) {
         if (basicBarConfig.basicBarPosition == BasicBarPosition.HORIZONTAL_BOTTOM)
-            Box(Modifier.padding(basicBarConfig.basicBarPadding)) {
-                HoverDescriptionTextComposable(
-                    spaceBetween.value,
-                    hoverSelectedIndex,
-                    bottomBarItems,
-                    isHovered,
-                    basicBarConfig
-                )
-            }
+            TopHoverComposable(basicBarConfig, spaceBetween, hoverSelectedIndex, bottomBarItems, isHovered)
         Row(
             Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
@@ -149,17 +141,12 @@ internal fun HorizontalBasicBar(
             )
         }
         if (basicBarConfig.basicBarPosition == BasicBarPosition.HORIZONTAL_TOP)
-            Box(Modifier.padding(5.dp)) {
-                HoverDescriptionTextComposable(
-                    spaceBetween.value,
-                    hoverSelectedIndex,
-                    bottomBarItems,
-                    isHovered,
-                    basicBarConfig
-                )
-            }
+            BottomHoverComposable(spaceBetween, hoverSelectedIndex, bottomBarItems, isHovered, basicBarConfig)
     }
 }
+
+
+
 
 @Composable
 private fun extracted(

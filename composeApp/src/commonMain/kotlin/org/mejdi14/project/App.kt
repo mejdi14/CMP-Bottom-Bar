@@ -84,10 +84,11 @@ fun App() {
                 bottomBarItems = bottomRoundItems,
                 BasicBarConfig(
                     basicBarPosition = BasicBarPosition.HORIZONTAL_BOTTOM,
-                    shape = RoundedCornerShape(50.dp),
+                    itemSize = 40.dp,
+                    shape = RoundedCornerShape(10.dp),
                     globalBasicIconConfig = GlobalBottomBarIcon(
-                        iconTintColor = Color.Black,
-                        selectedIconTintColor = Color.Red
+                        iconTintColor = Color.White,
+                        selectedIconTintColor = Color.Black
                     ),
                     additionalItems = BottomBarAdditionalItems(
                         rightBottomItem = BasicItem(
@@ -97,12 +98,12 @@ fun App() {
                             )
                         )
                     ),
-                    backgroundColor = Color.Green,
+                    backgroundColor = Color.Black,
                     hoveredBackgroundColor = Color(0xFFFFF59D),
                     selectedIndicatorConfig = SelectedIndicatorConfig(
-                        shapeType = BasicIndicatorShapeType.Circle,
+                        shapeType = BasicIndicatorShapeType.Square,
                         thickness = 3.dp,
-                        color = Color.Black
+                        color = Color.White
                     ),
                 ),
                 parentModifier = Modifier.align(
