@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Icon
@@ -23,7 +24,7 @@ internal fun LeftAdditionalItem(
     if (basicBarConfig.additionalItems?.leftTopItem != null) {
         Row {
             Box(
-                Modifier.size(basicBarConfig.itemSize)
+                Modifier.size(basicBarConfig.itemSize + basicBarConfig.aroundItemsPadding)
                     .clickable {
                         basicItem?.clickActionListener?.onItemClickListener()
                     }
@@ -37,7 +38,8 @@ internal fun LeftAdditionalItem(
                     Icon(
                         painter = painterResource(currentAdditionalIcon.iconDrawable),
                         contentDescription = currentAdditionalIcon.contentDescription,
-                        Modifier.align(Alignment.Center),
+                        Modifier.align(Alignment.Center).size(basicItem.size)
+                            .padding(basicItem.icon.sizeDifferenceComparedToParent),
                         tint = currentAdditionalIcon.iconTintColor,
                     )
                 }

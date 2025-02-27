@@ -56,7 +56,13 @@ internal fun VerticalBasicBar(
 ) {
     Row(parentModifier) {
         if (basicBarConfig.basicBarPosition == BasicBarPosition.VERTICAL_RIGHT)
-            HoverContainerComposable(basicBarConfig, spaceBetween, hoverSelectedIndex, bottomBarItems, isHovered)
+            HoverContainerComposable(
+                basicBarConfig,
+                spaceBetween,
+                hoverSelectedIndex,
+                bottomBarItems,
+                isHovered
+            )
         Column(
             Modifier.fillMaxHeight(),
             verticalArrangement = Arrangement.Center,
@@ -65,7 +71,7 @@ internal fun VerticalBasicBar(
             if (basicBarConfig.additionalItems?.leftTopItem != null) {
                 Column {
                     Box(
-                        Modifier.size(basicBarConfig.itemSize)
+                        Modifier.size(basicBarConfig.itemSize + basicBarConfig.aroundItemsPadding)
                             .clickable {
                                 (basicBarConfig.additionalItems.leftTopItem as BasicItem).clickActionListener.onItemClickListener()
                             }
@@ -82,7 +88,10 @@ internal fun VerticalBasicBar(
                             androidx.compose.material.Icon(
                                 painter = painterResource(currentAdditionalIcon.iconDrawable),
                                 contentDescription = currentAdditionalIcon.contentDescription,
-                                Modifier.align(Alignment.Center),
+                                Modifier.align(Alignment.Center).size(
+                                    basicBarConfig.additionalItems.leftTopItem?.size ?: 50.dp
+                                )
+                                    .padding(currentAdditionalIcon.sizeDifferenceComparedToParent),
                             )
                         }
                     }
@@ -159,7 +168,7 @@ internal fun VerticalBasicBar(
                 Column {
                     Spacer(Modifier.height(basicBarConfig.spaceBetweenItems))
                     Box(
-                        Modifier.size(basicBarConfig.itemSize)
+                        Modifier.size(basicBarConfig.itemSize + basicBarConfig.aroundItemsPadding)
                             .clickable {
                                 (basicBarConfig.additionalItems.rightBottomItem as BasicItem).clickActionListener.onItemClickListener()
                             }
@@ -176,7 +185,10 @@ internal fun VerticalBasicBar(
                             androidx.compose.material.Icon(
                                 painter = painterResource(currentAdditionalIcon.iconDrawable),
                                 contentDescription = currentAdditionalIcon.contentDescription,
-                                Modifier.align(Alignment.Center),
+                                Modifier.align(Alignment.Center).size(
+                                    basicBarConfig.additionalItems.rightBottomItem?.size ?: 50.dp
+                                )
+                                    .padding(currentAdditionalIcon.sizeDifferenceComparedToParent),
                             )
                         }
                     }
@@ -186,6 +198,12 @@ internal fun VerticalBasicBar(
             }
         }
         if (basicBarConfig.basicBarPosition == BasicBarPosition.VERTICAL_LEFT)
-            HoverContainerComposable(basicBarConfig, spaceBetween, hoverSelectedIndex, bottomBarItems, isHovered)
+            HoverContainerComposable(
+                basicBarConfig,
+                spaceBetween,
+                hoverSelectedIndex,
+                bottomBarItems,
+                isHovered
+            )
     }
 }
