@@ -72,11 +72,17 @@ fun App() {
                 BasicBarConfig(
                     basicBarPosition = BasicBarPosition.VERTICAL_RIGHT,
                     backgroundColor = Color(0xFF3841e6),
-                    hoveredBackgroundColor = Color(0xFF6067eb)
+                    hoveredBackgroundColor = Color(0xFF6067eb),
+                    selectedIndicatorConfig = SelectedIndicatorConfig(
+                        shapeType = BasicIndicatorShapeType.Circle,
+                        thickness = 3.dp,
+                        color = Color.White
+                    ),
                 ),
                 parentModifier = Modifier.align(
                     Alignment.CenterEnd
                 )
+
             ) {
 
             }

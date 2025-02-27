@@ -11,7 +11,6 @@ data class SelectedIndicatorConfig(
     val color: Color = Color.Blue,
     val shapeType: BasicIndicatorShapeType = BasicIndicatorShapeType.Square,
     val positionType: PositionType = PositionType.Bottom,
-    val size: Dp = 60.dp,
     val thickness: Dp = 6.dp,
     val padding: Dp = 10.dp,
     val shape: Shape = RoundedCornerShape(10.dp)

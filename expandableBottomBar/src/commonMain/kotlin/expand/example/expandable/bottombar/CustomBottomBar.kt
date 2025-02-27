@@ -30,12 +30,12 @@ fun CustomBottomBar(
 
     val shapeModifier = when (config.shapeType) {
         BasicIndicatorShapeType.Square -> Modifier.size(
-            config.size - config.padding,
-            config.size - config.padding
+            50.dp - config.padding,
+            50.dp - config.padding
         )
 
-        BasicIndicatorShapeType.Line -> Modifier.width(config.size - config.padding).height(config.thickness)
-        BasicIndicatorShapeType.Circle -> Modifier.size(config.size - config.padding).clip(CircleShape)
+        BasicIndicatorShapeType.Line -> Modifier.width(50.dp - config.padding).height(config.thickness)
+        BasicIndicatorShapeType.Circle -> Modifier.size(50.dp - config.padding).clip(CircleShape)
         BasicIndicatorShapeType.Dot -> Modifier.size(config.thickness).clip(CircleShape)
     }
 
