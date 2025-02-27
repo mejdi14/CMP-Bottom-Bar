@@ -31,17 +31,16 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import basic.example.component.bottombar.addtional.LeftAdditionalItem
-import basic.example.component.bottombar.hover.BottomHoverComposable
-import basic.example.component.bottombar.hover.TopHoverComposable
-import basic.mejdi14.component.bottombar.hover.HoverDescriptionTextComposable
+import basic.example.component.bottombar.addtional.RightAdditionalItem
+import basic.example.component.bottombar.hover.HoverContainerComposable
 import basic.mejdi14.component.bottombar.icon.BasicBarIconComposable
 import basic.mejdi14.component.bottombar.indicator.bottomBarIndicatorComposable
 import basic.mejdi14.component.data.BasicBarConfig
 import basic.mejdi14.component.data.BasicBarPosition
 import basic.mejdi14.component.data.BasicItem
-import org.mejdi14.core.bottombar.data.BottomBarItem
 import org.jetbrains.compose.resources.painterResource
 import org.mejdi14.core.bottombar.data.BottomBarAdditionalItems
+import org.mejdi14.core.bottombar.data.BottomBarItem
 
 @Composable
 internal fun HorizontalBasicBar(
@@ -60,7 +59,7 @@ internal fun HorizontalBasicBar(
 ) {
     Column(parentModifier.fillMaxWidth().padding(horizontal = basicBarConfig.aroundItemsPadding)) {
         if (basicBarConfig.basicBarPosition == BasicBarPosition.HORIZONTAL_BOTTOM)
-            TopHoverComposable(
+            HoverContainerComposable(
                 basicBarConfig,
                 spaceBetween,
                 hoverSelectedIndex,
@@ -142,63 +141,19 @@ internal fun HorizontalBasicBar(
                     }
                 }
             }
-            extracted(
+            RightAdditionalItem(
                 basicBarConfig.additionalItems,
                 basicBarConfig,
                 basicBarConfig.additionalItems?.rightBottomItem as BasicItem?,
             )
         }
         if (basicBarConfig.basicBarPosition == BasicBarPosition.HORIZONTAL_TOP)
-            BottomHoverComposable(
+            HoverContainerComposable(
+                basicBarConfig,
                 spaceBetween,
                 hoverSelectedIndex,
                 bottomBarItems,
-                isHovered,
-                basicBarConfig
+                isHovered
             )
     }
 }
-
-
-@Composable
-private fun extracted(
-    additionalItems: BottomBarAdditionalItems?,
-    basicBarConfig: BasicBarConfig,
-    rightBottomItem: BasicItem?,
-) {
-    if (additionalItems?.rightBottomItem != null) {
-        Row {
-            Spacer(Modifier.width(basicBarConfig.spaceBetweenItems))
-            Box(
-                Modifier.size(basicBarConfig.itemSize)
-                    .clickable {
-                        rightBottomItem?.clickActionListener?.onItemClickListener()
-                    }
-                    .background(
-                        color = rightBottomItem?.backgroundColor ?: basicBarConfig.backgroundColor,
-                        shape = rightBottomItem?.itemShape ?: basicBarConfig.shape
-                    )
-            ) {
-                if (rightBottomItem?.icon != null) {
-
-
-                    val currentAdditionalIcon =
-                        rightBottomItem.icon
-
-                    Icon(
-                        painter = painterResource(currentAdditionalIcon.iconDrawable),
-                        contentDescription = currentAdditionalIcon.contentDescription,
-                        Modifier.align(Alignment.Center),
-                        tint = currentAdditionalIcon.iconTintColor,
-                    )
-                }
-            }
-        }
-    } else if (basicBarConfig.additionalItems?.leftTopItem != null) {
-        Spacer(Modifier.width(basicBarConfig.itemSize + basicBarConfig.spaceBetweenItems))
-    }
-}
-
-
-
-

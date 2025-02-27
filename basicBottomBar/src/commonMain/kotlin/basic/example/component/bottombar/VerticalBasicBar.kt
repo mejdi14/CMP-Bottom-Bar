@@ -29,6 +29,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import basic.example.component.bottombar.hover.HoverContainerComposable
 import basic.mejdi14.component.bottombar.hover.HoverDescriptionTextComposable
 import basic.mejdi14.component.bottombar.icon.BasicBarIconComposable
 import basic.mejdi14.component.bottombar.indicator.bottomBarIndicatorComposable
@@ -55,15 +56,7 @@ internal fun VerticalBasicBar(
 ) {
     Row(parentModifier) {
         if (basicBarConfig.basicBarPosition == BasicBarPosition.VERTICAL_RIGHT)
-            Box(Modifier.padding(5.dp)) {
-                HoverDescriptionTextComposable(
-                    spaceBetween.value,
-                    hoverSelectedIndex,
-                    bottomBarItems,
-                    isHovered,
-                    basicBarConfig
-                )
-            }
+            HoverContainerComposable(basicBarConfig, spaceBetween, hoverSelectedIndex, bottomBarItems, isHovered)
         Column(
             Modifier.fillMaxHeight(),
             verticalArrangement = Arrangement.Center,
@@ -193,14 +186,6 @@ internal fun VerticalBasicBar(
             }
         }
         if (basicBarConfig.basicBarPosition == BasicBarPosition.VERTICAL_LEFT)
-            Box(Modifier.padding(5.dp)) {
-                HoverDescriptionTextComposable(
-                    spaceBetween.value,
-                    hoverSelectedIndex,
-                    bottomBarItems,
-                    isHovered,
-                    basicBarConfig
-                )
-            }
+            HoverContainerComposable(basicBarConfig, spaceBetween, hoverSelectedIndex, bottomBarItems, isHovered)
     }
 }
