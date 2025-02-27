@@ -31,14 +31,14 @@ internal fun bottomBarIndicatorComposable(
 ) {
     val shapeModifier = when (config.shapeType) {
         BasicIndicatorShapeType.Square -> Modifier.size(
-            config.size - config.padding,
-            config.size - config.padding
-        ).background(color = config.color, shape = RoundedCornerShape(10.dp))
+            itemSize,
+            itemSize
+        ).background(color = config.color, shape = config.shape)
 
-        BasicIndicatorShapeType.Line -> Modifier.width(config.size - config.padding)
+        BasicIndicatorShapeType.Line -> Modifier.width(itemSize)
             .height(config.thickness).background(color = config.color)
 
-        BasicIndicatorShapeType.Circle -> Modifier.size(config.size - config.padding)
+        BasicIndicatorShapeType.Circle -> Modifier.size(itemSize)
             .clip(CircleShape).background(color = config.color)
 
         BasicIndicatorShapeType.Dot -> Modifier.size(config.thickness).clip(CircleShape)
@@ -54,7 +54,7 @@ internal fun bottomBarIndicatorComposable(
                         y = if ((config.shapeType == BasicIndicatorShapeType.Line || config.shapeType == BasicIndicatorShapeType.Dot)
                             && config.positionType == PositionType.Bottom
                         )
-                            0.dp + (config.size - config.thickness) - (if (config.shapeType == BasicIndicatorShapeType.Dot) config.thickness else 0.dp)
+                            0.dp + ((itemSize + (config.padding / 2))) - (if (config.shapeType == BasicIndicatorShapeType.Dot) config.thickness else 0.dp)
                         else 0.dp + (config.padding / 2)
                     )
                     .then(shapeModifier)
@@ -69,7 +69,7 @@ internal fun bottomBarIndicatorComposable(
                         x = if ((config.shapeType == BasicIndicatorShapeType.Line || config.shapeType == BasicIndicatorShapeType.Dot)
                             && config.positionType == PositionType.Bottom
                         )
-                            0.dp + (config.size - config.thickness)
+                            0.dp + ((itemSize + (config.padding / 2))) - (if (config.shapeType == BasicIndicatorShapeType.Dot) config.thickness else 0.dp)
                         else 0.dp + (config.padding / 2)
                     )
                     .then(shapeModifier)

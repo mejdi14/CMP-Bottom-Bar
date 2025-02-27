@@ -31,6 +31,8 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import basic.example.component.bottombar.addtional.LeftAdditionalItem
+import basic.example.component.bottombar.hover.BottomHoverComposable
+import basic.example.component.bottombar.hover.TopHoverComposable
 import basic.mejdi14.component.bottombar.hover.HoverDescriptionTextComposable
 import basic.mejdi14.component.bottombar.icon.BasicBarIconComposable
 import basic.mejdi14.component.bottombar.indicator.bottomBarIndicatorComposable
@@ -58,7 +60,13 @@ internal fun HorizontalBasicBar(
 ) {
     Column(parentModifier.fillMaxWidth().padding(horizontal = basicBarConfig.aroundItemsPadding)) {
         if (basicBarConfig.basicBarPosition == BasicBarPosition.HORIZONTAL_BOTTOM)
-            TopHoverComposable(basicBarConfig, spaceBetween, hoverSelectedIndex, bottomBarItems, isHovered)
+            TopHoverComposable(
+                basicBarConfig,
+                spaceBetween,
+                hoverSelectedIndex,
+                bottomBarItems,
+                isHovered
+            )
         Row(
             Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
@@ -141,11 +149,15 @@ internal fun HorizontalBasicBar(
             )
         }
         if (basicBarConfig.basicBarPosition == BasicBarPosition.HORIZONTAL_TOP)
-            BottomHoverComposable(spaceBetween, hoverSelectedIndex, bottomBarItems, isHovered, basicBarConfig)
+            BottomHoverComposable(
+                spaceBetween,
+                hoverSelectedIndex,
+                bottomBarItems,
+                isHovered,
+                basicBarConfig
+            )
     }
 }
-
-
 
 
 @Composable

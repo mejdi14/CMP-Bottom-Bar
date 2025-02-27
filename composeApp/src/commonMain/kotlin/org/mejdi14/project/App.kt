@@ -84,7 +84,7 @@ fun App() {
                 bottomBarItems = bottomRoundItems,
                 BasicBarConfig(
                     basicBarPosition = BasicBarPosition.HORIZONTAL_BOTTOM,
-                    itemSize = 40.dp,
+                    itemSize = 45.dp,
                     shape = RoundedCornerShape(10.dp),
                     globalBasicIconConfig = GlobalBottomBarIcon(
                         iconTintColor = Color.White,
@@ -101,7 +101,7 @@ fun App() {
                     backgroundColor = Color.Black,
                     hoveredBackgroundColor = Color(0xFFFFF59D),
                     selectedIndicatorConfig = SelectedIndicatorConfig(
-                        shapeType = BasicIndicatorShapeType.Square,
+                        shapeType = BasicIndicatorShapeType.Line,
                         thickness = 3.dp,
                         color = Color.White
                     ),
