@@ -65,7 +65,7 @@ internal fun bottomBarIndicatorComposable(
             Box(
                 modifier = Modifier
                     .offset(
-                        y = (animatedOffset.value + (spaceBetween * (selectedIndex.value + 1))),
+                        y = (animatedOffset.value + (spaceBetween * (selectedIndex.value + 1))) + if (config.shapeType == BasicIndicatorShapeType.Dot) ((itemSize / 2) - (config.thickness / 2)) else 0.dp,
                         x = if ((config.shapeType == BasicIndicatorShapeType.Line || config.shapeType == BasicIndicatorShapeType.Dot)
                             && config.positionType == PositionType.Bottom
                         )
