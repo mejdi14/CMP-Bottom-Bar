@@ -30,6 +30,5 @@ data class AztopiaItem(
     val hoverActionListener: HoverActionListener<AztopiaItem> = emptyHoverActionListener(),
     val clickActionListener: ClickActionListener = EmptyClickActionListener
 ) : BottomBarItem() {
-    override val OnItemClick: Boolean
-        get() = TODO("Not yet implemented")
+    override val OnItemClick: Boolean = false
 }

@@ -6,4 +6,4 @@ actual fun Modifier.platformBlur(
     blurRadius: Float,
     alphaMultiplier: Float,
     alphaOffset: Float
-): Modifier = Modifier
+): Modifier = this

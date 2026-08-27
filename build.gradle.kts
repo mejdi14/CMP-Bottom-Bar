@@ -1,22 +1,23 @@
 plugins {
-    // this is necessary to avoid the plugins to be loaded multiple times
-    // in each subproject's classloader
+    // Keep shared plugins on the root classpath so subprojects load each plugin once.
     alias(libs.plugins.androidApplication) apply false
     alias(libs.plugins.androidLibrary) apply false
     alias(libs.plugins.jetbrainsCompose) apply false
     alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.kotlinMultiplatform) apply false
+    alias(libs.plugins.mavenPublish) apply false
 }
 
-group = "io.github.mejdi14"
+val libraryGroup = "io.github.mejdi14"
+val libraryVersion = providers.gradleProperty("VERSION_NAME").getOrElse("0.4.4-SNAPSHOT")
 
-val versionName = project.findProperty("VERSION_NAME") as String? ?: "0.2.8"
-version = versionName
+group = libraryGroup
+version = libraryVersion
 
 subprojects {
-    afterEvaluate {
-        if (this.version.toString() == "unspecified") {
-            this.version = versionName
-        }
+    // The demo app keeps its generated resource package independent of Maven coordinates.
+    if (name.endsWith("BottomBar")) {
+        group = libraryGroup
     }
+    version = libraryVersion
 }

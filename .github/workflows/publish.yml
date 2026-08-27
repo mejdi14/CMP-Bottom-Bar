@@ -3,23 +3,23 @@ name: Publish to Maven Central
 on:
   push:
     tags:
-      - 'v*'  # e.g. v0.2.8
+      - 'v*'
+
+permissions:
+  contents: read
 
 jobs:
   publish:
     runs-on: macos-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
-
-      - name: Grant execute permission to gradlew
-        run: chmod +x gradlew
 
       - name: Import GPG Key
         run: |
@@ -30,10 +30,9 @@ jobs:
 
       - name: Build and Publish to Maven Central
         env:
-          SONATYPE_HOST: CENTRAL_PORTAL
-          RELEASE_SIGNING_ENABLED: true
-          MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
-          MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          ORG_GRADLE_PROJECT_RELEASE_SIGNING_ENABLED: 'true'
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
         run: |
           # Extract version from the git tag (e.g., "v0.2.8" -> "0.2.8")
           VERSION_NAME=${GITHUB_REF#refs/tags/v}

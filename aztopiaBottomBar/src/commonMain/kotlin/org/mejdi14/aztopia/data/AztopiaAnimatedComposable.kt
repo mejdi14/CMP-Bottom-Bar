@@ -29,8 +29,7 @@ data class AztopiaAnimatedComposable (
 ) : BottomBarItem(){
     override val disableClickIfAlreadySelected: Boolean = true
     override val withTitleShown: Boolean = false
-    override val OnItemClick: Boolean
-        get() = TODO("Not yet implemented")
+    override val OnItemClick: Boolean = false
 }
 
 fun AztopiaItem.isSelectedItem(selectedItem: AztopiaItem?): Boolean {

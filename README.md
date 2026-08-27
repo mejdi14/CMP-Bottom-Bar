@@ -1,21 +1,49 @@
-This is a Kotlin Multiplatform project targeting Android, iOS, Web, Desktop.
+# CMP Bottom Bar
 
-* `/composeApp` is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - `commonMain` is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For mejdi14, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    `iosMain` would be the right folder for such calls.
+CMP Bottom Bar is a Compose Multiplatform library containing a shared bottom-bar model and several visual styles. It targets Android, iOS, desktop, and WebAssembly.
 
-* `/iosApp` contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform, 
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+## Modules
 
+| Module | Purpose |
+| --- | --- |
+| `coreBottomBar` | Shared item models, listeners, indicator configuration, and helpers |
+| `basicBottomBar` | Horizontal and vertical basic bottom bars |
+| `tinyGlideBottomBar` | Animated bar with expandable sub-items |
+| `aztopiaBottomBar` | Animated circular Aztopia style |
+| `expandableBottomBar` | Expandable bottom-bar experiment |
+| `gooeyBottomBar` | Gooey/blurred bottom-bar experiment |
+| `composeApp` | Multiplatform demo application |
+| `iosApp` | SwiftUI host for the iOS demo |
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html),
-[Compose Multiplatform](https://github.com/JetBrains/compose-multiplatform/#compose-multiplatform),
-[Kotlin/Wasm](https://kotl.in/wasm/)…
+Style modules depend on `coreBottomBar`; the demo app brings the styles together.
 
-We would appreciate your feedback on Compose/Web and Kotlin/Wasm in the public Slack channel [#compose-web](https://slack-chats.kotlinlang.org/c/compose-web).
-If you face any issues, please report them on [GitHub](https://github.com/JetBrains/compose-multiplatform/issues).
+## Published artifacts
 
-You can open the web application by running the `:composeApp:wasmJsBrowserDevelopmentRun` Gradle task.
+The currently configured Maven Central artifacts are:
+
+```kotlin
+implementation("io.github.mejdi14:cmp-bottombar-core:0.4.3")
+implementation("io.github.mejdi14:cmp-bottombar-basic:0.4.3")
+implementation("io.github.mejdi14:cmp-bottombar-tinyGlide:0.4.3")
+implementation("io.github.mejdi14:cmp-bottombar-aztopia:0.4.3")
+```
+
+`expandableBottomBar` and `gooeyBottomBar` are included as local experimental modules and are not currently configured for publication.
+
+## Build the project
+
+Use JDK 17 or 21, then run:
+
+```shell
+./gradlew :composeApp:assembleDebug
+./gradlew :composeApp:run
+./gradlew :composeApp:wasmJsBrowserDevelopmentRun
+```
+
+On macOS, open `iosApp/iosApp.xcodeproj` to run the iOS demo.
+
+Publishing is handled by `.github/workflows/publish.yml`. Maven Central credentials and the GPG private key must remain in GitHub Actions secrets; they must never be added to `gradle.properties` or committed files.
+
+## License
+
+Licensed under the Apache License 2.0. See [LICENSE](LICENSE).
