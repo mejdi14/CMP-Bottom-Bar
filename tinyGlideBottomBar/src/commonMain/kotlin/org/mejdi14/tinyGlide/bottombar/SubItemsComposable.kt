@@ -64,12 +64,12 @@ internal fun SubItemsComposable(
                 if (onHover) {
                     hoverExitJob.value?.cancel()
                     hoverExitJob.value = null
-                    currentItem.hoverActionListener.onHoverEnter(currentItem)
+                    currentItem.onHover.onHover(currentItem, true)
                 } else {
                     hoverExitJob.value = scope.launch {
                         delay(currentItem.hoverCancelDurationMillis)
                         if (!isHovering.value) {
-                            currentItem.hoverActionListener.onHoverExit(currentItem)
+                            currentItem.onHover.onHover(currentItem, false)
                             selectedItem.value = null
                             currentItem.parentItemDynamicSize.value = currentItem.size
                         }
@@ -105,7 +105,7 @@ internal fun SubItemsComposable(
 
                     IconButton(
                         onClick = {
-                            currentItem?.clickActionListener?.onItemClickListener()
+                            item.onClick.onClick(item, index)
                             selectedIndex.value = index
                             tinyGlideActionListener.onSubItemClickListener(
                                 item,
@@ -118,16 +118,16 @@ internal fun SubItemsComposable(
                                 color = if (currentItem.isSelectedItem(selectedItem.value))
                                     currentItem.selectedBackgroundColor
                                 else currentItem.backgroundColor,
-                                shape = currentItem.itemShape
+                                shape = currentItem.shape
                             ) else Modifier
                     ) {
                         Icon(
                             painter = if (currentItem?.isSelectedItem(selectedItem.value) != false) painterResource(
-                                item.icon.selectedIconDrawable
-                            ) else painterResource(item.icon.iconDrawable),
-                            contentDescription = item.contentDescription,
-                            tint = if (currentItem?.isSelectedItem(selectedItem.value) != false) item.icon.selectedIconTint else item.icon.iconTintColor,
-                            modifier = item.icon.modifier.then(Modifier.size(item.size - item.icon.sizeDifferenceComparedToParent))
+                                item.icon.selectedResource
+                            ) else painterResource(item.icon.resource),
+                            contentDescription = item.icon.contentDescription,
+                            tint = if (currentItem?.isSelectedItem(selectedItem.value) != false) item.icon.selectedTint else item.icon.tint,
+                            modifier = item.icon.modifier.then(Modifier.size(item.size - item.icon.sizeReduction))
                         )
                     }
                     Box(Modifier.width(item.itemSeparationSpace))

@@ -32,12 +32,12 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material)
-            implementation(compose.material3)
-            implementation(compose.ui)
-            implementation(compose.components.resources)
+            api(compose.foundation)
+            api(compose.ui)
+            api(compose.components.resources)
+        }
+        commonTest.dependencies {
+            implementation(kotlin("test"))
         }
     }
 }

@@ -28,8 +28,8 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import org.mejdi14.core.bottombar.data.BottomBarItem
-import org.mejdi14.core.bottombar.indicator.BasicIndicatorShapeType
-import org.mejdi14.core.bottombar.indicator.SelectedIndicatorConfig
+import org.mejdi14.core.bottombar.indicator.BottomBarIndicatorConfig
+import org.mejdi14.core.bottombar.indicator.BottomBarIndicatorShape
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -64,8 +64,8 @@ fun ExpandableBottomBar(bottomBarItems: List<BottomBarItem>, parentModifier : Mo
             ) {
                 val spaceBetween = ((parentWidth - (itemWidth * 4)) / 5)
                 CustomBottomBar(
-                    config = SelectedIndicatorConfig(
-                        shapeType = BasicIndicatorShapeType.Line,
+                    config = BottomBarIndicatorConfig(
+                        shapeType = BottomBarIndicatorShape.LINE,
                     ),
                     spaceBetween = spaceBetween,
                     animatedOffset = animatedOffset,
@@ -81,14 +81,17 @@ fun ExpandableBottomBar(bottomBarItems: List<BottomBarItem>, parentModifier : Mo
 
                         IconButton(
                             onClick = {
-                                selectedIndex.value = index
-                                onIconClick(item)
+                                if (item.interaction.shouldDispatchClick(selectedIndex.value, index)) {
+                                    selectedIndex.value = item.interaction
+                                        .nextSelectedIndex(selectedIndex.value, index) ?: selectedIndex.value
+                                    onIconClick(item)
+                                }
                             },
                             modifier = Modifier.size(50.dp).align(Alignment.Center)
                         ) {
                             Icon(
-                                painter = painterResource(item.icon.selectedIconDrawable),
-                                contentDescription = item.contentDescription,
+                                painter = painterResource(item.icon.selectedResource),
+                                contentDescription = item.icon.contentDescription,
                                 tint = Color.White,
                                 modifier = Modifier.align(Alignment.Center)
                             )
@@ -110,8 +113,8 @@ fun ExpandableBottomBar(bottomBarItems: List<BottomBarItem>, parentModifier : Mo
             ) {
                 val spaceBetween = ((parentWidth - (itemWidth * 4)) / 5)
                 CustomBottomBar(
-                    config = SelectedIndicatorConfig(
-                        shapeType = BasicIndicatorShapeType.Line,
+                    config = BottomBarIndicatorConfig(
+                        shapeType = BottomBarIndicatorShape.LINE,
                     ),
                     spaceBetween = spaceBetween,
                     animatedOffset = animatedOffset,
@@ -127,14 +130,17 @@ fun ExpandableBottomBar(bottomBarItems: List<BottomBarItem>, parentModifier : Mo
 
                         IconButton(
                             onClick = {
-                                selectedIndex.value = index
-                                onIconClick(item)
+                                if (item.interaction.shouldDispatchClick(selectedIndex.value, index)) {
+                                    selectedIndex.value = item.interaction
+                                        .nextSelectedIndex(selectedIndex.value, index) ?: selectedIndex.value
+                                    onIconClick(item)
+                                }
                             },
                             modifier = Modifier.size(50.dp).align(Alignment.Center)
                         ) {
                             Icon(
-                                painter = painterResource(item.icon.selectedIconDrawable),
-                                contentDescription = item.contentDescription,
+                                painter = painterResource(item.icon.selectedResource),
+                                contentDescription = item.icon.contentDescription,
                                 tint = Color.White,
                                 modifier = Modifier.align(Alignment.Center)
                             )

@@ -9,18 +9,15 @@ import org.mejdi14.core.bottombar.data.BottomBarIcon
 import org.mejdi14.tinyGlide.data.TinyGlideItem
 
 val homeItem = TinyGlideItem(
-    icon = BottomBarIcon(Res.drawable.icon13),
-    contentDescription = "Home Screen",
+    icon = BottomBarIcon(Res.drawable.icon13, contentDescription = "Home Screen"),
     backgroundColor = Color(0xFFCDC1FF),
     subTinyGlideItems = listOf(
         TinyGlideItem(
-            BottomBarIcon(Res.drawable.icon1),
-            "Read Papers",
+            BottomBarIcon(Res.drawable.icon1, contentDescription = "Read Papers"),
             backgroundColor = Color(0xFFCDC1FF)
         ),
         TinyGlideItem(
-            BottomBarIcon(Res.drawable.icon2),
-            "Visit Mosque",
+            BottomBarIcon(Res.drawable.icon2, contentDescription = "Visit Mosque"),
             backgroundColor = Color(0xFFCDC1FF)
         )
     )

@@ -21,32 +21,33 @@ internal fun LeftAdditionalItem(
     basicBarConfig: BasicBarConfig,
     basicItem: BasicItem?,
 ) {
-    if (basicBarConfig.additionalItems?.leftTopItem != null) {
+    if (basicBarConfig.additionalItems?.startItem != null) {
         Row {
             Box(
                 Modifier.size(basicBarConfig.itemSize + basicBarConfig.aroundItemsPadding)
                     .clickable {
-                        basicItem?.clickActionListener?.onItemClickListener()
+                        basicItem?.takeIf { it.interaction.enabled }
+                            ?.let { it.onClick.onClick(it, null) }
                     }
                     .background(
                         color = basicItem?.backgroundColor ?: basicBarConfig.backgroundColor,
-                        shape = basicItem?.itemShape ?: basicBarConfig.shape
+                        shape = basicItem?.shape ?: basicBarConfig.shape
                     )
             ) {
                 if (basicItem?.icon != null) {
                     val currentAdditionalIcon = basicItem.icon
                     Icon(
-                        painter = painterResource(currentAdditionalIcon.iconDrawable),
+                        painter = painterResource(currentAdditionalIcon.resource),
                         contentDescription = currentAdditionalIcon.contentDescription,
                         Modifier.align(Alignment.Center).size(basicItem.size)
-                            .padding(basicItem.icon.sizeDifferenceComparedToParent),
-                        tint = currentAdditionalIcon.iconTintColor,
+                            .padding(basicItem.icon.sizeReduction),
+                        tint = currentAdditionalIcon.tint,
                     )
                 }
             }
             Spacer(Modifier.width(basicBarConfig.spaceBetweenItems))
         }
-    } else if (basicBarConfig.additionalItems?.rightBottomItem != null) {
+    } else if (basicBarConfig.additionalItems?.endItem != null) {
         Spacer(Modifier.width(basicBarConfig.itemSize + basicBarConfig.spaceBetweenItems))
     }
 }

@@ -7,35 +7,39 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import org.mejdi14.aztopia.data.AztopiaItem
-import org.mejdi14.aztopia.data.isSelectedItem
 import org.mejdi14.aztopia.listeners.AztopiaActionListener
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
 internal fun AztopiaIcon(
     item: AztopiaItem,
-    selectedItem: MutableState<AztopiaItem?>,
+    index: Int,
+    selectedIndex: MutableState<Int?>,
     aztopiaActionListener: AztopiaActionListener,
 ) {
     Box(Modifier
         .clickable {
-            aztopiaActionListener.onItemClickListener(item, item.index)
+            if (item.interaction.shouldDispatchClick(selectedIndex.value, index)) {
+                selectedIndex.value = item.interaction.nextSelectedIndex(selectedIndex.value, index)
+                item.onClick.onClick(item, index)
+                aztopiaActionListener.onClick(item, index)
+            }
         }) {
-        when (item.isSelectedItem(selectedItem.value)) {
+        when (selectedIndex.value == index) {
             true -> {
                 Icon(
-                    painter = painterResource(item.icon.selectedIconDrawable),
+                    painter = painterResource(item.icon.selectedResource),
                     contentDescription = item.icon.contentDescription,
-                    tint = item.icon.selectedIconTint,
+                    tint = item.icon.selectedTint,
                     modifier = item.icon.modifier
                 )
             }
 
             false -> {
                 Icon(
-                    painter = painterResource(item.icon.iconDrawable),
+                    painter = painterResource(item.icon.resource),
                     contentDescription = item.icon.contentDescription,
-                    tint = item.icon.iconTintColor,
+                    tint = item.icon.tint,
                     modifier = item.icon.modifier
                 )
             }

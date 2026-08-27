@@ -10,21 +10,21 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.mejdi14.core.bottombar.data.BottomBarIcon
 import org.mejdi14.core.bottombar.data.BottomBarItem
-import org.mejdi14.core.bottombar.data.BottomBarTitle
-import org.mejdi14.core.bottombar.listener.ClickActionListener
-import org.mejdi14.core.bottombar.listener.EmptyClickActionListener
-import org.mejdi14.core.bottombar.listener.HoverActionListener
-import org.mejdi14.core.bottombar.listener.emptyHoverActionListener
+import org.mejdi14.core.bottombar.interaction.BottomBarInteraction
+import org.mejdi14.core.bottombar.interaction.BottomBarSelectionMode
+import org.mejdi14.core.bottombar.listener.BottomBarClickListener
+import org.mejdi14.core.bottombar.listener.BottomBarHoverListener
 
 data class TinyGlideItem(
     override val icon: BottomBarIcon,
-    override val contentDescription: String,
     override val size: Dp = 50.dp,
     override val backgroundColor: Color = Color.Blue,
     override val selectedBackgroundColor: Color = backgroundColor,
-    override val itemShape: Shape = RoundedCornerShape(10.dp),
-    override var index: Int = -1,
-    override val disableClickIfAlreadySelected: Boolean = true,
+    override val shape: Shape = RoundedCornerShape(10.dp),
+    override val interaction: BottomBarInteraction = BottomBarInteraction(
+        selectionMode = BottomBarSelectionMode.TOGGLE,
+        dispatchClickWhenSelected = true,
+    ),
     val radius: Dp = 10.dp,
     val onSelectItemSizeChangeFriction: Float = 1.3f,
     val onSelectItemSizeChangeDurationMillis: Int = 300,
@@ -35,13 +35,9 @@ data class TinyGlideItem(
     val parentAndSubVerticalSeparationSpace: Dp = 10.dp,
     val marginForScreenSizeChanges: Float = 10f,
     var parentItemDynamicSize: MutableState<Dp> = mutableStateOf(size),
-    val hoverActionListener: HoverActionListener<TinyGlideItem> = emptyHoverActionListener(),
-    val clickActionListener: ClickActionListener = EmptyClickActionListener
-) : BottomBarItem() {
-    override val withTitleShown: Boolean = false
-    override val OnItemClick: Boolean = false
-    override val title: BottomBarTitle = BottomBarTitle("bottomBarTitle")
-}
+    val onHover: BottomBarHoverListener<TinyGlideItem> = BottomBarHoverListener { _, _ -> },
+    val onClick: BottomBarClickListener<TinyGlideItem> = BottomBarClickListener { _, _ -> },
+) : BottomBarItem
 
 fun TinyGlideItem.isSelectedItem(selectedItem: TinyGlideItem?): Boolean {
     return this == selectedItem

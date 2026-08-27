@@ -16,12 +16,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import org.mejdi14.core.bottombar.indicator.BasicIndicatorShapeType
-import org.mejdi14.core.bottombar.indicator.SelectedIndicatorConfig
+import org.mejdi14.core.bottombar.indicator.BottomBarIndicatorConfig
+import org.mejdi14.core.bottombar.indicator.BottomBarIndicatorShape
 
 @Composable
 fun CustomBottomBar(
-    config: SelectedIndicatorConfig,
+    config: BottomBarIndicatorConfig,
     color: Color = Color.Blue,
     animatedOffset: State<Dp>,
     spaceBetween: Dp,
@@ -29,14 +29,14 @@ fun CustomBottomBar(
 ) {
 
     val shapeModifier = when (config.shapeType) {
-        BasicIndicatorShapeType.Square -> Modifier.size(
+        BottomBarIndicatorShape.SQUARE -> Modifier.size(
             50.dp - config.padding,
             50.dp - config.padding
         )
 
-        BasicIndicatorShapeType.Line -> Modifier.width(50.dp - config.padding).height(config.thickness)
-        BasicIndicatorShapeType.Circle -> Modifier.size(50.dp - config.padding).clip(CircleShape)
-        BasicIndicatorShapeType.Dot -> Modifier.size(config.thickness).clip(CircleShape)
+        BottomBarIndicatorShape.LINE -> Modifier.width(50.dp - config.padding).height(config.thickness)
+        BottomBarIndicatorShape.CIRCLE -> Modifier.size(50.dp - config.padding).clip(CircleShape)
+        BottomBarIndicatorShape.DOT -> Modifier.size(config.thickness).clip(CircleShape)
     }
 
     Box(

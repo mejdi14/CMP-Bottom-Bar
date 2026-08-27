@@ -39,8 +39,6 @@ import basic.mejdi14.component.data.BasicBarConfig
 import basic.mejdi14.component.data.BasicBarPosition
 import basic.mejdi14.component.data.BasicItem
 import org.jetbrains.compose.resources.painterResource
-import org.mejdi14.core.bottombar.data.BottomBarAdditionalItems
-import org.mejdi14.core.bottombar.data.BottomBarItem
 
 @Composable
 internal fun HorizontalBasicBar(
@@ -55,7 +53,7 @@ internal fun HorizontalBasicBar(
     selectedIndex: MutableState<Int>,
     basicBarConfig: BasicBarConfig,
     lazyListState: LazyListState,
-    onIconClick: (BottomBarItem) -> Unit
+    onIconClick: (BasicItem) -> Unit,
 ) {
     Column(parentModifier.fillMaxWidth().padding(horizontal = basicBarConfig.aroundItemsPadding)) {
         if (basicBarConfig.basicBarPosition == BasicBarPosition.HORIZONTAL_BOTTOM)
@@ -73,7 +71,7 @@ internal fun HorizontalBasicBar(
         ) {
             LeftAdditionalItem(
                 basicBarConfig,
-                basicBarConfig.additionalItems?.leftTopItem as BasicItem?,
+                basicBarConfig.additionalItems?.startItem,
             )
 
             Box(
@@ -113,13 +111,18 @@ internal fun HorizontalBasicBar(
                                 .hoverEffect { onHover ->
                                     isHovered.value = onHover
                                     hoverSelectedIndex.value = index
+                                    item.onHover.onHover(item, onHover)
                                 }
                                 .clickable(
                                     interactionSource = remember { MutableInteractionSource() },
                                     indication = null
                                 ) {
-                                    selectedIndex.value = index
-                                    onIconClick(item)
+                                    if (item.interaction.shouldDispatchClick(selectedIndex.value, index)) {
+                                        selectedIndex.value = item.interaction
+                                            .nextSelectedIndex(selectedIndex.value, index) ?: selectedIndex.value
+                                        item.onClick.onClick(item, index)
+                                        onIconClick(item)
+                                    }
                                 }
                                 .background(
                                     color = if (isHovered.value
@@ -132,7 +135,7 @@ internal fun HorizontalBasicBar(
                                 )
                         ) {
                             BasicBarIconComposable(
-                                basicBarConfig.globalBasicIconConfig,
+                                basicBarConfig.iconStyle,
                                 item,
                                 Modifier.align(Alignment.Center).size(item.size),
                                 selectedIndex.value == index
@@ -144,7 +147,7 @@ internal fun HorizontalBasicBar(
             RightAdditionalItem(
                 basicBarConfig.additionalItems,
                 basicBarConfig,
-                basicBarConfig.additionalItems?.rightBottomItem as BasicItem?,
+                basicBarConfig.additionalItems?.endItem,
             )
         }
         if (basicBarConfig.basicBarPosition == BasicBarPosition.HORIZONTAL_TOP)

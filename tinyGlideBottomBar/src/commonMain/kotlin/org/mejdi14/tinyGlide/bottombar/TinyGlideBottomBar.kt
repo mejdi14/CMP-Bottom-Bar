@@ -56,16 +56,18 @@ fun TinyGlideBottomBar(
                     targetValue = item.parentItemDynamicSize.value,
                     animationSpec = tween(durationMillis = item.onSelectItemSizeChangeDurationMillis)
                 )
-                item.index = index
                 Box(
                     Modifier.width(item.itemSeparationSpace)
                 )
                 IconButton(
                     onClick = {
-                        item.clickActionListener.onItemClickListener()
-                        tinyGlideActionListener.onItemClickListener(item, index)
-                        selectedIndex.value = index
-                        selectedItem.value = if (selectedItem.value == item) null else item
+                        if (item.interaction.shouldDispatchClick(selectedIndex.value, index)) {
+                            val nextIndex = item.interaction.nextSelectedIndex(selectedIndex.value, index)
+                            item.onClick.onClick(item, index)
+                            tinyGlideActionListener.onClick(item, index)
+                            selectedIndex.value = nextIndex
+                            selectedItem.value = if (nextIndex == null) null else item
+                        }
                     },
                     modifier = Modifier.size(animatedParentWidth).align(Alignment.Center)
                         .onGloballyPositioned { layoutCoordinates ->
@@ -80,7 +82,7 @@ fun TinyGlideBottomBar(
                             color = if (item.isSelectedItem(selectedItem.value))
                                 item.selectedBackgroundColor
                             else item.backgroundColor,
-                            shape = item.itemShape
+                            shape = item.shape
                         )
                         .hoverEffect { onHover ->
                             handleHoverAction(
@@ -110,6 +112,5 @@ fun TinyGlideBottomBar(
         )
     }
 }
-
 
 

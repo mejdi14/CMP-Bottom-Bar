@@ -15,35 +15,35 @@ import org.mejdi14.core.bottombar.data.BottomBarIcon
 val basicDemoItems =
     listOf(
         BasicItem(
-            BottomBarIcon(Res.drawable.home_line), "Mosque",
+            BottomBarIcon(Res.drawable.home_line, contentDescription = "Home"),
             backgroundColor = Color(0xFFAAB396),
             hoverText = "Home"
 
         ),
         BasicItem(
-            BottomBarIcon(Res.drawable.papers), "Papers",
+            BottomBarIcon(Res.drawable.papers, contentDescription = "Papers"),
             backgroundColor = Color(0xFFE6D9A2),
             hoverText = "read the available papers"
 
         ),
 
         BasicItem(
-            BottomBarIcon(Res.drawable.calendar_day), "Menu",
+            BottomBarIcon(Res.drawable.calendar_day, contentDescription = "Calendar"),
             backgroundColor = Color(0xFFFFAF00),
             hoverText = "this is a hover text"
         ),
         BasicItem(
-            BottomBarIcon(Res.drawable.menu_meatballs), "Mosque",
+            BottomBarIcon(Res.drawable.menu_meatballs, contentDescription = "Menu"),
             backgroundColor = Color(0xFFAAB396),
            hoverText = "go to the next page"
         ),
         BasicItem(
-            BottomBarIcon(Res.drawable.open_reader), "Menu",
+            BottomBarIcon(Res.drawable.open_reader, contentDescription = "Reader"),
             backgroundColor = Color(0xFFFFAF00),
             hoverText = "read a new book"
         ),
         BasicItem(
-            BottomBarIcon(Res.drawable.the_plus_icon), "Mosque",
+            BottomBarIcon(Res.drawable.the_plus_icon, contentDescription = "Add"),
             backgroundColor = Color(0xFFAAB396),
            hoverText = "add more options"
         ),
@@ -52,7 +52,11 @@ val basicDemoItems =
 val basicDemoItems2 =
     listOf(
         BasicItem(
-            BottomBarIcon(Res.drawable.home_line, iconTintColor = Color.Black), "Mosque",
+            BottomBarIcon(
+                Res.drawable.home_line,
+                tint = Color.Black,
+                contentDescription = "Home",
+            ),
             backgroundColor = Color(0xFFAAB396),
             hoverText = "Home",
 
@@ -60,29 +64,49 @@ val basicDemoItems2 =
 
         ),
         BasicItem(
-            BottomBarIcon(Res.drawable.papers, iconTintColor = Color.Black), "Papers",
+            BottomBarIcon(
+                Res.drawable.papers,
+                tint = Color.Black,
+                contentDescription = "Papers",
+            ),
             backgroundColor = Color(0xFFE6D9A2),
             hoverText = "read the available papers"
 
         ),
 
         BasicItem(
-            BottomBarIcon(Res.drawable.calendar_day, iconTintColor = Color.Black), "Menu",
+            BottomBarIcon(
+                Res.drawable.calendar_day,
+                tint = Color.Black,
+                contentDescription = "Calendar",
+            ),
             backgroundColor = Color(0xFFFFAF00),
             hoverText = "this is a hover text"
         ),
         BasicItem(
-            BottomBarIcon(Res.drawable.menu_meatballs, iconTintColor = Color.Black), "Mosque",
+            BottomBarIcon(
+                Res.drawable.menu_meatballs,
+                tint = Color.Black,
+                contentDescription = "Menu",
+            ),
             backgroundColor = Color(0xFFAAB396),
             hoverText = "go to the next page"
         ),
         BasicItem(
-            BottomBarIcon(Res.drawable.open_reader, iconTintColor = Color.Black), "Menu",
+            BottomBarIcon(
+                Res.drawable.open_reader,
+                tint = Color.Black,
+                contentDescription = "Reader",
+            ),
             backgroundColor = Color(0xFFFFAF00),
             hoverText = "read a new book"
         ),
         BasicItem(
-            BottomBarIcon(Res.drawable.the_plus_icon, iconTintColor = Color.Black), "Mosque",
+            BottomBarIcon(
+                Res.drawable.the_plus_icon,
+                tint = Color.Black,
+                contentDescription = "Add",
+            ),
             backgroundColor = Color(0xFFAAB396),
             hoverText = "add more options"
         ),
@@ -91,16 +115,29 @@ val basicDemoItems2 =
 val bottomRoundItems =
     listOf(
         BasicItem(
-            BottomBarIcon(Res.drawable.home_black, iconTintColor = Color.White, selectedIconTint = Color.Black), "Mosque",
+            BottomBarIcon(
+                Res.drawable.home_black,
+                tint = Color.White,
+                selectedTint = Color.Black,
+                contentDescription = "Home",
+            ),
             backgroundColor = Color(0xFFAAB396),
             ),
         BasicItem(
-            BottomBarIcon(Res.drawable.papers, iconTintColor = Color.Black), "Papers",
+            BottomBarIcon(
+                Res.drawable.papers,
+                tint = Color.Black,
+                contentDescription = "Papers",
+            ),
             backgroundColor = Color(0xFFE6D9A2),
 
         ),
         BasicItem(
-            BottomBarIcon(Res.drawable.menu_meatballs, iconTintColor = Color.Black), "Mosque",
+            BottomBarIcon(
+                Res.drawable.menu_meatballs,
+                tint = Color.Black,
+                contentDescription = "Menu",
+            ),
             backgroundColor = Color(0xFFAAB396),
         ),
     )

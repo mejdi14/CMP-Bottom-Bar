@@ -11,14 +11,13 @@ import androidx.compose.ui.unit.dp
 import basic.mejdi14.component.data.BasicBarConfig
 import basic.mejdi14.component.data.BasicBarPosition
 import basic.mejdi14.component.data.BasicItem
-import org.mejdi14.core.bottombar.data.BottomBarItem
 
 @Composable
 fun BasicBottomBar(
     bottomBarItems: List<BasicItem>,
     basicBarConfig: BasicBarConfig,
     parentModifier: Modifier,
-    onIconClick: (BottomBarItem) -> Unit
+    onIconClick: (BasicItem) -> Unit,
 ) {
     val selectedIndex = remember { mutableStateOf(0) }
     val hoverSelectedIndex = remember { mutableStateOf(0) }

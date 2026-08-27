@@ -41,6 +41,9 @@ jobs:
           :composeApp:compileKotlinDesktop
           --stacktrace
 
+      - name: Run core tests
+        run: ./gradlew :coreBottomBar:desktopTest --stacktrace
+
       - name: Build Android demo
         run: ./gradlew :composeApp:assembleDebug --stacktrace
 

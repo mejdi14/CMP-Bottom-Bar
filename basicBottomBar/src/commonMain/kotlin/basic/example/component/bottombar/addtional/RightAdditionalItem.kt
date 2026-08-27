@@ -13,27 +13,28 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import basic.mejdi14.component.data.BasicBarConfig
+import basic.mejdi14.component.data.BasicBarAdditionalItems
 import basic.mejdi14.component.data.BasicItem
 import org.jetbrains.compose.resources.painterResource
-import org.mejdi14.core.bottombar.data.BottomBarAdditionalItems
 
 @Composable
 internal fun RightAdditionalItem(
-    additionalItems: BottomBarAdditionalItems?,
+    additionalItems: BasicBarAdditionalItems?,
     basicBarConfig: BasicBarConfig,
     basicItem: BasicItem?,
 ) {
-    if (additionalItems?.rightBottomItem != null) {
+    if (additionalItems?.endItem != null) {
         Row {
             Spacer(Modifier.width(basicBarConfig.spaceBetweenItems))
             Box(
                 Modifier.size(basicBarConfig.itemSize + basicBarConfig.aroundItemsPadding)
                     .clickable {
-                        basicItem?.clickActionListener?.onItemClickListener()
+                        basicItem?.takeIf { it.interaction.enabled }
+                            ?.let { it.onClick.onClick(it, null) }
                     }
                     .background(
                         color = basicItem?.backgroundColor ?: basicBarConfig.backgroundColor,
-                        shape = basicItem?.itemShape ?: basicBarConfig.shape
+                        shape = basicItem?.shape ?: basicBarConfig.shape
                     )
             ) {
                 if (basicItem?.icon != null) {
@@ -43,16 +44,16 @@ internal fun RightAdditionalItem(
                         basicItem.icon
 
                     Icon(
-                        painter = painterResource(currentAdditionalIcon.iconDrawable),
+                        painter = painterResource(currentAdditionalIcon.resource),
                         contentDescription = currentAdditionalIcon.contentDescription,
                         Modifier.align(Alignment.Center).size(basicItem.size)
-                            .padding(basicItem.icon.sizeDifferenceComparedToParent),
-                        tint = currentAdditionalIcon.iconTintColor,
+                            .padding(basicItem.icon.sizeReduction),
+                        tint = currentAdditionalIcon.tint,
                     )
                 }
             }
         }
-    } else if (basicBarConfig.additionalItems?.leftTopItem != null) {
+    } else if (basicBarConfig.additionalItems?.startItem != null) {
         Spacer(Modifier.width(basicBarConfig.itemSize + basicBarConfig.spaceBetweenItems))
     }
 }

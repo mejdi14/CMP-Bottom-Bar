@@ -14,7 +14,7 @@ import org.mejdi14.tinyGlide.listeners.TinyGlideActionListener
         tinyGlideItems,
         alignModifier,
         tinyGlideActionListener = object : TinyGlideActionListener {
-            override fun onItemClickListener(item: TinyGlideItem, index: Int) {
+            override fun onClick(item: TinyGlideItem, index: Int?) {
                 // nothing
             }
 

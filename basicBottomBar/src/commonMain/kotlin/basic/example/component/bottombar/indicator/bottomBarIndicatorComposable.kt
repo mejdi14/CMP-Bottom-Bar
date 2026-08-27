@@ -16,13 +16,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import basic.mejdi14.component.data.BasicBarPosition
-import org.mejdi14.core.bottombar.indicator.BasicIndicatorShapeType
-import org.mejdi14.core.bottombar.indicator.PositionType
-import org.mejdi14.core.bottombar.indicator.SelectedIndicatorConfig
+import org.mejdi14.core.bottombar.indicator.BottomBarIndicatorConfig
+import org.mejdi14.core.bottombar.indicator.BottomBarIndicatorPosition
+import org.mejdi14.core.bottombar.indicator.BottomBarIndicatorShape
 
 @Composable
 internal fun bottomBarIndicatorComposable(
-    config: SelectedIndicatorConfig,
+    config: BottomBarIndicatorConfig,
     animatedOffset: State<Dp>,
     spaceBetween: Dp,
     selectedIndex: MutableState<Int>,
@@ -30,12 +30,12 @@ internal fun bottomBarIndicatorComposable(
     itemSize: Dp
 ) {
     val shapeModifier = when (config.shapeType) {
-        BasicIndicatorShapeType.Square -> Modifier.size(
+        BottomBarIndicatorShape.SQUARE -> Modifier.size(
             itemSize,
             itemSize
         ).background(color = config.color, shape = config.shape)
 
-        BasicIndicatorShapeType.Line ->
+        BottomBarIndicatorShape.LINE ->
             when (basicBarPosition) {
                 BasicBarPosition.HORIZONTAL_BOTTOM, BasicBarPosition.HORIZONTAL_TOP -> Modifier.width(
                     itemSize
@@ -46,10 +46,10 @@ internal fun bottomBarIndicatorComposable(
                 ).width(config.thickness).background(color = config.color, shape = config.shape)
             }
 
-        BasicIndicatorShapeType.Circle -> Modifier.size(itemSize)
+        BottomBarIndicatorShape.CIRCLE -> Modifier.size(itemSize)
             .clip(CircleShape).background(color = config.color)
 
-        BasicIndicatorShapeType.Dot -> Modifier.size(config.thickness).clip(CircleShape)
+        BottomBarIndicatorShape.DOT -> Modifier.size(config.thickness).clip(CircleShape)
             .background(color = config.color)
     }
 
@@ -58,11 +58,11 @@ internal fun bottomBarIndicatorComposable(
             Box(
                 modifier = Modifier
                     .offset(
-                        x = (animatedOffset.value + (spaceBetween * (selectedIndex.value + 1))) + if (config.shapeType == BasicIndicatorShapeType.Dot) ((itemSize / 2) - (config.thickness / 2)) else 0.dp,
-                        y = if ((config.shapeType == BasicIndicatorShapeType.Line || config.shapeType == BasicIndicatorShapeType.Dot)
-                            && config.positionType == PositionType.Bottom
+                        x = (animatedOffset.value + (spaceBetween * (selectedIndex.value + 1))) + if (config.shapeType == BottomBarIndicatorShape.DOT) ((itemSize / 2) - (config.thickness / 2)) else 0.dp,
+                        y = if ((config.shapeType == BottomBarIndicatorShape.LINE || config.shapeType == BottomBarIndicatorShape.DOT)
+                            && config.position == BottomBarIndicatorPosition.END
                         )
-                            0.dp + ((itemSize + (config.padding / 2))) - (if (config.shapeType == BasicIndicatorShapeType.Dot) config.thickness else 0.dp)
+                            0.dp + ((itemSize + (config.padding / 2))) - (if (config.shapeType == BottomBarIndicatorShape.DOT) config.thickness else 0.dp)
                         else 0.dp + (config.padding / 2)
                     )
                     .then(shapeModifier)
@@ -73,11 +73,11 @@ internal fun bottomBarIndicatorComposable(
             Box(
                 modifier = Modifier
                     .offset(
-                        y = (animatedOffset.value + (spaceBetween * (selectedIndex.value + 1))) + if (config.shapeType == BasicIndicatorShapeType.Dot) ((itemSize / 2) - (config.thickness / 2)) else 0.dp,
-                        x = if ((config.shapeType == BasicIndicatorShapeType.Line || config.shapeType == BasicIndicatorShapeType.Dot)
-                            && config.positionType == PositionType.Bottom
+                        y = (animatedOffset.value + (spaceBetween * (selectedIndex.value + 1))) + if (config.shapeType == BottomBarIndicatorShape.DOT) ((itemSize / 2) - (config.thickness / 2)) else 0.dp,
+                        x = if ((config.shapeType == BottomBarIndicatorShape.LINE || config.shapeType == BottomBarIndicatorShape.DOT)
+                            && config.position == BottomBarIndicatorPosition.END
                         )
-                            0.dp + ((itemSize + (config.padding / 2))) - (if (config.shapeType == BasicIndicatorShapeType.Dot) config.thickness else 0.dp)
+                            0.dp + ((itemSize + (config.padding / 2))) - (if (config.shapeType == BottomBarIndicatorShape.DOT) config.thickness else 0.dp)
                         else 0.dp + (config.padding / 2)
                     )
                     .then(shapeModifier)

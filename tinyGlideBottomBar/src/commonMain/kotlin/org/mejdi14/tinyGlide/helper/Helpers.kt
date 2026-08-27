@@ -16,14 +16,13 @@ internal fun handleHoverAction(
     scope: CoroutineScope
 ) {
     isHovering.value = onHover
-    item.hoverActionListener.onHoverEnter(item)
+    item.onHover.onHover(item, onHover)
     if (onHover) {
         if (item.isSelectedItem(selectedItem.value)) {
             hoverExitJob.value?.cancel()
             hoverExitJob.value = null
         }
         selectedItem.value = item
-        item.hoverActionListener.onHoverParentItem(item)
         item.parentItemDynamicSize.value =
             if (!item.isSelectedItem(selectedItem.value)) item.size else
                 item.size * item.onSelectItemSizeChangeFriction
@@ -31,7 +30,6 @@ internal fun handleHoverAction(
         hoverExitJob.value = scope.launch {
             selectedItem.value = null
             item.parentItemDynamicSize.value = item.size
-            item.hoverActionListener.onHoverExit(item)
         }
     }
 }

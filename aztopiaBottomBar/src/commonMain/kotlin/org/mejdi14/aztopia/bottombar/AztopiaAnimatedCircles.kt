@@ -51,7 +51,7 @@ internal fun AztopiaAnimatedCircles(
         if (spreadOut.value) 45f else 0f
     )
     val baseIconColorAnimation = animateColorAsState(
-        if (spreadOut.value) aztopiaAnimatedComposable.icon.selectedIconTint else aztopiaAnimatedComposable.icon.iconTintColor
+        if (spreadOut.value) aztopiaAnimatedComposable.icon.selectedTint else aztopiaAnimatedComposable.icon.tint
     )
     val bonusIconsScale = animateFloatAsState(
         if (spreadOut.value) 1f else 0f
@@ -103,9 +103,9 @@ internal fun AztopiaAnimatedCircles(
             ) {
                 icons[index]?.let {
                     Icon(
-                        painter = painterResource(it.iconDrawable),
+                        painter = painterResource(it.resource),
                         contentDescription = it.contentDescription,
-                        tint = it.iconTintColor,
+                        tint = it.tint,
                         modifier = Modifier
                             .align(Alignment.Center)
                             .size(circleSize / 3)
@@ -125,9 +125,9 @@ internal fun AztopiaAnimatedCircles(
 
         ) {
         Icon(
-            painter = painterResource(aztopiaAnimatedComposable.icon.iconDrawable),
+            painter = painterResource(aztopiaAnimatedComposable.icon.resource),
             tint = baseIconColorAnimation.value,
-            contentDescription = aztopiaAnimatedComposable.contentDescription,
+            contentDescription = aztopiaAnimatedComposable.icon.contentDescription,
             modifier = Modifier
                 .align(Alignment.Center)
                 .size(circleSize / 2)

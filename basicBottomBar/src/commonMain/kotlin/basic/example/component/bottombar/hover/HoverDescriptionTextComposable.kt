@@ -19,7 +19,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import basic.mejdi14.component.data.BasicBarConfig
@@ -62,16 +61,14 @@ internal fun HoverDescriptionTextComposable(
                 }
             )
             .clip(RoundedCornerShape(6.dp)).background(color = Color.Black)
-            .then(basicBarConfig.hoverTextConfig.containerModifier)
+            .then(basicBarConfig.hoverTextStyle.containerModifier)
         ) {
             Text(
-                bottomBarItems[selectedIndex.value].hoverText,
+                bottomBarItems[selectedIndex.value].hoverText.orEmpty(),
                 modifier = Modifier.align(Alignment.Center).padding(4.dp)
-                    .then(basicBarConfig.hoverTextConfig.textModifier),
-                color = basicBarConfig.hoverTextConfig.textColor,
-                style = TextStyle(
-                    fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
-                )
+                    .then(basicBarConfig.hoverTextStyle.textModifier),
+                color = basicBarConfig.hoverTextStyle.color,
+                style = basicBarConfig.hoverTextStyle.style,
             )
         }
 }

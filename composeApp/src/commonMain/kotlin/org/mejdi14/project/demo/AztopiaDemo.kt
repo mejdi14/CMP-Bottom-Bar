@@ -19,16 +19,16 @@ fun AztopiaDemo(alignModifier: Modifier) {
     AztopiaBottomBar(
         aztopiaItems,
         AztopiaAnimatedComposable(
-          BottomBarIcon(iconDrawable = Res.drawable.the_plus_icon),
+            BottomBarIcon(resource = Res.drawable.the_plus_icon),
             animatedCircleItems = AztopiaTrio(
-                AztopiaAnimatedCircle(icon = BottomBarIcon(iconDrawable = Res.drawable.open_reader)),
-                AztopiaAnimatedCircle(icon = BottomBarIcon(iconDrawable = Res.drawable.open_reader)),
-                AztopiaAnimatedCircle(icon = BottomBarIcon(iconDrawable = Res.drawable.open_reader)),
+                AztopiaAnimatedCircle(icon = BottomBarIcon(resource = Res.drawable.open_reader)),
+                AztopiaAnimatedCircle(icon = BottomBarIcon(resource = Res.drawable.open_reader)),
+                AztopiaAnimatedCircle(icon = BottomBarIcon(resource = Res.drawable.open_reader)),
             )
         ),
                 alignModifier,
         aztopiaActionListener = object : AztopiaActionListener {
-            override fun onItemClickListener(item: AztopiaItem, index: Int) {
+            override fun onClick(item: AztopiaItem, index: Int?) {
                 //TODO("Not yet implemented")
             }
 

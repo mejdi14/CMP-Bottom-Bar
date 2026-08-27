@@ -6,12 +6,12 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.DrawableResource
 
-class BottomBarIcon(
-    val iconDrawable: DrawableResource,
-    val selectedIconDrawable: DrawableResource = iconDrawable,
-    val iconTintColor: Color = Color.Unspecified,
-    val selectedIconTint: Color = iconTintColor,
-    val contentDescription: String = "bottom bar icon",
+data class BottomBarIcon(
+    val resource: DrawableResource,
+    val selectedResource: DrawableResource = resource,
+    val tint: Color = Color.Unspecified,
+    val selectedTint: Color = tint,
+    val contentDescription: String? = null,
     val modifier: Modifier = Modifier,
-    val sizeDifferenceComparedToParent: Dp = 10.dp
+    val sizeReduction: Dp = 10.dp,
 )

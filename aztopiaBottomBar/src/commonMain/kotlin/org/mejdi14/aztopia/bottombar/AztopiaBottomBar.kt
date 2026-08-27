@@ -30,7 +30,7 @@ fun AztopiaBottomBar(
     aztopiaActionListener: AztopiaActionListener
 ) {
     val spreadOut = remember { mutableStateOf(false) }
-    val selectedItem = remember { mutableStateOf<AztopiaItem?>(null) }
+    val selectedIndex = remember { mutableStateOf<Int?>(null) }
     BoxWithConstraints(
         modifier = Modifier.fillMaxWidth().height(100.dp)
             .background(Color.White, shape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
@@ -48,9 +48,9 @@ fun AztopiaBottomBar(
                 verticalAlignment = Alignment.Top,
                 modifier = Modifier.weight(1f).fillMaxHeight()
             ) {
-                bottomBarItems.filterIndexed { index, _ -> index % 2 == 0 }
-                    .forEach { item ->
-                        AztopiaIcon(item, selectedItem, aztopiaActionListener)
+                bottomBarItems.withIndex().filter { it.index % 2 == 0 }
+                    .forEach { (index, item) ->
+                        AztopiaIcon(item, index, selectedIndex, aztopiaActionListener)
                     }
             }
 
@@ -60,9 +60,9 @@ fun AztopiaBottomBar(
                 verticalAlignment = Alignment.Top,
                 modifier = Modifier.weight(1f).fillMaxHeight()
             ) {
-                bottomBarItems.filterIndexed { index, _ -> index % 2 != 0 }
-                    .forEach { item ->
-                        AztopiaIcon(item, selectedItem, aztopiaActionListener)
+                bottomBarItems.withIndex().filter { it.index % 2 != 0 }
+                    .forEach { (index, item) ->
+                        AztopiaIcon(item, index, selectedIndex, aztopiaActionListener)
                     }
             }
         }

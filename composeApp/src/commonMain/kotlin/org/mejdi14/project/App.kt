@@ -21,16 +21,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import basic.mejdi14.component.bottombar.BasicBottomBar
+import basic.mejdi14.component.data.BasicBarAdditionalItems
 import basic.mejdi14.component.data.BasicBarConfig
+import basic.mejdi14.component.data.BasicBarIconStyle
 import basic.mejdi14.component.data.BasicBarPosition
 import basic.mejdi14.component.data.BasicItem
 import kmp_bottom_bar.composeapp.generated.resources.Res
 import kmp_bottom_bar.composeapp.generated.resources.the_plus_icon
-import org.mejdi14.core.bottombar.data.BottomBarAdditionalItems
 import org.mejdi14.core.bottombar.data.BottomBarIcon
-import org.mejdi14.core.bottombar.data.GlobalBottomBarIcon
-import org.mejdi14.core.bottombar.indicator.BasicIndicatorShapeType
-import org.mejdi14.core.bottombar.indicator.SelectedIndicatorConfig
+import org.mejdi14.core.bottombar.indicator.BottomBarIndicatorConfig
+import org.mejdi14.core.bottombar.indicator.BottomBarIndicatorShape
 import org.mejdi14.gooey.GooeyBottomBar
 import org.mejdi14.project.data.basicDemoItems
 import org.mejdi14.project.data.bottomRoundItems
@@ -50,7 +50,9 @@ fun App() {
                 bottomBarItems = basicDemoItems,
                 BasicBarConfig(
                     basicBarPosition = BasicBarPosition.HORIZONTAL_TOP,
-                    selectedIndicatorConfig = SelectedIndicatorConfig(shapeType = BasicIndicatorShapeType.Dot)
+                    selectedIndicatorConfig = BottomBarIndicatorConfig(
+                        shapeType = BottomBarIndicatorShape.DOT,
+                    ),
                 ),
                 parentModifier = Modifier.align(
                     Alignment.TopCenter
@@ -73,8 +75,8 @@ fun App() {
                     basicBarPosition = BasicBarPosition.VERTICAL_RIGHT,
                     backgroundColor = Color(0xFF3841e6),
                     hoveredBackgroundColor = Color(0xFF6067eb),
-                    selectedIndicatorConfig = SelectedIndicatorConfig(
-                        shapeType = BasicIndicatorShapeType.Line,
+                    selectedIndicatorConfig = BottomBarIndicatorConfig(
+                        shapeType = BottomBarIndicatorShape.LINE,
                         thickness = 3.dp,
                         color = Color.Red
                     ),
@@ -92,12 +94,12 @@ fun App() {
                     basicBarPosition = BasicBarPosition.HORIZONTAL_BOTTOM,
                     itemSize = 45.dp,
                     shape = RoundedCornerShape(10.dp),
-                    globalBasicIconConfig = GlobalBottomBarIcon(
-                        iconTintColor = Color.White,
-                        selectedIconTintColor = Color.Black
+                    iconStyle = BasicBarIconStyle(
+                        tint = Color.White,
+                        selectedTint = Color.Black,
                     ),
-                    additionalItems = BottomBarAdditionalItems(
-                        rightBottomItem = BasicItem(
+                    additionalItems = BasicBarAdditionalItems(
+                        endItem = BasicItem(
                             backgroundColor = Color.Red,
                             icon = BottomBarIcon(
                                 Res.drawable.the_plus_icon
@@ -106,8 +108,8 @@ fun App() {
                     ),
                     backgroundColor = Color.Black,
                     hoveredBackgroundColor = Color(0xFFFFF59D),
-                    selectedIndicatorConfig = SelectedIndicatorConfig(
-                        shapeType = BasicIndicatorShapeType.Line,
+                    selectedIndicatorConfig = BottomBarIndicatorConfig(
+                        shapeType = BottomBarIndicatorShape.LINE,
                         thickness = 3.dp,
                         color = Color.White
                     ),
@@ -136,6 +138,5 @@ fun App() {
         }
     }
 }
-
 
 

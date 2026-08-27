@@ -18,19 +18,19 @@ internal fun TinyGlideIcon(
     when (item.isSelectedItem(selectedItem.value)) {
         true -> {
             Icon(
-                painter = painterResource(item.icon.selectedIconDrawable),
+                painter = painterResource(item.icon.selectedResource),
                 contentDescription = item.icon.contentDescription,
-                tint = item.icon.selectedIconTint,
-                modifier = item.icon.modifier.then(modifier.size(item.size - item.icon.sizeDifferenceComparedToParent))
+                tint = item.icon.selectedTint,
+                modifier = item.icon.modifier.then(modifier.size(item.size - item.icon.sizeReduction))
             )
         }
 
         false -> {
             Icon(
-                painter = painterResource(item.icon.iconDrawable),
+                painter = painterResource(item.icon.resource),
                 contentDescription = item.icon.contentDescription,
-                tint = item.icon.iconTintColor,
-                modifier = item.icon.modifier.then(modifier.size(item.size - item.icon.sizeDifferenceComparedToParent))
+                tint = item.icon.tint,
+                modifier = item.icon.modifier.then(modifier.size(item.size - item.icon.sizeReduction))
             )
         }
     }

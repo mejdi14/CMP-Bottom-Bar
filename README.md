@@ -17,6 +17,18 @@ CMP Bottom Bar is a Compose Multiplatform library containing a shared bottom-bar
 
 Style modules depend on `coreBottomBar`; the demo app brings the styles together.
 
+## Core API
+
+The development API keeps immutable item configuration separate from composable state:
+
+- `BottomBarItem` contains only visuals shared by selectable items.
+- `BottomBarInteraction` defines whether an item is enabled and whether selection should select, toggle, or remain unchanged.
+- `BottomBarClickListener<T>` and `BottomBarHoverListener<T>` provide typed callbacks without unsafe casts or empty listener objects.
+- Selection indexes and selected state are owned by the rendering composable, not stored in item models.
+- Style-specific configuration, such as Basic bar additional items and hover text styling, lives in its corresponding style module.
+
+This API is a breaking change intended for the next `0.5.x` release line.
+
 ## Published artifacts
 
 The currently configured Maven Central artifacts are:

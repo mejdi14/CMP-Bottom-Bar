@@ -4,26 +4,27 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import basic.mejdi14.component.data.BasicBarIconStyle
 import basic.mejdi14.component.data.BasicItem
-import org.mejdi14.core.bottombar.data.GlobalBottomBarIcon
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
 internal fun BasicBarIconComposable(
-    globalIconConfig: GlobalBottomBarIcon?,
+    iconStyle: BasicBarIconStyle?,
     item: BasicItem,
     modifier: Modifier,
     isSelectedIndex: Boolean
 ) {
-        Icon(
-            modifier = modifier.padding(item.icon.sizeDifferenceComparedToParent),
-            painter = painterResource(
-                if (isSelectedIndex) item.icon.selectedIconDrawable else
-                    item.icon.iconDrawable
-            ),
-            contentDescription = item.contentDescription,
-            tint = if (isSelectedIndex) (globalIconConfig?.selectedIconTintColor
-                ?: item.icon.selectedIconTint) else (globalIconConfig?.iconTintColor
-                ?: item.icon.iconTintColor),
-        )
+    Icon(
+        modifier = item.icon.modifier.then(modifier.padding(item.icon.sizeReduction)),
+        painter = painterResource(
+            if (isSelectedIndex) item.icon.selectedResource else item.icon.resource
+        ),
+        contentDescription = item.icon.contentDescription,
+        tint = if (isSelectedIndex) {
+            iconStyle?.selectedTint ?: item.icon.selectedTint
+        } else {
+            iconStyle?.tint ?: item.icon.tint
+        },
+    )
 }

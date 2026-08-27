@@ -36,7 +36,6 @@ import basic.mejdi14.component.bottombar.indicator.bottomBarIndicatorComposable
 import basic.mejdi14.component.data.BasicBarConfig
 import basic.mejdi14.component.data.BasicBarPosition
 import basic.mejdi14.component.data.BasicItem
-import org.mejdi14.core.bottombar.data.BottomBarItem
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -52,7 +51,7 @@ internal fun VerticalBasicBar(
     selectedIndex: MutableState<Int>,
     basicBarConfig: BasicBarConfig,
     lazyListState: LazyListState,
-    onIconClick: (BottomBarItem) -> Unit
+    onIconClick: (BasicItem) -> Unit,
 ) {
     Row(parentModifier) {
         if (basicBarConfig.basicBarPosition == BasicBarPosition.VERTICAL_RIGHT)
@@ -68,36 +67,33 @@ internal fun VerticalBasicBar(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if (basicBarConfig.additionalItems?.leftTopItem != null) {
+            if (basicBarConfig.additionalItems?.startItem != null) {
                 Column {
                     Box(
                         Modifier.size(basicBarConfig.itemSize + basicBarConfig.aroundItemsPadding)
                             .clickable {
-                                (basicBarConfig.additionalItems.leftTopItem as BasicItem).clickActionListener.onItemClickListener()
+                                basicBarConfig.additionalItems.startItem
+                                    .takeIf { it.interaction.enabled }
+                                    ?.let { it.onClick.onClick(it, null) }
                             }
                             .background(
-                                basicBarConfig.additionalItems.leftTopItem?.backgroundColor
-                                    ?: Color.White,
-                                shape = basicBarConfig.additionalItems.leftTopItem?.itemShape
-                                    ?: RoundedCornerShape(10.dp)
+                                basicBarConfig.additionalItems.startItem.backgroundColor,
+                                shape = basicBarConfig.additionalItems.startItem.shape,
                             )
                     ) {
                         val currentAdditionalIcon =
-                            basicBarConfig.additionalItems.leftTopItem?.icon
-                        if (currentAdditionalIcon != null) {
-                            androidx.compose.material.Icon(
-                                painter = painterResource(currentAdditionalIcon.iconDrawable),
-                                contentDescription = currentAdditionalIcon.contentDescription,
-                                Modifier.align(Alignment.Center).size(
-                                    basicBarConfig.additionalItems.leftTopItem?.size ?: 50.dp
-                                )
-                                    .padding(currentAdditionalIcon.sizeDifferenceComparedToParent),
-                            )
-                        }
+                            basicBarConfig.additionalItems.startItem.icon
+                        androidx.compose.material.Icon(
+                            painter = painterResource(currentAdditionalIcon.resource),
+                            contentDescription = currentAdditionalIcon.contentDescription,
+                            Modifier.align(Alignment.Center).size(
+                                basicBarConfig.additionalItems.startItem.size
+                            ).padding(currentAdditionalIcon.sizeReduction),
+                        )
                     }
                     Spacer(Modifier.height(basicBarConfig.spaceBetweenItems))
                 }
-            } else if (basicBarConfig.additionalItems?.rightBottomItem != null) {
+            } else if (basicBarConfig.additionalItems?.endItem != null) {
                 Spacer(Modifier.height(basicBarConfig.itemSize + basicBarConfig.spaceBetweenItems))
             }
             Box(
@@ -136,13 +132,18 @@ internal fun VerticalBasicBar(
                                 .hoverEffect { onHover ->
                                     isHovered.value = onHover
                                     hoverSelectedIndex.value = index
+                                    item.onHover.onHover(item, onHover)
                                 }
                                 .clickable(
                                     interactionSource = remember { MutableInteractionSource() },
                                     indication = null
                                 ) {
-                                    selectedIndex.value = index
-                                    onIconClick(item)
+                                    if (item.interaction.shouldDispatchClick(selectedIndex.value, index)) {
+                                        selectedIndex.value = item.interaction
+                                            .nextSelectedIndex(selectedIndex.value, index) ?: selectedIndex.value
+                                        item.onClick.onClick(item, index)
+                                        onIconClick(item)
+                                    }
                                 }
                                 .background(
                                     color = if (isHovered.value
@@ -155,7 +156,7 @@ internal fun VerticalBasicBar(
                                 )
                         ) {
                             BasicBarIconComposable(
-                                basicBarConfig.globalBasicIconConfig,
+                                basicBarConfig.iconStyle,
                                 item,
                                 Modifier.align(Alignment.Center).size(item.size),
                                 selectedIndex.value == index
@@ -164,36 +165,33 @@ internal fun VerticalBasicBar(
                     }
                 }
             }
-            if (basicBarConfig.additionalItems?.rightBottomItem != null) {
+            if (basicBarConfig.additionalItems?.endItem != null) {
                 Column {
                     Spacer(Modifier.height(basicBarConfig.spaceBetweenItems))
                     Box(
                         Modifier.size(basicBarConfig.itemSize + basicBarConfig.aroundItemsPadding)
                             .clickable {
-                                (basicBarConfig.additionalItems.rightBottomItem as BasicItem).clickActionListener.onItemClickListener()
+                                basicBarConfig.additionalItems.endItem
+                                    .takeIf { it.interaction.enabled }
+                                    ?.let { it.onClick.onClick(it, null) }
                             }
                             .background(
-                                basicBarConfig.additionalItems.rightBottomItem?.backgroundColor
-                                    ?: Color.White,
-                                shape = basicBarConfig.additionalItems.rightBottomItem?.itemShape
-                                    ?: RoundedCornerShape(10.dp)
+                                basicBarConfig.additionalItems.endItem.backgroundColor,
+                                shape = basicBarConfig.additionalItems.endItem.shape,
                             )
                     ) {
                         val currentAdditionalIcon =
-                            basicBarConfig.additionalItems.rightBottomItem?.icon
-                        if (currentAdditionalIcon != null) {
-                            androidx.compose.material.Icon(
-                                painter = painterResource(currentAdditionalIcon.iconDrawable),
-                                contentDescription = currentAdditionalIcon.contentDescription,
-                                Modifier.align(Alignment.Center).size(
-                                    basicBarConfig.additionalItems.rightBottomItem?.size ?: 50.dp
-                                )
-                                    .padding(currentAdditionalIcon.sizeDifferenceComparedToParent),
-                            )
-                        }
+                            basicBarConfig.additionalItems.endItem.icon
+                        androidx.compose.material.Icon(
+                            painter = painterResource(currentAdditionalIcon.resource),
+                            contentDescription = currentAdditionalIcon.contentDescription,
+                            Modifier.align(Alignment.Center).size(
+                                basicBarConfig.additionalItems.endItem.size
+                            ).padding(currentAdditionalIcon.sizeReduction),
+                        )
                     }
                 }
-            } else if (basicBarConfig.additionalItems?.leftTopItem != null) {
+            } else if (basicBarConfig.additionalItems?.startItem != null) {
                 Spacer(Modifier.height(basicBarConfig.itemSize + basicBarConfig.spaceBetweenItems))
             }
         }
