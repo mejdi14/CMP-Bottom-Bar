@@ -24,15 +24,16 @@ internal fun BasicBarIndicator(
     itemSize: Dp,
 ) {
     val isHorizontal = barPosition.isHorizontal
+    val indicatorLayout = basicBarIndicatorLayout(config, itemSize)
     val shapeModifier = when (config.shapeType) {
         BottomBarIndicatorShape.SQUARE -> Modifier
             .size(itemSize)
             .background(color = config.color, shape = config.shape)
 
         BottomBarIndicatorShape.LINE -> if (isHorizontal) {
-            Modifier.width(itemSize).height(config.thickness)
+            Modifier.width(indicatorLayout.itemSize).height(config.thickness)
         } else {
-            Modifier.height(itemSize).width(config.thickness)
+            Modifier.height(indicatorLayout.itemSize).width(config.thickness)
         }.background(color = config.color, shape = config.shape)
 
         BottomBarIndicatorShape.CIRCLE -> Modifier
@@ -43,25 +44,58 @@ internal fun BasicBarIndicator(
             .size(config.thickness)
             .background(color = config.color, shape = CircleShape)
     }
-    val mainAxisOffset = offset + if (config.shapeType == BottomBarIndicatorShape.DOT) {
-        (itemSize - config.thickness) / 2
-    } else {
-        0.dp
-    }
-    val crossAxisOffset = when {
-        config.shapeType != BottomBarIndicatorShape.LINE &&
-            config.shapeType != BottomBarIndicatorShape.DOT -> 0.dp
-
-        config.position == BottomBarIndicatorPosition.START -> config.padding
-        else -> itemSize - config.thickness - config.padding
+    val mainAxisOffset = offset + when (config.shapeType) {
+        BottomBarIndicatorShape.LINE -> (itemSize - indicatorLayout.itemSize) / 2
+        BottomBarIndicatorShape.DOT -> (itemSize - config.thickness) / 2
+        else -> 0.dp
     }
 
     Box(
         modifier = Modifier
             .offset(
-                x = if (isHorizontal) mainAxisOffset else crossAxisOffset,
-                y = if (isHorizontal) crossAxisOffset else mainAxisOffset,
+                x = if (isHorizontal) mainAxisOffset else indicatorLayout.indicatorCrossAxisOffset,
+                y = if (isHorizontal) indicatorLayout.indicatorCrossAxisOffset else mainAxisOffset,
             )
             .then(shapeModifier)
+    )
+}
+
+internal data class BasicBarIndicatorLayout(
+    val slotSize: Dp,
+    val itemSize: Dp,
+    val itemCrossAxisOffset: Dp,
+    val indicatorCrossAxisOffset: Dp,
+)
+
+internal fun basicBarIndicatorLayout(
+    config: BottomBarIndicatorConfig,
+    itemSize: Dp,
+): BasicBarIndicatorLayout {
+    val isOutsideItem = config.shapeType == BottomBarIndicatorShape.LINE ||
+        config.shapeType == BottomBarIndicatorShape.DOT
+    if (!isOutsideItem) {
+        return BasicBarIndicatorLayout(
+            slotSize = itemSize,
+            itemSize = itemSize,
+            itemCrossAxisOffset = 0.dp,
+            indicatorCrossAxisOffset = 0.dp,
+        )
+    }
+
+    val indicatorSpace = config.thickness + config.padding
+    val reducedItemSize = itemSize - indicatorSpace
+    return BasicBarIndicatorLayout(
+        slotSize = itemSize,
+        itemSize = reducedItemSize,
+        itemCrossAxisOffset = if (config.position == BottomBarIndicatorPosition.START) {
+            indicatorSpace
+        } else {
+            0.dp
+        },
+        indicatorCrossAxisOffset = if (config.position == BottomBarIndicatorPosition.START) {
+            0.dp
+        } else {
+            reducedItemSize + config.padding
+        },
     )
 }

@@ -29,73 +29,120 @@ import org.mejdi14.project.data.bottomRoundItems
 @Preview
 fun App() {
     MaterialTheme {
-        Box(Modifier.fillMaxSize().background(Color.White)) {
+        Box(Modifier.fillMaxSize().background(AppBackground)) {
             BasicBottomBar(
-                items = basicDemoItems,
+                items = lightDemoItems,
                 config = BasicBarConfig(
                     position = BasicBarPosition.HorizontalTop,
+                    containerColor = LightSurface,
+                    hoverColor = LightHover,
+                    iconStyle = LightIconStyle,
                     indicator = BottomBarIndicatorConfig(
                         shapeType = BottomBarIndicatorShape.DOT,
+                        color = DarkAccent,
                     ),
                 ),
-                modifier = Modifier.align(
-                    Alignment.TopCenter
-                )
+                modifier = Modifier.align(Alignment.TopCenter),
             ) { _, _ -> }
             BasicBottomBar(
-                items = basicDemoItems,
-                config = BasicBarConfig(position = BasicBarPosition.VerticalLeft),
-                modifier = Modifier.align(
-                    Alignment.CenterStart
-                )
+                items = darkDemoItems,
+                config = BasicBarConfig(
+                    position = BasicBarPosition.VerticalLeft,
+                    containerColor = DarkSurface,
+                    hoverColor = DarkHover,
+                    iconStyle = DarkIconStyle,
+                    indicator = BottomBarIndicatorConfig(color = DarkSelection),
+                ),
+                modifier = Modifier.align(Alignment.CenterStart),
             ) { _, _ -> }
             BasicBottomBar(
-                items = basicDemoItems,
+                items = lightDemoItems,
                 config = BasicBarConfig(
                     position = BasicBarPosition.VerticalRight,
-                    containerColor = Color(0xFF3841E6),
-                    hoverColor = Color(0xFF6067EB),
+                    containerColor = LightSurface,
+                    hoverColor = LightHover,
+                    iconStyle = LightIconStyle,
                     indicator = BottomBarIndicatorConfig(
                         shapeType = BottomBarIndicatorShape.LINE,
                         thickness = 3.dp,
-                        color = Color.Red
+                        color = DarkAccent,
                     ),
                 ),
-                modifier = Modifier.align(
-                    Alignment.CenterEnd
-                )
-
+                modifier = Modifier.align(Alignment.CenterEnd),
             ) { _, _ -> }
             BasicBottomBar(
-                items = bottomRoundItems,
+                items = darkBottomItems,
                 config = BasicBarConfig(
                     position = BasicBarPosition.HorizontalBottom,
                     itemSize = 45.dp,
                     shape = RoundedCornerShape(10.dp),
-                    iconStyle = BasicBarIconStyle(
-                        tint = Color.White,
-                        selectedTint = Color.Black,
-                    ),
+                    iconStyle = DarkIconStyle,
                     additionalItems = BasicBarAdditionalItems(
                         endItem = BasicItem(
-                            backgroundColor = Color.Red,
+                            backgroundColor = DarkItemSurface,
                             icon = BottomBarIcon(
-                                Res.drawable.the_plus_icon
-                            )
-                        )
+                                resource = Res.drawable.the_plus_icon,
+                                contentDescription = "Add",
+                            ),
+                        ),
                     ),
-                    containerColor = Color.Black,
-                    hoverColor = Color(0xFFFFF59D),
+                    containerColor = DarkSurface,
+                    hoverColor = DarkHover,
                     indicator = BottomBarIndicatorConfig(
                         shapeType = BottomBarIndicatorShape.LINE,
                         thickness = 3.dp,
-                        color = Color.White
+                        color = LightAccent,
                     ),
                 ),
-                modifier = Modifier.align(
-                    Alignment.BottomCenter
-                )
+                modifier = Modifier.align(Alignment.BottomCenter),
             ) { _, _ -> }
         }
     }
+}
+
+private val AppBackground = Color(0xFFF4F4F5)
+private val LightSurface = Color(0xFFFFFFFF)
+private val LightItemSurface = Color(0xFFF4F4F5)
+private val LightHover = Color(0xFFE4E4E7)
+private val LightSelection = Color(0xFFD4D4D8)
+private val DarkSurface = Color(0xFF18181B)
+private val DarkItemSurface = Color(0xFF27272A)
+private val DarkHover = Color(0xFF3F3F46)
+private val DarkSelection = Color(0xFF52525B)
+private val DarkAccent = Color(0xFF18181B)
+private val LightAccent = Color(0xFFFAFAFA)
+
+private val LightIconStyle = BasicBarIconStyle(
+    tint = Color(0xFF52525B),
+    selectedTint = Color(0xFF18181B),
+)
+
+private val DarkIconStyle = BasicBarIconStyle(
+    tint = Color(0xFFA1A1AA),
+    selectedTint = Color(0xFFFAFAFA),
+)
+
+private val lightDemoItems = basicDemoItems.withItemColors(
+    backgroundColor = LightItemSurface,
+    selectedBackgroundColor = LightSelection,
+)
+
+private val darkDemoItems = basicDemoItems.withItemColors(
+    backgroundColor = DarkItemSurface,
+    selectedBackgroundColor = DarkSelection,
+)
+
+private val darkBottomItems = bottomRoundItems.withItemColors(
+    backgroundColor = DarkItemSurface,
+    selectedBackgroundColor = DarkSelection,
+)
+
+private fun List<BasicItem>.withItemColors(
+    backgroundColor: Color,
+    selectedBackgroundColor: Color,
+): List<BasicItem> = map { item ->
+    item.copy(
+        backgroundColor = backgroundColor,
+        selectedBackgroundColor = selectedBackgroundColor,
+    )
 }

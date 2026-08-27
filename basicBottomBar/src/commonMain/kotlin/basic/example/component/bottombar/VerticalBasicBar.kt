@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
@@ -15,6 +16,7 @@ import androidx.compose.ui.unit.Dp
 import basic.mejdi14.component.bottombar.additional.BasicAdditionalItem
 import basic.mejdi14.component.bottombar.hover.BasicBarHoverLabel
 import basic.mejdi14.component.bottombar.indicator.BasicBarIndicator
+import basic.mejdi14.component.bottombar.indicator.basicBarIndicatorLayout
 import basic.mejdi14.component.data.BasicBarConfig
 import basic.mejdi14.component.data.BasicItem
 
@@ -85,19 +87,24 @@ private fun VerticalBarSurface(
     onItemClick: (Int) -> Unit,
 ) {
     val stripHeight = basicBarStripSize(items.size, config.itemSize, config.itemSpacing)
+    val indicatorLayout = basicBarIndicatorLayout(config.indicator, config.itemSize)
     Box(
         modifier = Modifier
             .background(color = config.containerColor, shape = config.shape)
             .padding(config.contentPadding),
     ) {
-        Box(Modifier.width(config.itemSize).height(stripHeight)) {
-            Column(verticalArrangement = Arrangement.spacedBy(config.itemSpacing)) {
+        Box(Modifier.width(indicatorLayout.slotSize).height(stripHeight)) {
+            Column(
+                modifier = Modifier.offset(x = indicatorLayout.itemCrossAxisOffset),
+                verticalArrangement = Arrangement.spacedBy(config.itemSpacing),
+            ) {
                 items.forEachIndexed { index, item ->
                     BasicBarItemBackground(
                         item = item,
                         isSelected = selectedIndex == index,
                         isHovered = hoveredIndex == index && selectedIndex != index,
                         config = config,
+                        itemSize = indicatorLayout.itemSize,
                     )
                 }
             }
@@ -109,13 +116,17 @@ private fun VerticalBarSurface(
                     itemSize = config.itemSize,
                 )
             }
-            Column(verticalArrangement = Arrangement.spacedBy(config.itemSpacing)) {
+            Column(
+                modifier = Modifier.offset(x = indicatorLayout.itemCrossAxisOffset),
+                verticalArrangement = Arrangement.spacedBy(config.itemSpacing),
+            ) {
                 items.forEachIndexed { index, item ->
                     BasicBarItemForeground(
                         item = item,
                         index = index,
                         isSelected = selectedIndex == index,
                         config = config,
+                        itemSize = indicatorLayout.itemSize,
                         onHover = onHover,
                         onClick = onItemClick,
                     )

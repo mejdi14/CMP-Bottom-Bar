@@ -1,5 +1,6 @@
 package basic.mejdi14.component.data
 
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -7,6 +8,8 @@ import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
+import org.mejdi14.core.bottombar.indicator.BottomBarIndicatorConfig
+import org.mejdi14.core.bottombar.indicator.BottomBarIndicatorShape
 
 class BasicBarConfigTest {
     @Test
@@ -14,6 +17,9 @@ class BasicBarConfigTest {
         val config = BasicBarConfig()
 
         assertEquals(BasicBarPosition.HorizontalBottom, config.position)
+        assertEquals(Color(0xFF18181B), config.containerColor)
+        assertEquals(Color(0xFF27272A), config.hoverColor)
+        assertEquals(Color(0xFF3F3F46), config.indicator.color)
         assertTrue(config.position.isHorizontal)
         assertFalse(BasicBarPosition.VerticalLeft.isHorizontal)
     }
@@ -22,6 +28,16 @@ class BasicBarConfigTest {
     fun invalidDimensionsAreRejected() {
         assertFailsWith<IllegalArgumentException> { BasicBarConfig(itemSize = 0.dp) }
         assertFailsWith<IllegalArgumentException> { BasicBarConfig(itemSpacing = (-1).dp) }
+        assertFailsWith<IllegalArgumentException> {
+            BasicBarConfig(
+                itemSize = 10.dp,
+                indicator = BottomBarIndicatorConfig(
+                    shapeType = BottomBarIndicatorShape.LINE,
+                    thickness = 6.dp,
+                    padding = 4.dp,
+                ),
+            )
+        }
     }
 
     @Test

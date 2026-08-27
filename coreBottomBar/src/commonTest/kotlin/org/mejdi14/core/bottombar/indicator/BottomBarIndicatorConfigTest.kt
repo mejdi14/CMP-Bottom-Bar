@@ -14,6 +14,6 @@ class BottomBarIndicatorConfigTest {
         assertEquals(BottomBarIndicatorShape.SQUARE, config.shapeType)
         assertEquals(BottomBarIndicatorPosition.END, config.position)
         assertEquals(6.dp, config.thickness)
-        assertEquals(10.dp, config.padding)
+        assertEquals(3.dp, config.padding)
     }
 }

@@ -23,6 +23,6 @@ data class BottomBarIndicatorConfig(
     val shapeType: BottomBarIndicatorShape = BottomBarIndicatorShape.SQUARE,
     val position: BottomBarIndicatorPosition = BottomBarIndicatorPosition.END,
     val thickness: Dp = 6.dp,
-    val padding: Dp = 10.dp,
+    val padding: Dp = 3.dp,
     val shape: Shape = RoundedCornerShape(10.dp),
 )
