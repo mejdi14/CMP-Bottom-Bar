@@ -14,7 +14,7 @@ import org.mejdi14.core.bottombar.listener.BottomBarHoverListener
 data class BasicItem(
     override val icon: BottomBarIcon,
     override val size: Dp = 50.dp,
-    override val backgroundColor: Color = Color.Blue,
+    override val backgroundColor: Color = Color.Transparent,
     override val selectedBackgroundColor: Color = backgroundColor,
     override val shape: Shape = RoundedCornerShape(10.dp),
     override val interaction: BottomBarInteraction = BottomBarInteraction(),

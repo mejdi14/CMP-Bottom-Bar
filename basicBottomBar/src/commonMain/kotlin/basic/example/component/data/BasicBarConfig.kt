@@ -9,19 +9,22 @@ import org.mejdi14.core.bottombar.indicator.BottomBarIndicatorConfig
 
 data class BasicBarConfig(
     val itemSize: Dp = 50.dp,
-    val itemsRadius: Dp = 10.dp,
-    val aroundItemsPadding: Dp = 10.dp,
+    val outerPadding: Dp = 10.dp,
+    val contentPadding: Dp = 5.dp,
+    val itemSpacing: Dp = 10.dp,
     val iconStyle: BasicBarIconStyle? = null,
-    val basicBarPadding: Dp = 5.dp,
-    val backgroundColor: Color = Color(0xFF1c2437),
-    val hoveredBackgroundColor: Color = Color(0xFF293751),
-    val selectedIndicatorConfig: BottomBarIndicatorConfig = BottomBarIndicatorConfig(),
+    val containerColor: Color = Color(0xFF1C2437),
+    val hoverColor: Color = Color(0xFF293751),
+    val indicator: BottomBarIndicatorConfig = BottomBarIndicatorConfig(),
     val shape: Shape = RoundedCornerShape(10.dp),
-    val onSelectItemSizeChangeFriction: Float = 1.3f,
-    val onSelectItemSizeChangeDurationMillis: Int = 300,
-    val hoverCancelDurationMillis: Long = 8,
-    val spaceBetweenItems: Dp = 10.dp,
     val additionalItems: BasicBarAdditionalItems? = null,
-    val basicBarPosition: BasicBarPosition = BasicBarPosition.HORIZONTAL_BOTTOM,
+    val position: BasicBarPosition = BasicBarPosition.HorizontalBottom,
     val hoverTextStyle: BasicBarHoverTextStyle = BasicBarHoverTextStyle(),
-)
+) {
+    init {
+        require(itemSize > 0.dp) { "itemSize must be greater than zero" }
+        require(outerPadding >= 0.dp) { "outerPadding cannot be negative" }
+        require(contentPadding >= 0.dp) { "contentPadding cannot be negative" }
+        require(itemSpacing >= 0.dp) { "itemSpacing cannot be negative" }
+    }
+}

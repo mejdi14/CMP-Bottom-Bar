@@ -26,15 +26,14 @@ kotlin {
 
     jvm("desktop")
 
-    iosX64()
     iosArm64()
     iosSimulatorArm64()
 
     sourceSets {
         commonMain.dependencies {
-            api(compose.foundation)
-            api(compose.ui)
-            api(compose.components.resources)
+            api(libs.compose.foundation)
+            api(libs.compose.ui)
+            api(libs.compose.resources)
         }
         commonTest.dependencies {
             implementation(kotlin("test"))

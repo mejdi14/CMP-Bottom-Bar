@@ -1,162 +1,126 @@
 package basic.mejdi14.component.bottombar
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
-import basic.example.component.bottombar.addtional.LeftAdditionalItem
-import basic.example.component.bottombar.addtional.RightAdditionalItem
-import basic.example.component.bottombar.hover.HoverContainerComposable
-import basic.mejdi14.component.bottombar.icon.BasicBarIconComposable
-import basic.mejdi14.component.bottombar.indicator.bottomBarIndicatorComposable
+import basic.mejdi14.component.bottombar.additional.BasicAdditionalItem
+import basic.mejdi14.component.bottombar.hover.BasicBarHoverLabel
+import basic.mejdi14.component.bottombar.indicator.BasicBarIndicator
 import basic.mejdi14.component.data.BasicBarConfig
-import basic.mejdi14.component.data.BasicBarPosition
 import basic.mejdi14.component.data.BasicItem
-import org.jetbrains.compose.resources.painterResource
 
 @Composable
 internal fun HorizontalBasicBar(
-    parentModifier: Modifier,
-    spaceBetween: MutableState<Dp>,
-    hoverSelectedIndex: MutableState<Int>,
-    bottomBarItems: List<BasicItem>,
-    isHovered: MutableState<Boolean>,
-    parentWidth: MutableState<Dp>,
-    density: Density,
-    animatedOffset: State<Dp>,
-    selectedIndex: MutableState<Int>,
-    basicBarConfig: BasicBarConfig,
-    lazyListState: LazyListState,
-    onIconClick: (BasicItem) -> Unit,
+    items: List<BasicItem>,
+    selectedIndex: Int?,
+    hoveredIndex: Int?,
+    indicatorOffset: Dp,
+    config: BasicBarConfig,
+    modifier: Modifier,
+    onHover: (Int, Boolean) -> Unit,
+    onItemClick: (Int) -> Unit,
+    onAdditionalItemClick: (BasicItem) -> Unit,
 ) {
-    Column(parentModifier.fillMaxWidth().padding(horizontal = basicBarConfig.aroundItemsPadding)) {
-        if (basicBarConfig.basicBarPosition == BasicBarPosition.HORIZONTAL_BOTTOM)
-            HoverContainerComposable(
-                basicBarConfig,
-                spaceBetween,
-                hoverSelectedIndex,
-                bottomBarItems,
-                isHovered
-            )
-        Row(
-            Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            LeftAdditionalItem(
-                basicBarConfig,
-                basicBarConfig.additionalItems?.startItem,
-            )
+    val additionalItems = config.additionalItems
+    val hasAdditionalItems = additionalItems?.startItem != null || additionalItems?.endItem != null
 
-            Box(
-                Modifier.padding(basicBarConfig.basicBarPadding)
-                    .height(basicBarConfig.itemSize + (basicBarConfig.basicBarPadding * 2))
-                    .background(
-                        color = basicBarConfig.backgroundColor,
-                        shape = basicBarConfig.shape
-                    )
-                    .onGloballyPositioned { layoutCoordinates ->
-                        val widthPx = layoutCoordinates.size.width
-                        parentWidth.value = with(density) { widthPx.toDp() }
-                    }
-            ) {
-                spaceBetween.value =
-                    ((parentWidth.value - (basicBarConfig.itemSize * (bottomBarItems.size))) / (bottomBarItems.size + 1))
-                bottomBarIndicatorComposable(
-                    config = basicBarConfig.selectedIndicatorConfig,
-                    spaceBetween = spaceBetween.value,
-                    animatedOffset = animatedOffset,
-                    selectedIndex = selectedIndex,
-                    basicBarPosition = basicBarConfig.basicBarPosition,
-                    itemSize = basicBarConfig.itemSize
-                )
-                LazyRow(
-                    state = lazyListState,
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxHeight()
-                        .width((basicBarConfig.itemSize * bottomBarItems.size) + (basicBarConfig.spaceBetweenItems * (bottomBarItems.size - 1)))
-                ) {
-                    itemsIndexed(bottomBarItems) { index, item ->
+    Row(
+        modifier = modifier.padding(config.outerPadding),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        if (hasAdditionalItems) {
+            BasicAdditionalItem(
+                item = additionalItems.startItem,
+                config = config,
+                onClick = onAdditionalItemClick,
+            )
+            Spacer(Modifier.width(config.itemSpacing))
+        }
 
-                        Box(
-                            modifier = Modifier.size(basicBarConfig.itemSize)
-                                .align(Alignment.Center)
-                                .hoverEffect { onHover ->
-                                    isHovered.value = onHover
-                                    hoverSelectedIndex.value = index
-                                    item.onHover.onHover(item, onHover)
-                                }
-                                .clickable(
-                                    interactionSource = remember { MutableInteractionSource() },
-                                    indication = null
-                                ) {
-                                    if (item.interaction.shouldDispatchClick(selectedIndex.value, index)) {
-                                        selectedIndex.value = item.interaction
-                                            .nextSelectedIndex(selectedIndex.value, index) ?: selectedIndex.value
-                                        item.onClick.onClick(item, index)
-                                        onIconClick(item)
-                                    }
-                                }
-                                .background(
-                                    color = if (isHovered.value
-                                        && index == hoverSelectedIndex.value
-                                        && index != selectedIndex.value
-                                    ) basicBarConfig.hoveredBackgroundColor
-                                    else
-                                        Color.Unspecified,
-                                    RoundedCornerShape(10.dp)
-                                )
-                        ) {
-                            BasicBarIconComposable(
-                                basicBarConfig.iconStyle,
-                                item,
-                                Modifier.align(Alignment.Center).size(item.size),
-                                selectedIndex.value == index
-                            )
-                        }
-                    }
-                }
-            }
-            RightAdditionalItem(
-                basicBarConfig.additionalItems,
-                basicBarConfig,
-                basicBarConfig.additionalItems?.endItem,
+        Box {
+            HorizontalBarSurface(
+                items = items,
+                selectedIndex = selectedIndex,
+                hoveredIndex = hoveredIndex,
+                indicatorOffset = indicatorOffset,
+                config = config,
+                onHover = onHover,
+                onItemClick = onItemClick,
+            )
+            BasicBarHoverLabel(
+                item = hoveredIndex?.let(items::getOrNull),
+                index = hoveredIndex,
+                config = config,
             )
         }
-        if (basicBarConfig.basicBarPosition == BasicBarPosition.HORIZONTAL_TOP)
-            HoverContainerComposable(
-                basicBarConfig,
-                spaceBetween,
-                hoverSelectedIndex,
-                bottomBarItems,
-                isHovered
+
+        if (hasAdditionalItems) {
+            Spacer(Modifier.width(config.itemSpacing))
+            BasicAdditionalItem(
+                item = additionalItems.endItem,
+                config = config,
+                onClick = onAdditionalItemClick,
             )
+        }
+    }
+}
+
+@Composable
+private fun HorizontalBarSurface(
+    items: List<BasicItem>,
+    selectedIndex: Int?,
+    hoveredIndex: Int?,
+    indicatorOffset: Dp,
+    config: BasicBarConfig,
+    onHover: (Int, Boolean) -> Unit,
+    onItemClick: (Int) -> Unit,
+) {
+    val stripWidth = basicBarStripSize(items.size, config.itemSize, config.itemSpacing)
+    Box(
+        modifier = Modifier
+            .background(color = config.containerColor, shape = config.shape)
+            .padding(config.contentPadding),
+    ) {
+        Box(Modifier.width(stripWidth).height(config.itemSize)) {
+            Row(horizontalArrangement = Arrangement.spacedBy(config.itemSpacing)) {
+                items.forEachIndexed { index, item ->
+                    BasicBarItemBackground(
+                        item = item,
+                        isSelected = selectedIndex == index,
+                        isHovered = hoveredIndex == index && selectedIndex != index,
+                        config = config,
+                    )
+                }
+            }
+            if (selectedIndex != null) {
+                BasicBarIndicator(
+                    config = config.indicator,
+                    offset = indicatorOffset,
+                    barPosition = config.position,
+                    itemSize = config.itemSize,
+                )
+            }
+            Row(horizontalArrangement = Arrangement.spacedBy(config.itemSpacing)) {
+                items.forEachIndexed { index, item ->
+                    BasicBarItemForeground(
+                        item = item,
+                        index = index,
+                        isSelected = selectedIndex == index,
+                        config = config,
+                        onHover = onHover,
+                        onClick = onItemClick,
+                    )
+                }
+            }
+        }
     }
 }

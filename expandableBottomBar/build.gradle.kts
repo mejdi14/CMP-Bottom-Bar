@@ -24,18 +24,17 @@ kotlin {
     
     jvm("desktop")
     
-    iosX64()
     iosArm64()
     iosSimulatorArm64()
     
     sourceSets {
         commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material)
-            implementation(compose.material3)
-            implementation(compose.ui)
-            implementation(compose.components.resources)
+            implementation(libs.compose.runtime)
+            implementation(libs.compose.foundation)
+            implementation(libs.compose.material)
+            implementation(libs.compose.material3)
+            implementation(libs.compose.ui)
+            implementation(libs.compose.resources)
             api(project(":coreBottomBar"))
         }
     }
