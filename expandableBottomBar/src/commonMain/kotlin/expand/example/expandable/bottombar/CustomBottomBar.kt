@@ -16,34 +16,52 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import org.mejdi14.core.bottombar.indicator.BasicIndicatorShapeType
-import org.mejdi14.core.bottombar.indicator.SelectedIndicatorConfig
+import org.mejdi14.core.bottombar.indicator.BottomBarIndicatorConfig
+import org.mejdi14.core.bottombar.indicator.BottomBarIndicatorPosition
+import org.mejdi14.core.bottombar.indicator.BottomBarIndicatorShape
 
 @Composable
 fun CustomBottomBar(
-    config: SelectedIndicatorConfig,
+    config: BottomBarIndicatorConfig,
     color: Color = Color.Blue,
     animatedOffset: State<Dp>,
     spaceBetween: Dp,
-    selectedIndex: MutableState<Int>
+    selectedIndex: MutableState<Int>,
+    itemSize: Dp = 50.dp,
+    rowHeight: Dp = 60.dp,
 ) {
 
     val shapeModifier = when (config.shapeType) {
-        BasicIndicatorShapeType.Square -> Modifier.size(
-            50.dp - config.padding,
-            50.dp - config.padding
+        BottomBarIndicatorShape.SQUARE -> Modifier.size(
+            itemSize - config.padding,
+            itemSize - config.padding,
         )
 
-        BasicIndicatorShapeType.Line -> Modifier.width(50.dp - config.padding).height(config.thickness)
-        BasicIndicatorShapeType.Circle -> Modifier.size(50.dp - config.padding).clip(CircleShape)
-        BasicIndicatorShapeType.Dot -> Modifier.size(config.thickness).clip(CircleShape)
+        BottomBarIndicatorShape.LINE -> Modifier.width(itemSize - config.padding).height(config.thickness)
+        BottomBarIndicatorShape.CIRCLE -> Modifier.size(itemSize - config.padding).clip(CircleShape)
+        BottomBarIndicatorShape.DOT -> Modifier.size(config.thickness).clip(CircleShape)
+    }
+
+    val indicatorHeight = when (config.shapeType) {
+        BottomBarIndicatorShape.LINE,
+        BottomBarIndicatorShape.DOT -> config.thickness
+        else -> itemSize - config.padding
+    }
+    val verticalOffset = when (config.shapeType) {
+        BottomBarIndicatorShape.LINE,
+        BottomBarIndicatorShape.DOT -> if (config.position == BottomBarIndicatorPosition.END) {
+            rowHeight - indicatorHeight
+        } else {
+            0.dp
+        }
+        else -> (rowHeight - indicatorHeight) / 2
     }
 
     Box(
         modifier = Modifier
             .offset(
                 x = (animatedOffset.value + (spaceBetween * (selectedIndex.value + 1))),
-                y = 0.dp
+                y = verticalOffset,
             )
             .then(shapeModifier)
             .background(color, RoundedCornerShape(10.dp))

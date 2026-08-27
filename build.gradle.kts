@@ -9,7 +9,7 @@ plugins {
 }
 
 val libraryGroup = "io.github.mejdi14"
-val libraryVersion = providers.gradleProperty("VERSION_NAME").getOrElse("0.4.4-SNAPSHOT")
+val libraryVersion = providers.gradleProperty("VERSION_NAME").getOrElse("0.5.0-SNAPSHOT")
 
 group = libraryGroup
 version = libraryVersion

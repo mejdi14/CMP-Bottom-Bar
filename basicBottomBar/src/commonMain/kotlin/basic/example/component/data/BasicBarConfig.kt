@@ -5,26 +5,39 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import org.mejdi14.core.bottombar.data.BottomBarAdditionalItems
-import org.mejdi14.core.bottombar.data.BottomBarHoverText
-import org.mejdi14.core.bottombar.data.GlobalBottomBarIcon
-import org.mejdi14.core.bottombar.indicator.SelectedIndicatorConfig
+import org.mejdi14.core.bottombar.indicator.BottomBarIndicatorConfig
+import org.mejdi14.core.bottombar.indicator.BottomBarIndicatorShape
 
-data class BasicBarConfig (
+data class BasicBarConfig(
     val itemSize: Dp = 50.dp,
-    val itemsRadius: Dp = 10.dp,
-    val aroundItemsPadding: Dp = 10.dp,
-    val globalBasicIconConfig: GlobalBottomBarIcon? = null,
-    val basicBarPadding: Dp = 5.dp,
-    val backgroundColor: Color = Color(0xFF1c2437),
-    val hoveredBackgroundColor: Color = Color(0xFF293751),
-    val selectedIndicatorConfig: SelectedIndicatorConfig = SelectedIndicatorConfig(),
+    val outerPadding: Dp = 10.dp,
+    val contentPadding: Dp = 5.dp,
+    val itemSpacing: Dp = 10.dp,
+    val iconStyle: BasicBarIconStyle? = null,
+    val containerColor: Color = Color(0xFF18181B),
+    val hoverColor: Color = Color(0xFF27272A),
+    val indicator: BottomBarIndicatorConfig = BottomBarIndicatorConfig(
+        color = Color(0xFF3F3F46),
+    ),
     val shape: Shape = RoundedCornerShape(10.dp),
-    val onSelectItemSizeChangeFriction: Float = 1.3f,
-    val onSelectItemSizeChangeDurationMillis: Int = 300,
-    val hoverCancelDurationMillis: Long = 8,
-    val spaceBetweenItems: Dp = 10.dp,
-    val additionalItems: BottomBarAdditionalItems? = null,
-    val basicBarPosition: BasicBarPosition = BasicBarPosition.HORIZONTAL_BOTTOM,
-    val hoverTextConfig: BottomBarHoverText = BottomBarHoverText()
-)
+    val additionalItems: BasicBarAdditionalItems? = null,
+    val position: BasicBarPosition = BasicBarPosition.HorizontalBottom,
+    val hoverTextStyle: BasicBarHoverTextStyle = BasicBarHoverTextStyle(),
+) {
+    init {
+        require(itemSize > 0.dp) { "itemSize must be greater than zero" }
+        require(outerPadding >= 0.dp) { "outerPadding cannot be negative" }
+        require(contentPadding >= 0.dp) { "contentPadding cannot be negative" }
+        require(itemSpacing >= 0.dp) { "itemSpacing cannot be negative" }
+        if (
+            indicator.shapeType == BottomBarIndicatorShape.LINE ||
+            indicator.shapeType == BottomBarIndicatorShape.DOT
+        ) {
+            require(indicator.thickness > 0.dp) { "indicator thickness must be greater than zero" }
+            require(indicator.padding >= 0.dp) { "indicator padding cannot be negative" }
+            require(indicator.thickness + indicator.padding < itemSize) {
+                "indicator thickness and padding must leave space for the item"
+            }
+        }
+    }
+}

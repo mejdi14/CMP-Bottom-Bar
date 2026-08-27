@@ -41,8 +41,18 @@ jobs:
           :composeApp:compileKotlinDesktop
           --stacktrace
 
+      - name: Run library tests
+        run: >-
+          ./gradlew
+          :coreBottomBar:desktopTest
+          :basicBottomBar:desktopTest
+          --stacktrace
+
       - name: Build Android demo
         run: ./gradlew :composeApp:assembleDebug --stacktrace
+
+      - name: Compile Wasm demo
+        run: ./gradlew :composeApp:compileKotlinWasmJs --stacktrace
 
       - name: Upload Android demo
         uses: actions/upload-artifact@v4

@@ -1,44 +1,24 @@
 package basic.mejdi14.component.data
 
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.mejdi14.core.bottombar.data.BottomBarIcon
 import org.mejdi14.core.bottombar.data.BottomBarItem
-import org.mejdi14.core.bottombar.data.BottomBarTitle
-import org.mejdi14.core.bottombar.listener.ClickActionListener
-import org.mejdi14.core.bottombar.listener.EmptyClickActionListener
-import org.mejdi14.core.bottombar.listener.HoverActionListener
-import org.mejdi14.core.bottombar.listener.emptyHoverActionListener
+import org.mejdi14.core.bottombar.interaction.BottomBarInteraction
+import org.mejdi14.core.bottombar.listener.BottomBarClickListener
+import org.mejdi14.core.bottombar.listener.BottomBarHoverListener
 
 data class BasicItem(
     override val icon: BottomBarIcon,
-    override val contentDescription: String = "bottom bar icon",
     override val size: Dp = 50.dp,
-    override val backgroundColor: Color = Color.Blue,
+    override val backgroundColor: Color = Color.Transparent,
     override val selectedBackgroundColor: Color = backgroundColor,
-    override val itemShape: Shape = RoundedCornerShape(10.dp),
-    override var index: Int = -1,
-    override val disableClickIfAlreadySelected: Boolean = true,
-    val radius: Dp? = null,
-    val onSelectItemSizeChangeFriction: Float? = null,
-    val onSelectItemSizeChangeDurationMillis: Int? = null,
-    val hoverCancelDurationMillis: Long? = null,
-    val itemSeparationSpace: Dp? = null,
-    var itemCoordinatesOffset: Offset? = null,
-    val parentAndSubVerticalSeparationSpace: Dp? = null,
-    val marginForScreenSizeChanges: Float? = null,
-    var parentItemDynamicSize: MutableState<Dp> = mutableStateOf(size),
-    val hoverText: String = "holder",
-    val hoverActionListener: HoverActionListener<BasicItem> = emptyHoverActionListener(),
-    val clickActionListener: ClickActionListener = EmptyClickActionListener
-) : BottomBarItem() {
-    override val withTitleShown: Boolean = false
-    override val OnItemClick: Boolean = false
-    override val title: BottomBarTitle = BottomBarTitle("bottomBarTitle")
-}
+    override val shape: Shape = RoundedCornerShape(10.dp),
+    override val interaction: BottomBarInteraction = BottomBarInteraction(),
+    val hoverText: String? = null,
+    val onClick: BottomBarClickListener<BasicItem> = BottomBarClickListener { _, _ -> },
+    val onHover: BottomBarHoverListener<BasicItem> = BottomBarHoverListener { _, _ -> },
+) : BottomBarItem

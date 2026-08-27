@@ -1,70 +1,83 @@
 package basic.mejdi14.component.bottombar
 
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.dp
 import basic.mejdi14.component.data.BasicBarConfig
-import basic.mejdi14.component.data.BasicBarPosition
+import basic.mejdi14.component.data.BasicBarState
 import basic.mejdi14.component.data.BasicItem
-import org.mejdi14.core.bottombar.data.BottomBarItem
+import basic.mejdi14.component.data.rememberBasicBarState
 
 @Composable
 fun BasicBottomBar(
-    bottomBarItems: List<BasicItem>,
-    basicBarConfig: BasicBarConfig,
-    parentModifier: Modifier,
-    onIconClick: (BottomBarItem) -> Unit
+    items: List<BasicItem>,
+    modifier: Modifier = Modifier,
+    config: BasicBarConfig = BasicBarConfig(),
+    state: BasicBarState = rememberBasicBarState(),
+    onItemClick: (item: BasicItem, index: Int?) -> Unit = { _, _ -> },
 ) {
-    val selectedIndex = remember { mutableStateOf(0) }
-    val hoverSelectedIndex = remember { mutableStateOf(0) }
+    if (items.isEmpty()) return
 
-    val lazyListState = rememberLazyListState()
-
-    var parentWidth = remember { mutableStateOf(0.dp) }
-    var parentHeight = remember { mutableStateOf(0.dp) }
-    val density = LocalDensity.current
-    val isHovered = remember { mutableStateOf(false) }
-    val animatedOffset = animateDpAsState(
-        targetValue = (selectedIndex.value * basicBarConfig.itemSize.value).dp
+    val selectedIndex = normalizedBasicBarIndex(state.selectedIndex, items.size)
+    var hoveredIndex by remember { mutableStateOf<Int?>(null) }
+    val indicatorOffset by animateDpAsState(
+        targetValue = selectedIndex?.let {
+            basicBarItemOffset(it, config.itemSize, config.itemSpacing)
+        } ?: basicBarItemOffset(0, config.itemSize, config.itemSpacing),
+        label = "Basic bottom bar indicator",
     )
-    var spaceBetween = remember { mutableStateOf(0.dp) }
-    when(basicBarConfig.basicBarPosition){
-        BasicBarPosition.HORIZONTAL_BOTTOM, BasicBarPosition.HORIZONTAL_TOP -> {
-            HorizontalBasicBar(
-                parentModifier,
-                spaceBetween,
-                hoverSelectedIndex,
-                bottomBarItems,
-                isHovered,
-                parentWidth,
-                density,
-                animatedOffset,
-                selectedIndex,
-                basicBarConfig,
-                lazyListState,
-                onIconClick
-            )
+
+    val handleHover: (Int, Boolean) -> Unit = { index, isHovered ->
+        if (isHovered) {
+            hoveredIndex = index
+        } else if (hoveredIndex == index) {
+            hoveredIndex = null
         }
-        BasicBarPosition.VERTICAL_LEFT, BasicBarPosition.VERTICAL_RIGHT -> {
-            VerticalBasicBar(
-                parentModifier,
-                spaceBetween,
-                hoverSelectedIndex,
-                bottomBarItems,
-                isHovered,
-                parentHeight,
-                density,
-                animatedOffset,
-                selectedIndex,
-                basicBarConfig,
-                lazyListState,
-                onIconClick
-            )
+        items[index].onHover.onHover(items[index], isHovered)
+    }
+    val handleClick: (Int) -> Unit = { index ->
+        val item = items[index]
+        val currentIndex = normalizedBasicBarIndex(state.selectedIndex, items.size)
+        if (item.interaction.shouldDispatchClick(currentIndex, index)) {
+            state.select(item.interaction.nextSelectedIndex(currentIndex, index))
+            item.onClick.onClick(item, index)
+            onItemClick(item, index)
         }
+    }
+    val handleAdditionalClick: (BasicItem) -> Unit = { item ->
+        if (item.interaction.enabled) {
+            item.onClick.onClick(item, null)
+            onItemClick(item, null)
+        }
+    }
+
+    if (config.position.isHorizontal) {
+        HorizontalBasicBar(
+            items = items,
+            selectedIndex = selectedIndex,
+            hoveredIndex = hoveredIndex,
+            indicatorOffset = indicatorOffset,
+            config = config,
+            modifier = modifier,
+            onHover = handleHover,
+            onItemClick = handleClick,
+            onAdditionalItemClick = handleAdditionalClick,
+        )
+    } else {
+        VerticalBasicBar(
+            items = items,
+            selectedIndex = selectedIndex,
+            hoveredIndex = hoveredIndex,
+            indicatorOffset = indicatorOffset,
+            config = config,
+            modifier = modifier,
+            onHover = handleHover,
+            onItemClick = handleClick,
+            onAdditionalItemClick = handleAdditionalClick,
+        )
     }
 }
