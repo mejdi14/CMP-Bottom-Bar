@@ -3,7 +3,6 @@ package org.mejdi14.project.data
 import basic.mejdi14.component.data.BasicItem
 import kmp_bottom_bar.composeapp.generated.resources.Res
 import kmp_bottom_bar.composeapp.generated.resources.calendar_day
-import kmp_bottom_bar.composeapp.generated.resources.home_black
 import kmp_bottom_bar.composeapp.generated.resources.home_line
 import kmp_bottom_bar.composeapp.generated.resources.menu_meatballs
 import kmp_bottom_bar.composeapp.generated.resources.open_reader
@@ -36,27 +35,5 @@ val basicDemoItems =
         BasicItem(
             BottomBarIcon(Res.drawable.the_plus_icon, contentDescription = "Add"),
             hoverText = "Add",
-        ),
-    )
-
-val bottomRoundItems =
-    listOf(
-        BasicItem(
-            BottomBarIcon(
-                Res.drawable.home_black,
-                contentDescription = "Home",
-            ),
-        ),
-        BasicItem(
-            BottomBarIcon(
-                Res.drawable.papers,
-                contentDescription = "Papers",
-            ),
-        ),
-        BasicItem(
-            BottomBarIcon(
-                Res.drawable.menu_meatballs,
-                contentDescription = "Menu",
-            ),
         ),
     )
