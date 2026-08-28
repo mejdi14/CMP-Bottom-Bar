@@ -26,7 +26,7 @@ data class TinyGlideItem(
         dispatchClickWhenSelected = true,
     ),
     val radius: Dp = 10.dp,
-    val onSelectItemSizeChangeFriction: Float = 1f,
+    val onSelectItemSizeChangeFriction: Float = 1.2f,
     val onSelectItemSizeChangeDurationMillis: Int = 300,
     val hoverCancelDurationMillis: Long = 220,
     val itemSeparationSpace: Dp = 10.dp,

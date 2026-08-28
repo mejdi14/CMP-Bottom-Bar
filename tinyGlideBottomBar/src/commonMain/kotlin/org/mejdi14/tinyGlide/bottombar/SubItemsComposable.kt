@@ -1,7 +1,7 @@
 package org.mejdi14.tinyGlide.bottombar
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -23,6 +24,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
@@ -33,6 +36,7 @@ import org.mejdi14.tinyGlide.animation.getEnterTransition
 import org.mejdi14.tinyGlide.animation.getExitTransition
 import org.mejdi14.tinyGlide.data.TinyGlideItem
 import org.mejdi14.tinyGlide.enum.AnimationType
+import org.mejdi14.tinyGlide.enum.TinyGlideOrientation
 import org.mejdi14.tinyGlide.listeners.TinyGlideActionListener
 import org.jetbrains.compose.resources.painterResource
 
@@ -46,24 +50,45 @@ internal fun SubItemsComposable(
     isHovering: MutableState<Boolean>,
     scope: CoroutineScope,
     tinyGlideActionListener: TinyGlideActionListener,
+    orientation: TinyGlideOrientation,
     animationType: AnimationType = AnimationType.SCALE,
 ) {
     val currentItem = selectedItem.value
     val subItems = currentItem?.subTinyGlideItems.orEmpty()
     val density = LocalDensity.current
-    val groupWidth = subItems.fold(0.dp) { width, item ->
-        width + item.size + (item.itemSeparationSpace * 2)
-    }
-    val groupHeight = subItems.maxOfOrNull { it.size } ?: 0.dp
-    val parentCenterX = with(density) { (selectedParentAnchor?.x ?: 0f).toDp() }
-    val parentTop = with(density) { (selectedParentAnchor?.y ?: 0f).toDp() }
+    val groupWidth = when (orientation) {
+        TinyGlideOrientation.HORIZONTAL -> subItems.fold(0.dp) { width, item ->
+            width + item.size + (item.itemSeparationSpace * 2)
+        }
 
-    Column(
+        TinyGlideOrientation.VERTICAL -> subItems.maxOfOrNull { it.size } ?: 0.dp
+    }
+    val groupHeight = when (orientation) {
+        TinyGlideOrientation.HORIZONTAL -> subItems.maxOfOrNull { it.size } ?: 0.dp
+        TinyGlideOrientation.VERTICAL -> subItems.fold(0.dp) { height, item ->
+            height + item.size + (item.itemSeparationSpace * 2)
+        }
+    }
+    val parentAnchorX = with(density) { (selectedParentAnchor?.x ?: 0f).toDp() }
+    val parentAnchorY = with(density) { (selectedParentAnchor?.y ?: 0f).toDp() }
+    val groupOffsetX = when (orientation) {
+        TinyGlideOrientation.HORIZONTAL -> parentAnchorX - (groupWidth / 2)
+        TinyGlideOrientation.VERTICAL ->
+            parentAnchorX - (currentItem?.parentAndSubVerticalSeparationSpace ?: 0.dp) - groupWidth
+    }
+    val groupOffsetY = when (orientation) {
+        TinyGlideOrientation.HORIZONTAL ->
+            parentAnchorY - (currentItem?.parentAndSubVerticalSeparationSpace ?: 0.dp) - groupHeight
+
+        TinyGlideOrientation.VERTICAL -> parentAnchorY - (groupHeight / 2)
+    }
+
+    Box(
         modifier = if (currentItem != null && selectedParentAnchor != null) {
             Modifier
                 .offset(
-                    x = parentCenterX - (groupWidth / 2),
-                    y = parentTop - currentItem.parentAndSubVerticalSeparationSpace - groupHeight,
+                    x = groupOffsetX,
+                    y = groupOffsetY,
                 )
                 .hoverEffect { onHover ->
                     isHovering.value = onHover
@@ -95,46 +120,70 @@ internal fun SubItemsComposable(
             enter = getEnterTransition(animationType),
             exit = getExitTransition(animationType),
         ) {
-            Row(verticalAlignment = Alignment.Bottom) {
-                subItems.forEachIndexed { childIndex, item ->
-                    var isHovered by remember(item) { mutableStateOf(false) }
-                    val animatedChildSize by animateDpAsState(
-                        targetValue = if (isHovered) {
-                            item.size * item.onSelectItemSizeChangeFriction
-                        } else {
-                            item.size
-                        },
-                        animationSpec = tween(item.onSelectItemSizeChangeDurationMillis),
-                    )
-                    val interactionSource = remember(item) { MutableInteractionSource() }
-                    Spacer(Modifier.width(item.itemSeparationSpace))
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier
-                            .size(animatedChildSize)
-                            .background(item.backgroundColor, item.shape)
-                            .hoverEffect { isHovered = it }
-                            .clickable(
-                                interactionSource = interactionSource,
-                                indication = null,
-                            ) {
-                            item.onClick.onClick(item, childIndex)
-                            tinyGlideActionListener.onSubItemClickListener(
-                                item,
-                                Pair(selectedIndex.value ?: 0, childIndex),
-                            )
-                        },
-                    ) {
-                        Icon(
-                            painter = painterResource(item.icon.selectedResource),
-                            contentDescription = item.icon.contentDescription,
-                            tint = item.icon.selectedTint,
-                            modifier = item.icon.modifier.then(
-                                Modifier.size(animatedChildSize - item.icon.sizeReduction),
-                            ),
+            val childItem: @Composable (Int, TinyGlideItem) -> Unit = { childIndex, item ->
+                var isHovered by remember(item) { mutableStateOf(false) }
+                val animatedChildScale by animateFloatAsState(
+                    targetValue = if (isHovered) {
+                        item.onSelectItemSizeChangeFriction
+                    } else {
+                        1f
+                    },
+                    animationSpec = tween(item.onSelectItemSizeChangeDurationMillis),
+                )
+                val interactionSource = remember(item) { MutableInteractionSource() }
+                val spacingModifier = when (orientation) {
+                    TinyGlideOrientation.HORIZONTAL -> Modifier.width(item.itemSeparationSpace)
+                    TinyGlideOrientation.VERTICAL -> Modifier.height(item.itemSeparationSpace)
+                }
+                val transformOrigin = when (orientation) {
+                    TinyGlideOrientation.HORIZONTAL -> TransformOrigin(0.5f, 1f)
+                    TinyGlideOrientation.VERTICAL -> TransformOrigin(1f, 0.5f)
+                }
+                Spacer(spacingModifier)
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .size(item.size)
+                        .graphicsLayer {
+                            scaleX = animatedChildScale
+                            scaleY = animatedChildScale
+                            this.transformOrigin = transformOrigin
+                        }
+                        .background(item.backgroundColor, item.shape)
+                        .hoverEffect { isHovered = it }
+                        .clickable(
+                            interactionSource = interactionSource,
+                            indication = null,
+                        ) {
+                        item.onClick.onClick(item, childIndex)
+                        tinyGlideActionListener.onSubItemClickListener(
+                            item,
+                            Pair(selectedIndex.value ?: 0, childIndex),
                         )
+                    },
+                ) {
+                    Icon(
+                        painter = painterResource(item.icon.selectedResource),
+                        contentDescription = item.icon.contentDescription,
+                        tint = item.icon.selectedTint,
+                        modifier = item.icon.modifier.then(
+                            Modifier.size(item.size - item.icon.sizeReduction),
+                        ),
+                    )
+                }
+                Spacer(spacingModifier)
+            }
+            when (orientation) {
+                TinyGlideOrientation.HORIZONTAL -> Row(verticalAlignment = Alignment.Bottom) {
+                    subItems.forEachIndexed { childIndex, item ->
+                        childItem(childIndex, item)
                     }
-                    Spacer(Modifier.width(item.itemSeparationSpace))
+                }
+
+                TinyGlideOrientation.VERTICAL -> Column(horizontalAlignment = Alignment.End) {
+                    subItems.forEachIndexed { childIndex, item ->
+                        childItem(childIndex, item)
+                    }
                 }
             }
         }

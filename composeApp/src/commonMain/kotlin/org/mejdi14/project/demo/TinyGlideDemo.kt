@@ -1,5 +1,7 @@
 package org.mejdi14.project.demo
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -31,6 +33,8 @@ import kmp_bottom_bar.composeapp.generated.resources.icon9
 import org.mejdi14.core.bottombar.data.BottomBarIcon
 import org.mejdi14.tinyGlide.bottombar.TinyGlideBottomBar
 import org.mejdi14.tinyGlide.data.TinyGlideItem
+import org.mejdi14.tinyGlide.data.rememberTinyGlideState
+import org.mejdi14.tinyGlide.enum.TinyGlideOrientation
 import org.mejdi14.tinyGlide.listeners.TinyGlideActionListener
 import org.jetbrains.compose.resources.DrawableResource
 
@@ -39,9 +43,12 @@ fun TinyGlideDemo(modifier: Modifier = Modifier) {
     var itemSize by remember { mutableStateOf(54f) }
     var itemSpacing by remember { mutableStateOf(10f) }
     var childSpacing by remember { mutableStateOf(8f) }
-    var selectedScale by remember { mutableStateOf(1f) }
+    var selectedScale by remember { mutableStateOf(1.2f) }
     var itemCount by remember { mutableStateOf(10) }
     var palette by remember { mutableStateOf("Storybook") }
+    var orientation by remember { mutableStateOf(TinyGlideOrientation.HORIZONTAL) }
+    val tinyGlideState = rememberTinyGlideState()
+    val backgroundInteractionSource = remember { MutableInteractionSource() }
 
     val items = remember(itemSize, itemSpacing, childSpacing, selectedScale, itemCount, palette) {
         tinyGlideDemoItems(
@@ -52,13 +59,38 @@ fun TinyGlideDemo(modifier: Modifier = Modifier) {
             storybookPalette = palette == "Storybook",
         ).take(itemCount)
     }
-
-    Box(modifier.fillMaxSize()) {
+    Box(
+        modifier
+            .fillMaxSize()
+            .clickable(
+                interactionSource = backgroundInteractionSource,
+                indication = null,
+                onClick = tinyGlideState::dismiss,
+            ),
+    ) {
         PlaygroundPanel(
             modifier = Modifier
                 .align(Alignment.Center)
-                .padding(bottom = 112.dp),
+                .padding(
+                    end = if (orientation == TinyGlideOrientation.VERTICAL) 96.dp else 0.dp,
+                    bottom = if (orientation == TinyGlideOrientation.HORIZONTAL) 112.dp else 0.dp,
+                ),
         ) {
+            PlaygroundOptions(
+                label = "Orientation",
+                options = listOf("Horizontal", "Vertical"),
+                selected = when (orientation) {
+                    TinyGlideOrientation.HORIZONTAL -> "Horizontal"
+                    TinyGlideOrientation.VERTICAL -> "Vertical"
+                },
+                onSelected = { selectedOrientation ->
+                    tinyGlideState.dismiss()
+                    orientation = when (selectedOrientation) {
+                        "Vertical" -> TinyGlideOrientation.VERTICAL
+                        else -> TinyGlideOrientation.HORIZONTAL
+                    }
+                },
+            )
             PlaygroundSlider(
                 label = "Item size",
                 value = itemSize,
@@ -100,12 +132,19 @@ fun TinyGlideDemo(modifier: Modifier = Modifier) {
 
         TinyGlideBottomBar(
             bottomBarItems = items,
-            parentModifier = Modifier.align(Alignment.BottomCenter),
+            parentModifier = Modifier.align(
+                when (orientation) {
+                    TinyGlideOrientation.HORIZONTAL -> Alignment.BottomCenter
+                    TinyGlideOrientation.VERTICAL -> Alignment.CenterEnd
+                },
+            ),
             tinyGlideActionListener = object : TinyGlideActionListener {
                 override fun onClick(item: TinyGlideItem, index: Int?) = Unit
 
                 override fun onSubItemClickListener(item: TinyGlideItem, index: Pair<Int, Int>) = Unit
             },
+            state = tinyGlideState,
+            orientation = orientation,
         )
     }
 }
