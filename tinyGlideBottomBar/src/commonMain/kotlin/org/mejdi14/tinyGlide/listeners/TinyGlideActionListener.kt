@@ -15,6 +15,10 @@ interface TinyGlideActionListener : BottomBarClickListener<TinyGlideItem> {
 
     fun onHoverExit(item: TinyGlideItem, position: TinyGlideItemPosition) = Unit
 
+    fun onFocus(item: TinyGlideItem, position: TinyGlideItemPosition) = Unit
+
+    fun onFocusExit(item: TinyGlideItem, position: TinyGlideItemPosition) = Unit
+
     fun onExpand(item: TinyGlideItem, index: Int) = Unit
 
     fun onCollapse(item: TinyGlideItem, index: Int) = Unit

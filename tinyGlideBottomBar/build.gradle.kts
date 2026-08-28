@@ -1,5 +1,6 @@
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
+import org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -12,6 +13,9 @@ plugins {
 }
 
 kotlin {
+    @OptIn(ExperimentalAbiValidation::class)
+    abiValidation {}
+
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
         browser()
@@ -38,6 +42,9 @@ kotlin {
             implementation(libs.compose.ui)
             implementation(libs.compose.resources)
             api(project(":coreBottomBar"))
+        }
+        commonTest.dependencies {
+            implementation(kotlin("test"))
         }
     }
 }

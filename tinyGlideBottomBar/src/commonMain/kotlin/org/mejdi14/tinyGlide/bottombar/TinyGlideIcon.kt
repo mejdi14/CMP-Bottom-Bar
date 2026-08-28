@@ -3,21 +3,19 @@ package org.mejdi14.tinyGlide.bottombar
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import org.mejdi14.tinyGlide.data.TinyGlideItem
-import org.mejdi14.tinyGlide.data.isSelectedItem
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
 internal fun TinyGlideIcon(
     item: TinyGlideItem,
-    selectedItem: MutableState<TinyGlideItem?>,
+    isActive: Boolean,
     modifier: Modifier,
     displaySize: Dp = item.size,
 ) {
-    when (item.isSelectedItem(selectedItem.value)) {
+    when (isActive) {
         true -> {
             Icon(
                 painter = painterResource(item.icon.selectedResource),

@@ -24,25 +24,16 @@ internal fun handleHoverAction(
     if (onHover) {
         hoverExitJob.value?.cancel()
         hoverExitJob.value = null
-        if (state.expandedItem !== item) {
-            state.expandedItem?.parentItemDynamicSize?.value = state.expandedItem?.size ?: item.size
-        }
         state.updateHoveredItem(item, TinyGlideItemPosition(parentIndex = itemIndex))
         state.updateExpandedItem(item, itemIndex)
-        item.parentItemDynamicSize.value = item.size * item.onSelectItemSizeChangeFriction
     } else {
-        if (state.hoveredItem === item) {
+        if (state.hoveredItem?.key == item.key) {
             state.updateHoveredItem(null, null)
         }
         hoverExitJob.value = scope.launch {
             delay(item.hoverCancelDurationMillis)
-            if (!isHovering.value) {
-                item.parentItemDynamicSize.value = item.size
+            if (!isHovering.value && state.focusedItem == null) {
                 val fallback = selectedItemAfterHover()
-                fallback?.first?.let { selected ->
-                    selected.parentItemDynamicSize.value =
-                        selected.size * selected.onSelectItemSizeChangeFriction
-                }
                 state.updateExpandedItem(fallback?.first, fallback?.second)
             }
         }

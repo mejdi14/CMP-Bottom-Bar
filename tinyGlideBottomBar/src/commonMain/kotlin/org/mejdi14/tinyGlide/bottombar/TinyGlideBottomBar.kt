@@ -4,12 +4,14 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -21,6 +23,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
@@ -28,17 +31,41 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.mejdi14.tinyGlide.data.TinyGlideItem
+import org.mejdi14.tinyGlide.data.TinyGlideItemPosition
+import org.mejdi14.tinyGlide.data.TinyGlideItemVisualState
+import org.mejdi14.tinyGlide.data.TinyGlideChildrenLayout
 import org.mejdi14.tinyGlide.data.TinyGlideState
-import org.mejdi14.tinyGlide.data.isSelectedItem
 import org.mejdi14.tinyGlide.data.rememberTinyGlideState
+import org.mejdi14.tinyGlide.enum.TinyGlideChildrenPlacement
 import org.mejdi14.tinyGlide.enum.TinyGlideOrientation
+import org.mejdi14.tinyGlide.enum.TinyGlideVerticalSide
 import org.mejdi14.tinyGlide.helper.handleHoverAction
 import org.mejdi14.tinyGlide.listeners.TinyGlideActionListener
 
@@ -49,19 +76,37 @@ fun TinyGlideBottomBar(
     tinyGlideActionListener: TinyGlideActionListener,
     state: TinyGlideState = rememberTinyGlideState(),
     orientation: TinyGlideOrientation = TinyGlideOrientation.HORIZONTAL,
+    verticalSide: TinyGlideVerticalSide = TinyGlideVerticalSide.END,
+    childrenPlacement: TinyGlideChildrenPlacement = TinyGlideChildrenPlacement.AUTO,
+    edgePadding: Dp = 5.dp,
+    childrenLayout: TinyGlideChildrenLayout = TinyGlideChildrenLayout(),
+    customChildrenContent: TinyGlideCustomChildrenContent? = null,
+    showCustomChildrenContent: (TinyGlideItem) -> Boolean = { true },
+    parentContent: TinyGlideItemContent = { item, _, visualState ->
+        TinyGlideDefaultParentContent(item, visualState)
+    },
+    childContent: TinyGlideItemContent = { item, _, visualState ->
+        TinyGlideDefaultChildContent(item, visualState)
+    },
 ) {
     val selectedIndex = state.selectedIndexState
-    val expandedItem = state.expandedItemState
     val lazyListState = rememberLazyListState()
-    val itemAnchors = remember(bottomBarItems, orientation) { mutableStateMapOf<Int, Offset>() }
+    val itemBounds = remember(orientation) { mutableStateMapOf<String, Rect>() }
     val containerPosition = remember { mutableStateOf(Offset.Zero) }
     val containerSize = remember { mutableStateOf(IntSize.Zero) }
     val hoverExitJob = remember { mutableStateOf<Job?>(null) }
     val scope = rememberCoroutineScope()
     val isHovering = remember { mutableStateOf(false) }
-    val orientationModifier = when (orientation) {
-        TinyGlideOrientation.HORIZONTAL -> Modifier.fillMaxWidth()
-        TinyGlideOrientation.VERTICAL -> Modifier.fillMaxHeight()
+    val focusRequesters = remember(bottomBarItems.map(TinyGlideItem::key)) {
+        bottomBarItems.associate { it.key to FocusRequester() }
+    }
+    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+    val orientationModifier = Modifier.fillMaxSize()
+
+    SideEffect {
+        state.attach(bottomBarItems) { index ->
+            lazyListState.animateScrollToItem(index)
+        }
     }
     DisposableEffect(state, tinyGlideActionListener) {
         state.actionListener = tinyGlideActionListener
@@ -75,47 +120,87 @@ fun TinyGlideBottomBar(
     Box(
         parentModifier
             .then(orientationModifier)
-            .padding(5.dp)
+            .padding(edgePadding)
             .onGloballyPositioned { coordinates ->
                 containerPosition.value = coordinates.positionInRoot()
                 containerSize.value = coordinates.size
             },
     ) {
         val parentItem: @Composable (Int, TinyGlideItem) -> Unit = { index, item ->
+            val position = TinyGlideItemPosition(parentIndex = index)
+            val isSelected = state.selectedKey == item.key
+            val isExpanded = state.expandedKey == item.key
+            val isHovered = state.hoveredItem?.key == item.key &&
+                state.hoveredPosition == position
+            val isFocused = state.focusedItem?.key == item.key &&
+                state.focusedPosition == position
+            val usesHoverAnimation = isHovered || isFocused || (isExpanded && !isSelected)
+            val targetScale = when {
+                usesHoverAnimation -> item.animation.parentHoverScale
+                isSelected -> item.animation.parentSelectedScale
+                else -> 1f
+            }
             val animatedParentSize by animateDpAsState(
-                targetValue = item.parentItemDynamicSize.value,
-                animationSpec = tween(item.onSelectItemSizeChangeDurationMillis),
+                targetValue = item.size * targetScale,
+                animationSpec = tween(
+                    durationMillis = if (usesHoverAnimation) {
+                        item.animation.parentHoverDurationMillis
+                    } else {
+                        item.animation.parentSelectionDurationMillis
+                    },
+                    easing = if (usesHoverAnimation) {
+                        item.animation.parentHoverEasing
+                    } else {
+                        item.animation.parentSelectionEasing
+                    },
+                ),
             )
             val spacingModifier = when (orientation) {
                 TinyGlideOrientation.HORIZONTAL -> Modifier.width(item.itemSeparationSpace)
                 TinyGlideOrientation.VERTICAL -> Modifier.height(item.itemSeparationSpace)
             }
+            val interactionSource = remember(item.key) { MutableInteractionSource() }
+            val activate = {
+                if (item.interaction.shouldDispatchClick(selectedIndex.value, index)) {
+                    val nextIndex = item.interaction.nextSelectedIndex(selectedIndex.value, index)
+                    val nextSelectedItem = nextIndex?.let(bottomBarItems::getOrNull)
+                    item.onClick.onClick(item, index)
+                    tinyGlideActionListener.onClick(item, index)
+                    state.updateSelection(nextSelectedItem, nextIndex)
+                    state.updateExpandedItem(nextSelectedItem, nextIndex)
+                }
+            }
+            val moveFocus = { offset: Int ->
+                val nextIndex = (index + offset).coerceIn(bottomBarItems.indices)
+                if (nextIndex != index) {
+                    scope.launch {
+                        lazyListState.animateScrollToItem(nextIndex)
+                        focusRequesters[bottomBarItems[nextIndex].key]?.requestFocus()
+                    }
+                    true
+                } else {
+                    false
+                }
+            }
             Spacer(spacingModifier)
-            val interactionSource = remember(item) { MutableInteractionSource() }
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
                     .size(animatedParentSize)
                     .onGloballyPositioned { layoutCoordinates ->
-                        val position = layoutCoordinates.positionInRoot()
-                        val anchor = when (orientation) {
-                            TinyGlideOrientation.HORIZONTAL -> Offset(
-                                x = position.x + (layoutCoordinates.size.width / 2f),
-                                y = position.y,
-                            )
-
-                            TinyGlideOrientation.VERTICAL -> Offset(
-                                x = position.x,
-                                y = position.y + (layoutCoordinates.size.height / 2f),
-                            )
+                        val rootPosition = layoutCoordinates.positionInRoot()
+                        val bounds = Rect(
+                            left = rootPosition.x,
+                            top = rootPosition.y,
+                            right = rootPosition.x + layoutCoordinates.size.width,
+                            bottom = rootPosition.y + layoutCoordinates.size.height,
+                        )
+                        if (itemBounds[item.key] != bounds) {
+                            itemBounds[item.key] = bounds
                         }
-                        if (itemAnchors[index] != anchor) {
-                            itemAnchors[index] = anchor
-                        }
-                        item.itemCoordinatesOffset = position
                     }
                     .background(
-                        color = if (item.isSelectedItem(expandedItem.value)) {
+                        color = if (isExpanded) {
                             item.selectedBackgroundColor
                         } else {
                             item.backgroundColor
@@ -132,45 +217,94 @@ fun TinyGlideBottomBar(
                             hoverExitJob = hoverExitJob,
                             scope = scope,
                             selectedItemAfterHover = {
-                                selectedIndex.value?.let { selected ->
-                                    bottomBarItems.getOrNull(selected)?.let { it to selected }
+                                state.selectedItem?.let { selected ->
+                                    state.selectedIndex?.let { selected to it }
                                 }
                             },
                         )
                     }
+                    .focusRequester(focusRequesters.getValue(item.key))
+                    .onFocusChanged { focusState ->
+                        if (focusState.isFocused) {
+                            hoverExitJob.value?.cancel()
+                            state.updateFocusedItem(item, position)
+                            state.updateExpandedItem(item, index)
+                        } else if (
+                            state.focusedItem?.key == item.key && state.focusedPosition == position
+                        ) {
+                            state.updateFocusedItem(null, null)
+                            hoverExitJob.value = scope.launch {
+                                delay(item.hoverCancelDurationMillis)
+                                if (state.focusedItem == null && state.hoveredItem == null) {
+                                    state.updateExpandedItem(
+                                        state.selectedItem,
+                                        state.selectedIndex,
+                                    )
+                                }
+                            }
+                        }
+                    }
+                    .onPreviewKeyEvent { event ->
+                        if (event.type != KeyEventType.KeyDown) {
+                            false
+                        } else {
+                            when (event.key) {
+                                Key.Enter, Key.NumPadEnter, Key.Spacebar -> {
+                                    activate()
+                                    true
+                                }
+
+                                Key.Escape -> {
+                                    state.dismiss()
+                                    true
+                                }
+
+                                Key.DirectionLeft -> orientation == TinyGlideOrientation.HORIZONTAL &&
+                                    moveFocus(if (isRtl) 1 else -1)
+
+                                Key.DirectionRight -> orientation == TinyGlideOrientation.HORIZONTAL &&
+                                    moveFocus(if (isRtl) -1 else 1)
+
+                                Key.DirectionUp -> orientation == TinyGlideOrientation.VERTICAL &&
+                                    moveFocus(-1)
+
+                                Key.DirectionDown -> orientation == TinyGlideOrientation.VERTICAL &&
+                                    moveFocus(1)
+
+                                else -> false
+                            }
+                        }
+                    }
+                    .semantics(mergeDescendants = true) {
+                        item.icon.contentDescription?.let { contentDescription = it }
+                        role = Role.Button
+                        selected = isSelected
+                        stateDescription = when {
+                            isSelected && isExpanded -> "Selected and expanded"
+
+                            isSelected -> "Selected"
+                            isExpanded -> "Expanded"
+                            else -> "Collapsed"
+                        }
+                    }
                     .clickable(
                         interactionSource = interactionSource,
                         indication = null,
-                    ) {
-                        if (item.interaction.shouldDispatchClick(selectedIndex.value, index)) {
-                            val previouslyExpandedItem = expandedItem.value
-                            val nextIndex =
-                                item.interaction.nextSelectedIndex(selectedIndex.value, index)
-                            val nextSelectedItem = nextIndex?.let(bottomBarItems::getOrNull)
-                            item.onClick.onClick(item, index)
-                            tinyGlideActionListener.onClick(item, index)
-                            state.updateSelection(nextSelectedItem, nextIndex)
-                            previouslyExpandedItem
-                                ?.takeIf { it !== item }
-                                ?.let { previousItem ->
-                                    previousItem.parentItemDynamicSize.value = previousItem.size
-                                }
-                            if (nextIndex == null) {
-                                item.parentItemDynamicSize.value = item.size
-                                state.updateExpandedItem(null, null)
-                            } else {
-                                item.parentItemDynamicSize.value =
-                                    item.size * item.onSelectItemSizeChangeFriction
-                                state.updateExpandedItem(item, index)
-                            }
-                        }
-                    },
+                        role = Role.Button,
+                        onClick = activate,
+                    )
+                    .focusable(interactionSource = interactionSource),
             ) {
-                TinyGlideIcon(
-                    item = item,
-                    selectedItem = expandedItem,
-                    modifier = Modifier,
-                    displaySize = animatedParentSize,
+                parentContent(
+                    item,
+                    position,
+                    TinyGlideItemVisualState(
+                        isSelected = isSelected,
+                        isExpanded = isExpanded,
+                        isHovered = isHovered,
+                        isFocused = isFocused,
+                        displaySize = animatedParentSize,
+                    ),
                 )
             }
             Spacer(spacingModifier)
@@ -182,10 +316,12 @@ fun TinyGlideBottomBar(
                 contentPadding = PaddingValues(horizontal = 12.dp),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.Bottom,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter),
                 userScrollEnabled = true,
             ) {
-                itemsIndexed(bottomBarItems) { index, item ->
+                itemsIndexed(bottomBarItems, key = { _, item -> item.key }) { index, item ->
                     parentItem(index, item)
                 }
             }
@@ -194,39 +330,52 @@ fun TinyGlideBottomBar(
                 state = lazyListState,
                 contentPadding = PaddingValues(vertical = 12.dp),
                 verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.End,
-                modifier = Modifier.fillMaxHeight(),
+                horizontalAlignment = when (verticalSide) {
+                    TinyGlideVerticalSide.START -> Alignment.Start
+                    TinyGlideVerticalSide.END -> Alignment.End
+                },
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .align(
+                        when (verticalSide) {
+                            TinyGlideVerticalSide.START -> Alignment.CenterStart
+                            TinyGlideVerticalSide.END -> Alignment.CenterEnd
+                        },
+                    ),
                 userScrollEnabled = true,
             ) {
-                itemsIndexed(bottomBarItems) { index, item ->
+                itemsIndexed(bottomBarItems, key = { _, item -> item.key }) { index, item ->
                     parentItem(index, item)
                 }
             }
         }
 
-        val selectedParentIndex = expandedItem.value?.let { activeItem ->
-            bottomBarItems.indexOfFirst { it === activeItem }.takeIf { it >= 0 }
-        }
-        val selectedParentAnchor = selectedParentIndex
-            ?.let(itemAnchors::get)
-            ?.let { rootAnchor ->
-                Offset(
-                    x = rootAnchor.x - containerPosition.value.x,
-                    y = rootAnchor.y - containerPosition.value.y,
+        val selectedParentBounds = state.expandedKey
+            ?.let(itemBounds::get)
+            ?.let { rootBounds ->
+                Rect(
+                    left = rootBounds.left - containerPosition.value.x,
+                    top = rootBounds.top - containerPosition.value.y,
+                    right = rootBounds.right - containerPosition.value.x,
+                    bottom = rootBounds.bottom - containerPosition.value.y,
                 )
             }
         SubItemsComposable(
             state = state,
-            selectedParentAnchor = selectedParentAnchor,
-            selectedItemAfterHover = selectedIndex.value?.let { selected ->
-                bottomBarItems.getOrNull(selected)?.let { it to selected }
-            },
+            selectedParentBounds = selectedParentBounds,
             hoverExitJob = hoverExitJob,
             isHovering = isHovering,
             scope = scope,
             tinyGlideActionListener = tinyGlideActionListener,
             orientation = orientation,
+            verticalSide = verticalSide,
+            childrenPlacement = childrenPlacement,
+            edgePadding = edgePadding,
             containerSize = containerSize.value,
+            childrenLayout = childrenLayout,
+            customChildrenContent = customChildrenContent,
+            showCustomChildrenContent = showCustomChildrenContent,
+            childContent = childContent,
         )
     }
 }
