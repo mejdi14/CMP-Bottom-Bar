@@ -5,6 +5,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
 import org.mejdi14.tinyGlide.data.TinyGlideItem
 import org.mejdi14.tinyGlide.data.isSelectedItem
 import org.jetbrains.compose.resources.painterResource
@@ -13,7 +14,8 @@ import org.jetbrains.compose.resources.painterResource
 internal fun TinyGlideIcon(
     item: TinyGlideItem,
     selectedItem: MutableState<TinyGlideItem?>,
-    modifier: Modifier
+    modifier: Modifier,
+    displaySize: Dp = item.size,
 ) {
     when (item.isSelectedItem(selectedItem.value)) {
         true -> {
@@ -21,7 +23,7 @@ internal fun TinyGlideIcon(
                 painter = painterResource(item.icon.selectedResource),
                 contentDescription = item.icon.contentDescription,
                 tint = item.icon.selectedTint,
-                modifier = item.icon.modifier.then(modifier.size(item.size - item.icon.sizeReduction))
+                modifier = item.icon.modifier.then(modifier.size(displaySize - item.icon.sizeReduction))
             )
         }
 
@@ -30,7 +32,7 @@ internal fun TinyGlideIcon(
                 painter = painterResource(item.icon.resource),
                 contentDescription = item.icon.contentDescription,
                 tint = item.icon.tint,
-                modifier = item.icon.modifier.then(modifier.size(item.size - item.icon.sizeReduction))
+                modifier = item.icon.modifier.then(modifier.size(displaySize - item.icon.sizeReduction))
             )
         }
     }
