@@ -27,6 +27,8 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -51,6 +53,7 @@ internal fun SubItemsComposable(
     scope: CoroutineScope,
     tinyGlideActionListener: TinyGlideActionListener,
     orientation: TinyGlideOrientation,
+    containerSize: IntSize,
     animationType: AnimationType = AnimationType.SCALE,
 ) {
     val currentItem = selectedItem.value
@@ -71,8 +74,17 @@ internal fun SubItemsComposable(
     }
     val parentAnchorX = with(density) { (selectedParentAnchor?.x ?: 0f).toDp() }
     val parentAnchorY = with(density) { (selectedParentAnchor?.y ?: 0f).toDp() }
+    val containerWidth = with(density) { containerSize.width.toDp() }
+    val containerHeight = with(density) { containerSize.height.toDp() }
+    val edgePadding = 5.dp
     val groupOffsetX = when (orientation) {
-        TinyGlideOrientation.HORIZONTAL -> parentAnchorX - (groupWidth / 2)
+        TinyGlideOrientation.HORIZONTAL -> keepGroupInsideContainer(
+            preferredOffset = parentAnchorX - (groupWidth / 2),
+            groupSize = groupWidth,
+            containerSize = containerWidth,
+            edgePadding = edgePadding,
+        )
+
         TinyGlideOrientation.VERTICAL ->
             parentAnchorX - (currentItem?.parentAndSubVerticalSeparationSpace ?: 0.dp) - groupWidth
     }
@@ -80,7 +92,12 @@ internal fun SubItemsComposable(
         TinyGlideOrientation.HORIZONTAL ->
             parentAnchorY - (currentItem?.parentAndSubVerticalSeparationSpace ?: 0.dp) - groupHeight
 
-        TinyGlideOrientation.VERTICAL -> parentAnchorY - (groupHeight / 2)
+        TinyGlideOrientation.VERTICAL -> keepGroupInsideContainer(
+            preferredOffset = parentAnchorY - (groupHeight / 2),
+            groupSize = groupHeight,
+            containerSize = containerHeight,
+            edgePadding = edgePadding,
+        )
     }
 
     Box(
@@ -187,5 +204,19 @@ internal fun SubItemsComposable(
                 }
             }
         }
+    }
+}
+
+private fun keepGroupInsideContainer(
+    preferredOffset: Dp,
+    groupSize: Dp,
+    containerSize: Dp,
+    edgePadding: Dp,
+): Dp {
+    val maximumOffset = containerSize - groupSize - edgePadding
+    return if (maximumOffset >= edgePadding) {
+        preferredOffset.coerceIn(edgePadding, maximumOffset)
+    } else {
+        ((containerSize - groupSize) / 2).coerceAtLeast(0.dp)
     }
 }

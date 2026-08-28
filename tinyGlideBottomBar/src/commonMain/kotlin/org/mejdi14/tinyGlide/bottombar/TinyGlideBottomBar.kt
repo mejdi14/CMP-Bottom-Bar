@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Job
 import org.mejdi14.tinyGlide.data.TinyGlideItem
@@ -53,6 +54,7 @@ fun TinyGlideBottomBar(
     val lazyListState = rememberLazyListState()
     val itemAnchors = remember(bottomBarItems, orientation) { mutableStateMapOf<Int, Offset>() }
     val containerPosition = remember { mutableStateOf(Offset.Zero) }
+    val containerSize = remember { mutableStateOf(IntSize.Zero) }
     val hoverExitJob = remember { mutableStateOf<Job?>(null) }
     val scope = rememberCoroutineScope()
     val isHovering = remember { mutableStateOf(false) }
@@ -67,6 +69,7 @@ fun TinyGlideBottomBar(
             .padding(5.dp)
             .onGloballyPositioned { coordinates ->
                 containerPosition.value = coordinates.positionInRoot()
+                containerSize.value = coordinates.size
             },
     ) {
         val parentItem: @Composable (Int, TinyGlideItem) -> Unit = { index, item ->
@@ -209,6 +212,7 @@ fun TinyGlideBottomBar(
             scope = scope,
             tinyGlideActionListener = tinyGlideActionListener,
             orientation = orientation,
+            containerSize = containerSize.value,
         )
     }
 }
