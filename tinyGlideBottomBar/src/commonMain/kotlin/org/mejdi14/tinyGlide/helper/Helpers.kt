@@ -6,43 +6,44 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.mejdi14.tinyGlide.data.TinyGlideItem
-import org.mejdi14.tinyGlide.data.isSelectedItem
+import org.mejdi14.tinyGlide.data.TinyGlideItemPosition
+import org.mejdi14.tinyGlide.data.TinyGlideState
 
 internal fun handleHoverAction(
     isHovering: MutableState<Boolean>,
     onHover: Boolean,
     item: TinyGlideItem,
-    selectedItem: MutableState<TinyGlideItem?>,
+    itemIndex: Int,
+    state: TinyGlideState,
     hoverExitJob: MutableState<Job?>,
     scope: CoroutineScope,
-    selectedItemAfterHover: () -> TinyGlideItem?,
+    selectedItemAfterHover: () -> Pair<TinyGlideItem, Int>?,
 ) {
     isHovering.value = onHover
     item.onHover.onHover(item, onHover)
     if (onHover) {
-        if (selectedItem.value !== item) {
-            selectedItem.value?.let { previousItem ->
-                previousItem.parentItemDynamicSize.value = previousItem.size
-            }
+        hoverExitJob.value?.cancel()
+        hoverExitJob.value = null
+        if (state.expandedItem !== item) {
+            state.expandedItem?.parentItemDynamicSize?.value = state.expandedItem?.size ?: item.size
         }
-        if (item.isSelectedItem(selectedItem.value)) {
-            hoverExitJob.value?.cancel()
-            hoverExitJob.value = null
-        }
-        selectedItem.value = item
-        item.parentItemDynamicSize.value =
-            if (!item.isSelectedItem(selectedItem.value)) item.size else
-                item.size * item.onSelectItemSizeChangeFriction
+        state.updateHoveredItem(item, TinyGlideItemPosition(parentIndex = itemIndex))
+        state.updateExpandedItem(item, itemIndex)
+        item.parentItemDynamicSize.value = item.size * item.onSelectItemSizeChangeFriction
     } else {
+        if (state.hoveredItem === item) {
+            state.updateHoveredItem(null, null)
+        }
         hoverExitJob.value = scope.launch {
             delay(item.hoverCancelDurationMillis)
             if (!isHovering.value) {
                 item.parentItemDynamicSize.value = item.size
-                val fallbackItem = selectedItemAfterHover()
-                fallbackItem?.let {
-                    it.parentItemDynamicSize.value = it.size * it.onSelectItemSizeChangeFriction
+                val fallback = selectedItemAfterHover()
+                fallback?.first?.let { selected ->
+                    selected.parentItemDynamicSize.value =
+                        selected.size * selected.onSelectItemSizeChangeFriction
                 }
-                selectedItem.value = fallbackItem
+                state.updateExpandedItem(fallback?.first, fallback?.second)
             }
         }
     }

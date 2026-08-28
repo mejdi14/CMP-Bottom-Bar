@@ -37,6 +37,8 @@ import kotlinx.coroutines.launch
 import org.mejdi14.tinyGlide.animation.getEnterTransition
 import org.mejdi14.tinyGlide.animation.getExitTransition
 import org.mejdi14.tinyGlide.data.TinyGlideItem
+import org.mejdi14.tinyGlide.data.TinyGlideItemPosition
+import org.mejdi14.tinyGlide.data.TinyGlideState
 import org.mejdi14.tinyGlide.enum.AnimationType
 import org.mejdi14.tinyGlide.enum.TinyGlideOrientation
 import org.mejdi14.tinyGlide.listeners.TinyGlideActionListener
@@ -44,10 +46,9 @@ import org.jetbrains.compose.resources.painterResource
 
 @Composable
 internal fun SubItemsComposable(
-    selectedItem: MutableState<TinyGlideItem?>,
-    selectedIndex: MutableState<Int?>,
+    state: TinyGlideState,
     selectedParentAnchor: Offset?,
-    selectedItemAfterHover: TinyGlideItem?,
+    selectedItemAfterHover: Pair<TinyGlideItem, Int>?,
     hoverExitJob: MutableState<Job?>,
     isHovering: MutableState<Boolean>,
     scope: CoroutineScope,
@@ -56,7 +57,7 @@ internal fun SubItemsComposable(
     containerSize: IntSize,
     animationType: AnimationType = AnimationType.SCALE,
 ) {
-    val currentItem = selectedItem.value
+    val currentItem = state.expandedItem
     val subItems = currentItem?.subTinyGlideItems.orEmpty()
     val density = LocalDensity.current
     val groupWidth = when (orientation) {
@@ -119,11 +120,14 @@ internal fun SubItemsComposable(
                             if (!isHovering.value) {
                                 currentItem.onHover.onHover(currentItem, false)
                                 currentItem.parentItemDynamicSize.value = currentItem.size
-                                selectedItemAfterHover?.let {
+                                selectedItemAfterHover?.first?.let {
                                     it.parentItemDynamicSize.value =
                                         it.size * it.onSelectItemSizeChangeFriction
                                 }
-                                selectedItem.value = selectedItemAfterHover
+                                state.updateExpandedItem(
+                                    selectedItemAfterHover?.first,
+                                    selectedItemAfterHover?.second,
+                                )
                             }
                         }
                     }
@@ -167,17 +171,31 @@ internal fun SubItemsComposable(
                             this.transformOrigin = transformOrigin
                         }
                         .background(item.backgroundColor, item.shape)
-                        .hoverEffect { isHovered = it }
+                        .hoverEffect { onHover ->
+                            isHovered = onHover
+                            item.onHover.onHover(item, onHover)
+                            val position = TinyGlideItemPosition(
+                                parentIndex = state.expandedIndex ?: 0,
+                                childIndex = childIndex,
+                            )
+                            if (onHover) {
+                                state.updateHoveredItem(item, position)
+                            } else if (
+                                state.hoveredItem === item && state.hoveredPosition == position
+                            ) {
+                                state.updateHoveredItem(null, null)
+                            }
+                        }
                         .clickable(
                             interactionSource = interactionSource,
                             indication = null,
                         ) {
-                        item.onClick.onClick(item, childIndex)
-                        tinyGlideActionListener.onSubItemClickListener(
-                            item,
-                            Pair(selectedIndex.value ?: 0, childIndex),
-                        )
-                    },
+                            item.onClick.onClick(item, childIndex)
+                            tinyGlideActionListener.onSubItemClickListener(
+                                item,
+                                Pair(state.expandedIndex ?: 0, childIndex),
+                            )
+                        },
                 ) {
                     Icon(
                         painter = painterResource(item.icon.selectedResource),

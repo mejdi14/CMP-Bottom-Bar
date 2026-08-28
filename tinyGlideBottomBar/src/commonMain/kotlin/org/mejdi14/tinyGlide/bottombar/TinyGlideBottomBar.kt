@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
@@ -49,8 +50,8 @@ fun TinyGlideBottomBar(
     state: TinyGlideState = rememberTinyGlideState(),
     orientation: TinyGlideOrientation = TinyGlideOrientation.HORIZONTAL,
 ) {
-    val selectedIndex = state.selectedIndex
-    val selectedItem = state.selectedItem
+    val selectedIndex = state.selectedIndexState
+    val expandedItem = state.expandedItemState
     val lazyListState = rememberLazyListState()
     val itemAnchors = remember(bottomBarItems, orientation) { mutableStateMapOf<Int, Offset>() }
     val containerPosition = remember { mutableStateOf(Offset.Zero) }
@@ -61,6 +62,14 @@ fun TinyGlideBottomBar(
     val orientationModifier = when (orientation) {
         TinyGlideOrientation.HORIZONTAL -> Modifier.fillMaxWidth()
         TinyGlideOrientation.VERTICAL -> Modifier.fillMaxHeight()
+    }
+    DisposableEffect(state, tinyGlideActionListener) {
+        state.actionListener = tinyGlideActionListener
+        onDispose {
+            if (state.actionListener === tinyGlideActionListener) {
+                state.actionListener = null
+            }
+        }
     }
 
     Box(
@@ -106,7 +115,7 @@ fun TinyGlideBottomBar(
                         item.itemCoordinatesOffset = position
                     }
                     .background(
-                        color = if (item.isSelectedItem(selectedItem.value)) {
+                        color = if (item.isSelectedItem(expandedItem.value)) {
                             item.selectedBackgroundColor
                         } else {
                             item.backgroundColor
@@ -118,11 +127,14 @@ fun TinyGlideBottomBar(
                             isHovering = isHovering,
                             onHover = onHover,
                             item = item,
-                            selectedItem = selectedItem,
+                            itemIndex = index,
+                            state = state,
                             hoverExitJob = hoverExitJob,
                             scope = scope,
                             selectedItemAfterHover = {
-                                selectedIndex.value?.let(bottomBarItems::getOrNull)
+                                selectedIndex.value?.let { selected ->
+                                    bottomBarItems.getOrNull(selected)?.let { it to selected }
+                                }
                             },
                         )
                     }
@@ -131,31 +143,32 @@ fun TinyGlideBottomBar(
                         indication = null,
                     ) {
                         if (item.interaction.shouldDispatchClick(selectedIndex.value, index)) {
-                            val previouslyActiveItem = selectedItem.value
+                            val previouslyExpandedItem = expandedItem.value
                             val nextIndex =
                                 item.interaction.nextSelectedIndex(selectedIndex.value, index)
+                            val nextSelectedItem = nextIndex?.let(bottomBarItems::getOrNull)
                             item.onClick.onClick(item, index)
                             tinyGlideActionListener.onClick(item, index)
-                            selectedIndex.value = nextIndex
-                            previouslyActiveItem
+                            state.updateSelection(nextSelectedItem, nextIndex)
+                            previouslyExpandedItem
                                 ?.takeIf { it !== item }
                                 ?.let { previousItem ->
                                     previousItem.parentItemDynamicSize.value = previousItem.size
                                 }
                             if (nextIndex == null) {
                                 item.parentItemDynamicSize.value = item.size
-                                selectedItem.value = null
+                                state.updateExpandedItem(null, null)
                             } else {
                                 item.parentItemDynamicSize.value =
                                     item.size * item.onSelectItemSizeChangeFriction
-                                selectedItem.value = item
+                                state.updateExpandedItem(item, index)
                             }
                         }
                     },
             ) {
                 TinyGlideIcon(
                     item = item,
-                    selectedItem = selectedItem,
+                    selectedItem = expandedItem,
                     modifier = Modifier,
                     displaySize = animatedParentSize,
                 )
@@ -191,7 +204,7 @@ fun TinyGlideBottomBar(
             }
         }
 
-        val selectedParentIndex = selectedItem.value?.let { activeItem ->
+        val selectedParentIndex = expandedItem.value?.let { activeItem ->
             bottomBarItems.indexOfFirst { it === activeItem }.takeIf { it >= 0 }
         }
         val selectedParentAnchor = selectedParentIndex
@@ -203,10 +216,11 @@ fun TinyGlideBottomBar(
                 )
             }
         SubItemsComposable(
-            selectedItem = selectedItem,
-            selectedIndex = selectedIndex,
+            state = state,
             selectedParentAnchor = selectedParentAnchor,
-            selectedItemAfterHover = selectedIndex.value?.let(bottomBarItems::getOrNull),
+            selectedItemAfterHover = selectedIndex.value?.let { selected ->
+                bottomBarItems.getOrNull(selected)?.let { it to selected }
+            },
             hoverExitJob = hoverExitJob,
             isHovering = isHovering,
             scope = scope,
