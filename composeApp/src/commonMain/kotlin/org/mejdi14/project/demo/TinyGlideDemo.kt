@@ -157,19 +157,19 @@ private fun tinyGlideDemoItems(
     storybookPalette: Boolean,
 ): List<TinyGlideItem> {
     val illustrations = listOf(
-        Res.drawable.icon13,
+        Res.drawable.icon1,
+        Res.drawable.icon2,
         Res.drawable.icon3,
-        Res.drawable.icon8,
-        Res.drawable.icon10,
         Res.drawable.icon4,
         Res.drawable.icon5,
         Res.drawable.icon6,
         Res.drawable.icon7,
+        Res.drawable.icon8,
         Res.drawable.icon9,
+        Res.drawable.icon10,
         Res.drawable.icon11,
         Res.drawable.icon12,
-        Res.drawable.icon1,
-        Res.drawable.icon2,
+        Res.drawable.icon13,
     )
     val storybookColors = listOf(
         Color(0xFF756474),
