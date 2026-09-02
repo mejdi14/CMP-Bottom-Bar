@@ -7,9 +7,9 @@ import org.mejdi14.tinyGlide.enum.AnimationType
 
 @Immutable
 data class TinyGlideAnimationConfig(
-    val parentHoverScale: Float = 1.2f,
+    val parentHoverScale: Float = 1.3f,
     val parentSelectedScale: Float = 1.2f,
-    val childHoverScale: Float = 1.1f,
+    val childHoverScale: Float = 1.3f,
     val parentHoverDurationMillis: Int = 300,
     val parentSelectionDurationMillis: Int = 300,
     val childHoverDurationMillis: Int = 300,

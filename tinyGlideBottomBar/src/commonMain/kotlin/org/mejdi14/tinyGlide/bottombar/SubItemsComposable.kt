@@ -1,7 +1,8 @@
 package org.mejdi14.tinyGlide.bottombar
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,9 +18,11 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -30,12 +33,12 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.TransformOrigin
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.semantics.Role
@@ -43,6 +46,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -52,7 +56,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.mejdi14.tinyGlide.animation.getEnterTransition
 import org.mejdi14.tinyGlide.animation.getExitTransition
-import org.mejdi14.tinyGlide.data.TinyGlideAnimationConfig
 import org.mejdi14.tinyGlide.data.TinyGlideChildrenLayout
 import org.mejdi14.tinyGlide.data.TinyGlideItem
 import org.mejdi14.tinyGlide.data.TinyGlideItemPosition
@@ -62,6 +65,12 @@ import org.mejdi14.tinyGlide.enum.TinyGlideChildrenPlacement
 import org.mejdi14.tinyGlide.enum.TinyGlideOrientation
 import org.mejdi14.tinyGlide.enum.TinyGlideVerticalSide
 import org.mejdi14.tinyGlide.listeners.TinyGlideActionListener
+
+private data class TinyGlideRenderedGroup(
+    val item: TinyGlideItem,
+    val parentIndex: Int,
+    val parentBounds: Rect,
+)
 
 @Composable
 internal fun SubItemsComposable(
@@ -76,6 +85,7 @@ internal fun SubItemsComposable(
     childrenPlacement: TinyGlideChildrenPlacement,
     edgePadding: Dp,
     containerSize: IntSize,
+    closeOnItemSelect: Boolean,
     childrenLayout: TinyGlideChildrenLayout,
     customChildrenContent: TinyGlideCustomChildrenContent?,
     showCustomChildrenContent: (TinyGlideItem) -> Boolean,
@@ -83,24 +93,126 @@ internal fun SubItemsComposable(
 ) {
     val currentItem = state.expandedItem
     val currentParentIndex = state.expandedIndex
-    var retainedItem by remember { mutableStateOf<TinyGlideItem?>(null) }
-    var retainedParentBounds by remember { mutableStateOf<Rect?>(null) }
-    var retainedParentIndex by remember { mutableStateOf(0) }
-    SideEffect {
-        if (currentItem != null) {
-            retainedItem = currentItem
-        }
-        if (currentParentIndex != null) {
-            retainedParentIndex = currentParentIndex
-        }
-        if (selectedParentBounds != null) {
-            retainedParentBounds = selectedParentBounds
+    val requestedGroup = if (
+        currentItem != null && currentParentIndex != null && selectedParentBounds != null
+    ) {
+        TinyGlideRenderedGroup(currentItem, currentParentIndex, selectedParentBounds)
+    } else {
+        null
+    }
+    var displayedGroup by remember { mutableStateOf(requestedGroup) }
+    var outgoingGroup by remember { mutableStateOf<TinyGlideRenderedGroup?>(null) }
+    var displayedVisible by remember { mutableStateOf(requestedGroup != null) }
+    LaunchedEffect(requestedGroup?.item, requestedGroup?.parentIndex) {
+        if (requestedGroup == null) {
+            displayedVisible = false
+            outgoingGroup = null
+        } else if (displayedGroup?.item?.key == requestedGroup.item.key) {
+            displayedGroup = requestedGroup
+            displayedVisible = true
+        } else {
+            val groupFinishingExit = outgoingGroup ?: displayedGroup
+            if (displayedVisible) {
+                outgoingGroup = displayedGroup
+            }
+            displayedGroup = requestedGroup
+            displayedVisible = false
+            val exitDuration = groupFinishingExit
+                ?.item
+                ?.animation
+                ?.childDisappearanceDurationMillis
+                ?.toLong()
+                ?: 0L
+            val overlapDelay = exitDuration / 2
+            delay(overlapDelay)
+            displayedVisible = true
+            delay(exitDuration - overlapDelay)
+            if (outgoingGroup?.item?.key == groupFinishingExit?.item?.key) {
+                outgoingGroup = null
+            }
         }
     }
-    val displayedItem = currentItem ?: retainedItem
-    val displayedParentBounds = selectedParentBounds ?: retainedParentBounds
-    val displayedParentIndex = currentParentIndex ?: retainedParentIndex
-    val subItems = displayedItem?.subTinyGlideItems.orEmpty()
+    LaunchedEffect(requestedGroup?.parentBounds) {
+        if (displayedGroup?.item?.key == requestedGroup?.item?.key) {
+            displayedGroup = requestedGroup
+        }
+    }
+
+    outgoingGroup?.let { group ->
+        key("outgoing", group.item.key) {
+            TinyGlideChildrenGroup(
+                group = group,
+                contentVisible = false,
+                initiallyVisible = true,
+                state = state,
+                hoverExitJob = hoverExitJob,
+                isHovering = isHovering,
+                scope = scope,
+                tinyGlideActionListener = tinyGlideActionListener,
+                orientation = orientation,
+                verticalSide = verticalSide,
+                childrenPlacement = childrenPlacement,
+                edgePadding = edgePadding,
+                containerSize = containerSize,
+                closeOnItemSelect = closeOnItemSelect,
+                childrenLayout = childrenLayout,
+                customChildrenContent = customChildrenContent,
+                showCustomChildrenContent = showCustomChildrenContent,
+                childContent = childContent,
+            )
+        }
+    }
+    displayedGroup?.let { group ->
+        key("displayed", group.item.key) {
+            TinyGlideChildrenGroup(
+                group = group,
+                contentVisible = displayedVisible,
+                initiallyVisible = displayedVisible,
+                state = state,
+                hoverExitJob = hoverExitJob,
+                isHovering = isHovering,
+                scope = scope,
+                tinyGlideActionListener = tinyGlideActionListener,
+                orientation = orientation,
+                verticalSide = verticalSide,
+                childrenPlacement = childrenPlacement,
+                edgePadding = edgePadding,
+                containerSize = containerSize,
+                closeOnItemSelect = closeOnItemSelect,
+                childrenLayout = childrenLayout,
+                customChildrenContent = customChildrenContent,
+                showCustomChildrenContent = showCustomChildrenContent,
+                childContent = childContent,
+            )
+        }
+    }
+}
+
+@Composable
+private fun TinyGlideChildrenGroup(
+    group: TinyGlideRenderedGroup,
+    contentVisible: Boolean,
+    initiallyVisible: Boolean,
+    state: TinyGlideState,
+    hoverExitJob: MutableState<Job?>,
+    isHovering: MutableState<Boolean>,
+    scope: CoroutineScope,
+    tinyGlideActionListener: TinyGlideActionListener,
+    orientation: TinyGlideOrientation,
+    verticalSide: TinyGlideVerticalSide,
+    childrenPlacement: TinyGlideChildrenPlacement,
+    edgePadding: Dp,
+    containerSize: IntSize,
+    closeOnItemSelect: Boolean,
+    childrenLayout: TinyGlideChildrenLayout,
+    customChildrenContent: TinyGlideCustomChildrenContent?,
+    showCustomChildrenContent: (TinyGlideItem) -> Boolean,
+    childContent: TinyGlideItemContent,
+) {
+    val renderedItem = group.item
+    val displayedParentIndex = group.parentIndex
+    val displayedParentBounds = group.parentBounds
+    val subItems = renderedItem.subTinyGlideItems
     val layoutDirection = LocalLayoutDirection.current
     val resolvedPlacement = resolveTinyGlideChildrenPlacement(
         placement = childrenPlacement,
@@ -114,6 +226,29 @@ internal fun SubItemsComposable(
         TinyGlideChildrenPlacement.END -> layoutDirection == LayoutDirection.Rtl
         else -> false
     }
+    val horizontalRowAlignment = when (resolvedPlacement) {
+        TinyGlideChildrenPlacement.ABOVE -> Alignment.Bottom
+        TinyGlideChildrenPlacement.BELOW -> Alignment.Top
+        else -> Alignment.CenterVertically
+    }
+    val verticalColumnAlignment = if (childrenAreOnLeft) {
+        Alignment.End
+    } else {
+        Alignment.Start
+    }
+    val groupTransformOrigin = when (resolvedPlacement) {
+        TinyGlideChildrenPlacement.ABOVE -> TransformOrigin(0.5f, 1f)
+        TinyGlideChildrenPlacement.BELOW -> TransformOrigin(0.5f, 0f)
+        TinyGlideChildrenPlacement.START,
+        TinyGlideChildrenPlacement.END,
+        -> if (childrenAreOnLeft) {
+            TransformOrigin(1f, 0.5f)
+        } else {
+            TransformOrigin(0f, 0.5f)
+        }
+
+        TinyGlideChildrenPlacement.AUTO -> TransformOrigin.Center
+    }
     val density = LocalDensity.current
     val gridSize = tinyGlideGridSize(
         items = subItems,
@@ -122,15 +257,14 @@ internal fun SubItemsComposable(
         lineSpacing = childrenLayout.lineSpacing,
     )
     val hasGrid = subItems.isNotEmpty()
-    val hasCustomContent = displayedItem != null &&
-        customChildrenContent != null &&
-        showCustomChildrenContent(displayedItem)
+    val hasCustomContent = customChildrenContent != null &&
+        showCustomChildrenContent(renderedItem)
     val contentSpacing = if (hasGrid && hasCustomContent) {
         childrenLayout.customContentSpacing
     } else {
         0.dp
     }
-    val groupWidth = if (childrenAreHorizontal) {
+    val baseGroupWidth = if (childrenAreHorizontal) {
         if (hasCustomContent) {
             maxOf(gridSize.width, childrenLayout.customContentSize.width)
         } else {
@@ -141,7 +275,7 @@ internal fun SubItemsComposable(
             (if (hasCustomContent) childrenLayout.customContentSize.width else 0.dp) +
             contentSpacing
     }
-    val groupHeight = if (childrenAreHorizontal) {
+    val baseGroupHeight = if (childrenAreHorizontal) {
         gridSize.height +
             (if (hasCustomContent) childrenLayout.customContentSize.height else 0.dp) +
             contentSpacing
@@ -152,15 +286,28 @@ internal fun SubItemsComposable(
             gridSize.height
         }
     }
-    val parentLeft = with(density) { (displayedParentBounds?.left ?: 0f).toDp() }
-    val parentTop = with(density) { (displayedParentBounds?.top ?: 0f).toDp() }
-    val parentRight = with(density) { (displayedParentBounds?.right ?: 0f).toDp() }
-    val parentBottom = with(density) { (displayedParentBounds?.bottom ?: 0f).toDp() }
-    val parentCenterX = with(density) { (displayedParentBounds?.center?.x ?: 0f).toDp() }
-    val parentCenterY = with(density) { (displayedParentBounds?.center?.y ?: 0f).toDp() }
+    val parentLeft = with(density) { displayedParentBounds.left.toDp() }
+    val parentTop = with(density) { displayedParentBounds.top.toDp() }
+    val parentRight = with(density) { displayedParentBounds.right.toDp() }
+    val parentBottom = with(density) { displayedParentBounds.bottom.toDp() }
+    val parentCenterX = with(density) { displayedParentBounds.center.x.toDp() }
+    val parentCenterY = with(density) { displayedParentBounds.center.y.toDp() }
     val containerWidth = with(density) { containerSize.width.toDp() }
     val containerHeight = with(density) { containerSize.height.toDp() }
-    val parentGap = displayedItem?.parentAndSubVerticalSeparationSpace ?: 0.dp
+    var measuredGroupSize by remember(renderedItem.key, resolvedPlacement, childrenLayout) {
+        mutableStateOf(IntSize.Zero)
+    }
+    val groupWidth = if (measuredGroupSize.width > 0) {
+        with(density) { measuredGroupSize.width.toDp() }
+    } else {
+        baseGroupWidth
+    }
+    val groupHeight = if (measuredGroupSize.height > 0) {
+        with(density) { measuredGroupSize.height.toDp() }
+    } else {
+        baseGroupHeight
+    }
+    val parentGap = renderedItem.parentAndSubVerticalSeparationSpace
     val groupOffset = tinyGlideGroupOffset(
         placement = resolvedPlacement,
         childrenAreOnLeft = childrenAreOnLeft,
@@ -177,44 +324,50 @@ internal fun SubItemsComposable(
         containerHeight = containerHeight,
         edgePadding = edgePadding,
     )
-    val childFocusRequesters = remember(displayedItem?.key, subItems.map(TinyGlideItem::key)) {
+    val childFocusRequesters = remember(renderedItem.key, subItems.map(TinyGlideItem::key)) {
         subItems.associate { it.key to FocusRequester() }
     }
-    val positionedModifier = if (displayedItem != null && displayedParentBounds != null) {
-        Modifier.offset(x = groupOffset.x, y = groupOffset.y)
-    } else {
-        Modifier
+    val positionedModifier = Modifier.offset(x = groupOffset.x, y = groupOffset.y)
+    val visibilityState = remember(renderedItem.key) {
+        MutableTransitionState(initiallyVisible)
+    }
+    SideEffect {
+        visibilityState.targetState = contentVisible
     }
 
     Box(
-        modifier = if (currentItem != null) {
+        modifier = if (contentVisible) {
             positionedModifier.hoverEffect { onHover ->
-                    isHovering.value = onHover
-                    if (onHover) {
-                        hoverExitJob.value?.cancel()
-                        hoverExitJob.value = null
-                        currentItem.onHover.onHover(currentItem, true)
-                    } else {
-                        hoverExitJob.value = scope.launch {
-                            delay(currentItem.hoverCancelDurationMillis)
-                            if (!isHovering.value && state.focusedItem == null) {
-                                currentItem.onHover.onHover(currentItem, false)
-                                state.updateExpandedItem(
-                                    state.selectedItem,
-                                    state.selectedIndex,
-                                )
-                            }
+                val item = renderedItem
+                isHovering.value = onHover
+                if (onHover) {
+                    hoverExitJob.value?.cancel()
+                    hoverExitJob.value = null
+                    item.onHover.onHover(item, true)
+                } else {
+                    hoverExitJob.value = scope.launch {
+                        delay(item.hoverCancelDurationMillis)
+                        if (!isHovering.value && state.focusedItem == null) {
+                            item.onHover.onHover(item, false)
+                            state.updateExpandedItem(
+                                state.selectedItem,
+                                state.selectedIndex,
+                            )
                         }
                     }
                 }
+            }
         } else {
             positionedModifier
         },
     ) {
         AnimatedVisibility(
-            visible = currentItem != null && selectedParentBounds != null,
-            enter = getEnterTransition(displayedItem?.animation ?: TinyGlideAnimationConfig()),
-            exit = getExitTransition(displayedItem?.animation ?: TinyGlideAnimationConfig()),
+            visibleState = visibilityState,
+            enter = getEnterTransition(renderedItem.animation),
+            exit = getExitTransition(
+                renderedItem.animation,
+                groupTransformOrigin,
+            ),
         ) {
             val childItem: @Composable (Int, TinyGlideItem) -> Unit = { childIndex, item ->
                 val position = TinyGlideItemPosition(
@@ -223,12 +376,21 @@ internal fun SubItemsComposable(
                 )
                 var isHovered by remember(item.key) { mutableStateOf(false) }
                 var isFocused by remember(item.key) { mutableStateOf(false) }
-                val animatedChildScale by animateFloatAsState(
-                    targetValue = if (isHovered || isFocused) {
-                        item.animation.childHoverScale
-                    } else {
-                        1f
-                    },
+                val childScale = if (isHovered || isFocused) {
+                    item.animation.childHoverScale
+                } else {
+                    1f
+                }
+                val childSize = item.subItemSize ?: DpSize(item.size, item.size)
+                val animatedChildWidth by animateDpAsState(
+                    targetValue = childSize.width * childScale,
+                    animationSpec = tween(
+                        durationMillis = item.animation.childHoverDurationMillis,
+                        easing = item.animation.childHoverEasing,
+                    ),
+                )
+                val animatedChildHeight by animateDpAsState(
+                    targetValue = childSize.height * childScale,
                     animationSpec = tween(
                         durationMillis = item.animation.childHoverDurationMillis,
                         easing = item.animation.childHoverEasing,
@@ -240,25 +402,18 @@ internal fun SubItemsComposable(
                 } else {
                     Modifier.height(item.itemSeparationSpace)
                 }
-                val transformOrigin = when (resolvedPlacement) {
-                    TinyGlideChildrenPlacement.ABOVE -> TransformOrigin(0.5f, 1f)
-                    TinyGlideChildrenPlacement.BELOW -> TransformOrigin(0.5f, 0f)
-                    TinyGlideChildrenPlacement.START,
-                    TinyGlideChildrenPlacement.END,
-                    -> if (childrenAreOnLeft) {
-                        TransformOrigin(1f, 0.5f)
-                    } else {
-                        TransformOrigin(0f, 0.5f)
-                    }
-
-                    TinyGlideChildrenPlacement.AUTO -> TransformOrigin.Center
-                }
                 val activate = {
                     item.onClick.onClick(item, childIndex)
                     tinyGlideActionListener.onSubItemClickListener(
                         item,
                         Pair(displayedParentIndex, childIndex),
                     )
+                    if (closeOnItemSelect) {
+                        hoverExitJob.value?.cancel()
+                        hoverExitJob.value = null
+                        isHovering.value = false
+                        state.dismiss()
+                    }
                 }
                 val moveFocus = { nextIndex: Int? ->
                     if (nextIndex != null && nextIndex in subItems.indices) {
@@ -284,12 +439,7 @@ internal fun SubItemsComposable(
                 Box(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
-                        .size(item.size)
-                        .graphicsLayer {
-                            scaleX = animatedChildScale
-                            scaleY = animatedChildScale
-                            this.transformOrigin = transformOrigin
-                        }
+                        .size(animatedChildWidth, animatedChildHeight)
                         .background(item.backgroundColor, item.shape)
                         .hoverEffect { onHover ->
                             isHovered = onHover
@@ -393,7 +543,7 @@ internal fun SubItemsComposable(
                             isExpanded = false,
                             isHovered = isHovered,
                             isFocused = isFocused,
-                            displaySize = item.size,
+                            displaySize = minOf(animatedChildWidth, animatedChildHeight),
                         ),
                     )
                 }
@@ -409,7 +559,7 @@ internal fun SubItemsComposable(
                         verticalArrangement = Arrangement.spacedBy(childrenLayout.lineSpacing),
                     ) {
                         indexedLines.forEach { line ->
-                            Row(verticalAlignment = Alignment.CenterVertically) {
+                            Row(verticalAlignment = horizontalRowAlignment) {
                                 line.forEach { indexedItem ->
                                     childItem(indexedItem.index, indexedItem.value)
                                 }
@@ -422,7 +572,7 @@ internal fun SubItemsComposable(
                         horizontalArrangement = Arrangement.spacedBy(childrenLayout.lineSpacing),
                     ) {
                         indexedLines.forEach { line ->
-                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Column(horizontalAlignment = verticalColumnAlignment) {
                                 line.forEach { indexedItem ->
                                     childItem(indexedItem.index, indexedItem.value)
                                 }
@@ -431,21 +581,50 @@ internal fun SubItemsComposable(
                     }
                 }
             }
+            var customContentHovered by remember(renderedItem.key) { mutableStateOf(false) }
+            val customContentScale = if (customContentHovered) {
+                renderedItem.animation.childHoverScale
+            } else {
+                1f
+            }
+            val animatedCustomContentWidth by animateDpAsState(
+                targetValue = childrenLayout.customContentSize.width * customContentScale,
+                animationSpec = tween(
+                    durationMillis = renderedItem.animation.childHoverDurationMillis,
+                    easing = renderedItem.animation.childHoverEasing,
+                ),
+            )
+            val animatedCustomContentHeight by animateDpAsState(
+                targetValue = childrenLayout.customContentSize.height * customContentScale,
+                animationSpec = tween(
+                    durationMillis = renderedItem.animation.childHoverDurationMillis,
+                    easing = renderedItem.animation.childHoverEasing,
+                ),
+            )
             val customContent: @Composable () -> Unit = {
-                if (displayedItem != null && customChildrenContent != null && hasCustomContent) {
+                if (customChildrenContent != null && hasCustomContent) {
                     Box(
                         contentAlignment = Alignment.Center,
-                        modifier = Modifier.size(childrenLayout.customContentSize),
+                        modifier = Modifier
+                            .size(animatedCustomContentWidth, animatedCustomContentHeight)
+                            .hoverEffect { customContentHovered = it },
                     ) {
                         customChildrenContent(
-                            displayedItem,
+                            renderedItem,
                             TinyGlideItemPosition(parentIndex = displayedParentIndex),
                         )
                     }
                 }
             }
             if (childrenAreHorizontal) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.onSizeChanged {
+                        if (measuredGroupSize != it) {
+                            measuredGroupSize = it
+                        }
+                    },
+                ) {
                     if (resolvedPlacement == TinyGlideChildrenPlacement.ABOVE) {
                         customContent()
                         if (hasGrid && hasCustomContent) {
@@ -461,7 +640,14 @@ internal fun SubItemsComposable(
                     }
                 }
             } else {
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.onSizeChanged {
+                        if (measuredGroupSize != it) {
+                            measuredGroupSize = it
+                        }
+                    },
+                ) {
                     if (childrenAreOnLeft) {
                         customContent()
                         if (hasGrid && hasCustomContent) {

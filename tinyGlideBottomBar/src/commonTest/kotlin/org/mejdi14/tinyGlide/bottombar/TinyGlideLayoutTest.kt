@@ -1,6 +1,7 @@
 package org.mejdi14.tinyGlide.bottombar
 
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.DpSize
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import org.jetbrains.compose.resources.DrawableResource
@@ -89,6 +90,22 @@ class TinyGlideLayoutTest {
 
         assertEquals(88.dp, size.width)
         assertEquals(150.dp, size.height)
+    }
+
+    @Test
+    fun rectangularCustomChildSharesALineWithDefaultChild() {
+        val items = children(2).toMutableList()
+        items[0] = items[0].copy(subItemSize = DpSize(120.dp, 50.dp))
+
+        val size = tinyGlideGridSize(
+            items = items,
+            itemsPerLine = 3,
+            childrenAreHorizontal = true,
+            lineSpacing = 8.dp,
+        )
+
+        assertEquals(180.dp, size.width)
+        assertEquals(50.dp, size.height)
     }
 
     private fun groupOffset(

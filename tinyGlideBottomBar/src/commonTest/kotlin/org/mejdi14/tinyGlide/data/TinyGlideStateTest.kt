@@ -12,6 +12,14 @@ import org.mejdi14.tinyGlide.listeners.TinyGlideActionListener
 @OptIn(InternalResourceApi::class)
 class TinyGlideStateTest {
     @Test
+    fun defaultHoverScalesAre130Percent() {
+        val item = item("default-scale")
+
+        assertEquals(1.3f, item.animation.parentHoverScale)
+        assertEquals(1.3f, item.animation.childHoverScale)
+    }
+
+    @Test
     fun selectionSurvivesReorderingByKey() {
         val first = item("first")
         val second = item("second")
@@ -85,6 +93,18 @@ class TinyGlideStateTest {
         assertEquals(parentPosition, state.hoveredPosition)
         assertEquals("child", state.focusedItem?.key)
         assertEquals(childPosition, state.focusedPosition)
+    }
+
+    @Test
+    fun collapseKeepsTheParentSelected() {
+        val state = TinyGlideState()
+        state.attach(listOf(item("first"))) {}
+
+        state.select(0)
+        state.collapse()
+
+        assertEquals("first", state.selectedKey)
+        assertNull(state.expandedKey)
     }
 
     private fun item(key: String): TinyGlideItem = TinyGlideItem(

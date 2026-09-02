@@ -6,8 +6,8 @@ public final class org/mejdi14/tinyGlide/animation/TinyGlideAnimationKt {
 public final class org/mejdi14/tinyGlide/bottombar/ComposableSingletons$TinyGlideBottomBarKt {
 	public static final field INSTANCE Lorg/mejdi14/tinyGlide/bottombar/ComposableSingletons$TinyGlideBottomBarKt;
 	public fun <init> ()V
-	public final fun getLambda$-50600342$io_github_mejdi14_tinyGlideBottomBar ()Lkotlin/jvm/functions/Function6;
-	public final fun getLambda$1976838112$io_github_mejdi14_tinyGlideBottomBar ()Lkotlin/jvm/functions/Function6;
+	public final fun getLambda$-1017477572$io_github_mejdi14_tinyGlideBottomBar ()Lkotlin/jvm/functions/Function6;
+	public final fun getLambda$-355984698$io_github_mejdi14_tinyGlideBottomBar ()Lkotlin/jvm/functions/Function6;
 }
 
 public final class org/mejdi14/tinyGlide/bottombar/HoverAction_desktopKt {
@@ -15,7 +15,7 @@ public final class org/mejdi14/tinyGlide/bottombar/HoverAction_desktopKt {
 }
 
 public final class org/mejdi14/tinyGlide/bottombar/TinyGlideBottomBarKt {
-	public static final fun TinyGlideBottomBar-xKBSf-U (Ljava/util/List;Landroidx/compose/ui/Modifier;Lorg/mejdi14/tinyGlide/listeners/TinyGlideActionListener;Lorg/mejdi14/tinyGlide/data/TinyGlideState;Lorg/mejdi14/tinyGlide/enum/TinyGlideOrientation;Lorg/mejdi14/tinyGlide/enum/TinyGlideVerticalSide;Lorg/mejdi14/tinyGlide/enum/TinyGlideChildrenPlacement;FLorg/mejdi14/tinyGlide/data/TinyGlideChildrenLayout;Lkotlin/jvm/functions/Function5;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function6;Lkotlin/jvm/functions/Function6;Landroidx/compose/runtime/Composer;III)V
+	public static final fun TinyGlideBottomBar-uuZZ4FU (Ljava/util/List;Landroidx/compose/ui/Modifier;Lorg/mejdi14/tinyGlide/listeners/TinyGlideActionListener;Lorg/mejdi14/tinyGlide/data/TinyGlideState;Lorg/mejdi14/tinyGlide/enum/TinyGlideOrientation;Lorg/mejdi14/tinyGlide/enum/TinyGlideVerticalSide;Lorg/mejdi14/tinyGlide/enum/TinyGlideChildrenPlacement;FZLorg/mejdi14/tinyGlide/data/TinyGlideChildrenLayout;Lkotlin/jvm/functions/Function5;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function6;Lkotlin/jvm/functions/Function6;Landroidx/compose/runtime/Composer;III)V
 }
 
 public final class org/mejdi14/tinyGlide/bottombar/TinyGlideItemContentKt {
@@ -83,20 +83,21 @@ public final class org/mejdi14/tinyGlide/data/TinyGlideChildrenLayout {
 
 public final class org/mejdi14/tinyGlide/data/TinyGlideItem : org/mejdi14/core/bottombar/data/BottomBarItem {
 	public static final field $stable I
-	public synthetic fun <init> (Lorg/mejdi14/core/bottombar/data/BottomBarIcon;FJJLandroidx/compose/ui/graphics/Shape;Lorg/mejdi14/core/bottombar/interaction/BottomBarInteraction;FFIJFLjava/util/List;FFLorg/mejdi14/core/bottombar/listener/BottomBarHoverListener;Lorg/mejdi14/core/bottombar/listener/BottomBarClickListener;Ljava/lang/String;Lorg/mejdi14/tinyGlide/data/TinyGlideItemDecoration;Lorg/mejdi14/tinyGlide/data/TinyGlideAnimationConfig;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public synthetic fun <init> (Lorg/mejdi14/core/bottombar/data/BottomBarIcon;FJJLandroidx/compose/ui/graphics/Shape;Lorg/mejdi14/core/bottombar/interaction/BottomBarInteraction;FFIJFLjava/util/List;FFLorg/mejdi14/core/bottombar/listener/BottomBarHoverListener;Lorg/mejdi14/core/bottombar/listener/BottomBarClickListener;Ljava/lang/String;Lorg/mejdi14/tinyGlide/data/TinyGlideItemDecoration;Lorg/mejdi14/tinyGlide/data/TinyGlideAnimationConfig;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Lorg/mejdi14/core/bottombar/data/BottomBarIcon;FJJLandroidx/compose/ui/graphics/Shape;Lorg/mejdi14/core/bottombar/interaction/BottomBarInteraction;FFIJFLjava/util/List;Landroidx/compose/ui/unit/DpSize;FFLorg/mejdi14/core/bottombar/listener/BottomBarHoverListener;Lorg/mejdi14/core/bottombar/listener/BottomBarClickListener;Ljava/lang/String;Lorg/mejdi14/tinyGlide/data/TinyGlideItemDecoration;Lorg/mejdi14/tinyGlide/data/TinyGlideAnimationConfig;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Lorg/mejdi14/core/bottombar/data/BottomBarIcon;FJJLandroidx/compose/ui/graphics/Shape;Lorg/mejdi14/core/bottombar/interaction/BottomBarInteraction;FFIJFLjava/util/List;Landroidx/compose/ui/unit/DpSize;FFLorg/mejdi14/core/bottombar/listener/BottomBarHoverListener;Lorg/mejdi14/core/bottombar/listener/BottomBarClickListener;Ljava/lang/String;Lorg/mejdi14/tinyGlide/data/TinyGlideItemDecoration;Lorg/mejdi14/tinyGlide/data/TinyGlideAnimationConfig;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun component1 ()Lorg/mejdi14/core/bottombar/data/BottomBarIcon;
 	public final fun component10 ()J
 	public final fun component11-D9Ej5fM ()F
 	public final fun component12 ()Ljava/util/List;
-	public final fun component13-D9Ej5fM ()F
-	public final fun component14 ()F
-	public final fun component15 ()Lorg/mejdi14/core/bottombar/listener/BottomBarHoverListener;
-	public final fun component16 ()Lorg/mejdi14/core/bottombar/listener/BottomBarClickListener;
-	public final fun component17 ()Ljava/lang/String;
-	public final fun component18 ()Lorg/mejdi14/tinyGlide/data/TinyGlideItemDecoration;
-	public final fun component19 ()Lorg/mejdi14/tinyGlide/data/TinyGlideAnimationConfig;
+	public final fun component13-rqqXlrw ()Landroidx/compose/ui/unit/DpSize;
+	public final fun component14-D9Ej5fM ()F
+	public final fun component15 ()F
+	public final fun component16 ()Lorg/mejdi14/core/bottombar/listener/BottomBarHoverListener;
+	public final fun component17 ()Lorg/mejdi14/core/bottombar/listener/BottomBarClickListener;
+	public final fun component18 ()Ljava/lang/String;
+	public final fun component19 ()Lorg/mejdi14/tinyGlide/data/TinyGlideItemDecoration;
 	public final fun component2-D9Ej5fM ()F
+	public final fun component20 ()Lorg/mejdi14/tinyGlide/data/TinyGlideAnimationConfig;
 	public final fun component3-0d7_KjU ()J
 	public final fun component4-0d7_KjU ()J
 	public final fun component5 ()Landroidx/compose/ui/graphics/Shape;
@@ -104,8 +105,8 @@ public final class org/mejdi14/tinyGlide/data/TinyGlideItem : org/mejdi14/core/b
 	public final fun component7-D9Ej5fM ()F
 	public final fun component8 ()F
 	public final fun component9 ()I
-	public final fun copy-ovD11WE (Lorg/mejdi14/core/bottombar/data/BottomBarIcon;FJJLandroidx/compose/ui/graphics/Shape;Lorg/mejdi14/core/bottombar/interaction/BottomBarInteraction;FFIJFLjava/util/List;FFLorg/mejdi14/core/bottombar/listener/BottomBarHoverListener;Lorg/mejdi14/core/bottombar/listener/BottomBarClickListener;Ljava/lang/String;Lorg/mejdi14/tinyGlide/data/TinyGlideItemDecoration;Lorg/mejdi14/tinyGlide/data/TinyGlideAnimationConfig;)Lorg/mejdi14/tinyGlide/data/TinyGlideItem;
-	public static synthetic fun copy-ovD11WE$default (Lorg/mejdi14/tinyGlide/data/TinyGlideItem;Lorg/mejdi14/core/bottombar/data/BottomBarIcon;FJJLandroidx/compose/ui/graphics/Shape;Lorg/mejdi14/core/bottombar/interaction/BottomBarInteraction;FFIJFLjava/util/List;FFLorg/mejdi14/core/bottombar/listener/BottomBarHoverListener;Lorg/mejdi14/core/bottombar/listener/BottomBarClickListener;Ljava/lang/String;Lorg/mejdi14/tinyGlide/data/TinyGlideItemDecoration;Lorg/mejdi14/tinyGlide/data/TinyGlideAnimationConfig;ILjava/lang/Object;)Lorg/mejdi14/tinyGlide/data/TinyGlideItem;
+	public final fun copy-ECE43_M (Lorg/mejdi14/core/bottombar/data/BottomBarIcon;FJJLandroidx/compose/ui/graphics/Shape;Lorg/mejdi14/core/bottombar/interaction/BottomBarInteraction;FFIJFLjava/util/List;Landroidx/compose/ui/unit/DpSize;FFLorg/mejdi14/core/bottombar/listener/BottomBarHoverListener;Lorg/mejdi14/core/bottombar/listener/BottomBarClickListener;Ljava/lang/String;Lorg/mejdi14/tinyGlide/data/TinyGlideItemDecoration;Lorg/mejdi14/tinyGlide/data/TinyGlideAnimationConfig;)Lorg/mejdi14/tinyGlide/data/TinyGlideItem;
+	public static synthetic fun copy-ECE43_M$default (Lorg/mejdi14/tinyGlide/data/TinyGlideItem;Lorg/mejdi14/core/bottombar/data/BottomBarIcon;FJJLandroidx/compose/ui/graphics/Shape;Lorg/mejdi14/core/bottombar/interaction/BottomBarInteraction;FFIJFLjava/util/List;Landroidx/compose/ui/unit/DpSize;FFLorg/mejdi14/core/bottombar/listener/BottomBarHoverListener;Lorg/mejdi14/core/bottombar/listener/BottomBarClickListener;Ljava/lang/String;Lorg/mejdi14/tinyGlide/data/TinyGlideItemDecoration;Lorg/mejdi14/tinyGlide/data/TinyGlideAnimationConfig;ILjava/lang/Object;)Lorg/mejdi14/tinyGlide/data/TinyGlideItem;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getAnimation ()Lorg/mejdi14/tinyGlide/data/TinyGlideAnimationConfig;
 	public fun getBackgroundColor-0d7_KjU ()J
@@ -125,6 +126,7 @@ public final class org/mejdi14/tinyGlide/data/TinyGlideItem : org/mejdi14/core/b
 	public fun getSelectedBackgroundColor-0d7_KjU ()J
 	public fun getShape ()Landroidx/compose/ui/graphics/Shape;
 	public fun getSize-D9Ej5fM ()F
+	public final fun getSubItemSize-rqqXlrw ()Landroidx/compose/ui/unit/DpSize;
 	public final fun getSubTinyGlideItems ()Ljava/util/List;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;

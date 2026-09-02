@@ -31,23 +31,27 @@ internal fun tinyGlideGridSize(
         TinyGlideGridSize(
             width = lines.maxOf { line ->
                 line.fold(0.dp) { width, item ->
-                    width + item.size + (item.itemSeparationSpace * 2)
+                    width + (item.subItemSize?.width ?: item.size) +
+                        (item.itemSeparationSpace * 2)
                 }
             },
             height = lines.foldIndexed(0.dp) { index, height, line ->
-                height + (line.maxOfOrNull { it.size } ?: 0.dp) +
+                height +
+                    (line.maxOfOrNull { it.subItemSize?.height ?: it.size } ?: 0.dp) +
                     if (index == 0) 0.dp else lineSpacing
             },
         )
     } else {
         TinyGlideGridSize(
             width = lines.foldIndexed(0.dp) { index, width, line ->
-                width + (line.maxOfOrNull { it.size } ?: 0.dp) +
+                width +
+                    (line.maxOfOrNull { it.subItemSize?.width ?: it.size } ?: 0.dp) +
                     if (index == 0) 0.dp else lineSpacing
             },
             height = lines.maxOf { line ->
                 line.fold(0.dp) { height, item ->
-                    height + item.size + (item.itemSeparationSpace * 2)
+                    height + (item.subItemSize?.height ?: item.size) +
+                        (item.itemSeparationSpace * 2)
                 }
             },
         )

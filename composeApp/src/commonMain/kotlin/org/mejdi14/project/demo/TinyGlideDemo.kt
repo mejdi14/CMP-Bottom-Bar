@@ -52,6 +52,7 @@ import kmp_bottom_bar.composeapp.generated.resources.icon7
 import kmp_bottom_bar.composeapp.generated.resources.icon8
 import kmp_bottom_bar.composeapp.generated.resources.icon9
 import org.mejdi14.core.bottombar.data.BottomBarIcon
+import org.mejdi14.tinyGlide.bottombar.TinyGlideDefaultChildContent
 import org.mejdi14.tinyGlide.bottombar.TinyGlideDefaultParentContent
 import org.mejdi14.tinyGlide.bottombar.TinyGlideBottomBar
 import org.mejdi14.tinyGlide.data.TinyGlideAnimationConfig
@@ -71,9 +72,9 @@ fun TinyGlideDemo(modifier: Modifier = Modifier) {
     var itemSize by remember { mutableStateOf(54f) }
     var itemSpacing by remember { mutableStateOf(10f) }
     var childSpacing by remember { mutableStateOf(8f) }
-    var parentHoverScale by remember { mutableStateOf(1.2f) }
+    var parentHoverScale by remember { mutableStateOf(1.3f) }
     var selectedScale by remember { mutableStateOf(1.2f) }
-    var childHoverScale by remember { mutableStateOf(1.1f) }
+    var childHoverScale by remember { mutableStateOf(1.3f) }
     var animationDuration by remember { mutableStateOf(300f) }
     var childAnimation by remember { mutableStateOf(AnimationType.SCALE) }
     var decorations by remember { mutableStateOf("Off") }
@@ -87,6 +88,7 @@ fun TinyGlideDemo(modifier: Modifier = Modifier) {
     var showcaseRows by remember { mutableStateOf(3) }
     var itemsPerLine by remember { mutableStateOf(3) }
     var customItem by remember { mutableStateOf("Slider") }
+    var closeOnItemSelect by remember { mutableStateOf(true) }
     var customItemValue by remember { mutableStateOf(0.42f) }
     val tinyGlideState = rememberTinyGlideState()
     val backgroundInteractionSource = remember { MutableInteractionSource() }
@@ -107,6 +109,8 @@ fun TinyGlideDemo(modifier: Modifier = Modifier) {
         palette,
         showcaseRows,
         itemsPerLine,
+        orientation,
+        customItem,
     ) {
         tinyGlideDemoItems(
             itemSize = itemSize.dp,
@@ -121,6 +125,8 @@ fun TinyGlideDemo(modifier: Modifier = Modifier) {
             storybookPalette = palette == "Storybook",
             showcaseRows = showcaseRows,
             itemsPerLine = itemsPerLine,
+            orientation = orientation,
+            includeInlineCustomItem = customItem == "Slider",
         ).take(itemCount)
     }
     Box(
@@ -259,6 +265,12 @@ fun TinyGlideDemo(modifier: Modifier = Modifier) {
                 onSelected = { customItem = it },
             )
             PlaygroundOptions(
+                label = "Close on item select",
+                options = listOf("On", "Off"),
+                selected = if (closeOnItemSelect) "On" else "Off",
+                onSelected = { closeOnItemSelect = it == "On" },
+            )
+            PlaygroundOptions(
                 label = "Decorations",
                 options = listOf("Off", "Labels", "Badges", "Tooltips", "All"),
                 selected = decorations,
@@ -320,13 +332,21 @@ fun TinyGlideDemo(modifier: Modifier = Modifier) {
             verticalSide = verticalSide,
             childrenPlacement = childrenPlacement,
             edgePadding = edgePadding.dp,
+            closeOnItemSelect = closeOnItemSelect,
             childrenLayout = TinyGlideChildrenLayout(
                 itemsPerLine = itemsPerLine,
                 lineSpacing = childSpacing.dp,
-                customContentSize = DpSize(
-                    width = (itemSize * 0.78f + childSpacing * 2f).dp * itemsPerLine,
-                    height = 50.dp,
-                ),
+                customContentSize = when (orientation) {
+                    TinyGlideOrientation.HORIZONTAL -> DpSize(
+                        width = (itemSize * 0.78f + childSpacing * 2f).dp * itemsPerLine,
+                        height = 50.dp,
+                    )
+
+                    TinyGlideOrientation.VERTICAL -> DpSize(
+                        width = 50.dp,
+                        height = (itemSize * 0.78f + childSpacing * 2f).dp * itemsPerLine,
+                    )
+                },
                 customContentSpacing = childSpacing.dp,
             ),
             customChildrenContent = if (customItem == "Slider") {
@@ -334,6 +354,7 @@ fun TinyGlideDemo(modifier: Modifier = Modifier) {
                     StorybookSlider(
                         value = customItemValue,
                         onValueChange = { customItemValue = it },
+                        orientation = orientation,
                         modifier = Modifier.fillMaxSize(),
                     )
                 }
@@ -341,6 +362,18 @@ fun TinyGlideDemo(modifier: Modifier = Modifier) {
                 null
             },
             showCustomChildrenContent = { item -> item.key == "parent-4" },
+            childContent = { item, _, visualState ->
+                if (item.key == "inline-custom-slider") {
+                    StorybookSlider(
+                        value = customItemValue,
+                        onValueChange = { customItemValue = it },
+                        orientation = orientation,
+                        modifier = Modifier.fillMaxSize(),
+                    )
+                } else {
+                    TinyGlideDefaultChildContent(item, visualState)
+                }
+            },
             parentContent = { item, position, visualState ->
                 TinyGlideDefaultParentContent(item, visualState)
                 if (contentStyle == "Numbered") {
@@ -369,13 +402,18 @@ fun TinyGlideDemo(modifier: Modifier = Modifier) {
 private fun StorybookSlider(
     value: Float,
     onValueChange: (Float) -> Unit,
+    orientation: TinyGlideOrientation,
     modifier: Modifier = Modifier,
 ) {
     val density = LocalDensity.current
-    val updateValue = { position: Float, width: Float ->
+    val updateValue = { position: androidx.compose.ui.geometry.Offset, size: androidx.compose.ui.unit.IntSize ->
         val trackInset = with(density) { 15.dp.toPx() }
+        val horizontal = orientation == TinyGlideOrientation.HORIZONTAL
+        val availableLength = if (horizontal) size.width.toFloat() else size.height.toFloat()
+        val pointerPosition = if (horizontal) position.x else availableLength - position.y
         onValueChange(
-            ((position - trackInset) / (width - trackInset * 2f)).coerceIn(0f, 1f),
+            ((pointerPosition - trackInset) / (availableLength - trackInset * 2f))
+                .coerceIn(0f, 1f),
         )
     }
     Canvas(
@@ -389,17 +427,17 @@ private fun StorybookSlider(
             }
             .pointerInput(onValueChange) {
                 detectTapGestures { offset ->
-                    updateValue(offset.x, size.width.toFloat())
+                    updateValue(offset, size)
                 }
             }
             .pointerInput(onValueChange) {
                 detectDragGestures(
                     onDragStart = { offset ->
-                        updateValue(offset.x, size.width.toFloat())
+                        updateValue(offset, size)
                     },
                     onDrag = { change, _ ->
                         change.consume()
-                        updateValue(change.position.x, size.width.toFloat())
+                        updateValue(change.position, size)
                     },
                 )
             },
@@ -415,12 +453,20 @@ private fun StorybookSlider(
         val shadowOffset = 2.dp.toPx()
         val inset = 1.dp.toPx()
         val trackInset = 15.dp.toPx()
-        val trackHeight = 5.dp.toPx()
-        val trackTop = (size.height - trackHeight) / 2f
-        val trackWidth = size.width - trackInset * 2f
-        val thumbWidth = 17.dp.toPx()
-        val thumbHeight = 19.dp.toPx()
-        val thumbCenter = trackInset + trackWidth * value.coerceIn(0f, 1f)
+        val trackThickness = 5.dp.toPx()
+        val horizontal = orientation == TinyGlideOrientation.HORIZONTAL
+        val trackLength = if (horizontal) {
+            size.width - trackInset * 2f
+        } else {
+            size.height - trackInset * 2f
+        }
+        val thumbLongSide = 19.dp.toPx()
+        val thumbShortSide = 17.dp.toPx()
+        val thumbCenter = if (horizontal) {
+            trackInset + trackLength * value.coerceIn(0f, 1f)
+        } else {
+            size.height - trackInset - trackLength * value.coerceIn(0f, 1f)
+        }
 
         drawRoundRect(
             color = shadowColor.copy(alpha = 0.8f),
@@ -443,21 +489,45 @@ private fun StorybookSlider(
             cornerRadius = CornerRadius(corner - inset, corner - inset),
             style = Stroke(borderWidth),
         )
-        drawRoundRect(
-            color = trackColor,
-            topLeft = androidx.compose.ui.geometry.Offset(trackInset, trackTop),
-            size = androidx.compose.ui.geometry.Size(trackWidth, trackHeight),
-            cornerRadius = CornerRadius(1.5.dp.toPx(), 1.5.dp.toPx()),
-        )
-        drawRoundRect(
-            color = thumbColor,
-            topLeft = androidx.compose.ui.geometry.Offset(
-                thumbCenter - thumbWidth / 2f,
-                (size.height - thumbHeight) / 2f,
-            ),
-            size = androidx.compose.ui.geometry.Size(thumbWidth, thumbHeight),
-            cornerRadius = CornerRadius(0.75.dp.toPx(), 0.75.dp.toPx()),
-        )
+        if (horizontal) {
+            drawRoundRect(
+                color = trackColor,
+                topLeft = androidx.compose.ui.geometry.Offset(
+                    trackInset,
+                    (size.height - trackThickness) / 2f,
+                ),
+                size = androidx.compose.ui.geometry.Size(trackLength, trackThickness),
+                cornerRadius = CornerRadius(1.5.dp.toPx(), 1.5.dp.toPx()),
+            )
+            drawRoundRect(
+                color = thumbColor,
+                topLeft = androidx.compose.ui.geometry.Offset(
+                    thumbCenter - thumbShortSide / 2f,
+                    (size.height - thumbLongSide) / 2f,
+                ),
+                size = androidx.compose.ui.geometry.Size(thumbShortSide, thumbLongSide),
+                cornerRadius = CornerRadius(0.75.dp.toPx(), 0.75.dp.toPx()),
+            )
+        } else {
+            drawRoundRect(
+                color = trackColor,
+                topLeft = androidx.compose.ui.geometry.Offset(
+                    (size.width - trackThickness) / 2f,
+                    trackInset,
+                ),
+                size = androidx.compose.ui.geometry.Size(trackThickness, trackLength),
+                cornerRadius = CornerRadius(1.5.dp.toPx(), 1.5.dp.toPx()),
+            )
+            drawRoundRect(
+                color = thumbColor,
+                topLeft = androidx.compose.ui.geometry.Offset(
+                    (size.width - thumbLongSide) / 2f,
+                    thumbCenter - thumbShortSide / 2f,
+                ),
+                size = androidx.compose.ui.geometry.Size(thumbLongSide, thumbShortSide),
+                cornerRadius = CornerRadius(0.75.dp.toPx(), 0.75.dp.toPx()),
+            )
+        }
 
         val leftCurl = Path().apply {
             moveTo(8.dp.toPx(), size.height - 5.dp.toPx())
@@ -523,6 +593,8 @@ private fun tinyGlideDemoItems(
     storybookPalette: Boolean,
     showcaseRows: Int,
     itemsPerLine: Int,
+    orientation: TinyGlideOrientation,
+    includeInlineCustomItem: Boolean,
 ): List<TinyGlideItem> {
     val illustrations = listOf(
         Res.drawable.icon1,
@@ -583,7 +655,12 @@ private fun tinyGlideDemoItems(
             parentIndex % 3 == 1 -> 2
             else -> 3
         }
-        val children = List(childCount) { childIndex ->
+        val regularChildCount = if (parentIndex == 1 && includeInlineCustomItem) {
+            1
+        } else {
+            childCount
+        }
+        val regularChildren = List(regularChildCount) { childIndex ->
             val illustrationIndex = (parentIndex + childIndex + 1) % illustrations.size
             tinyGlideItem(
                 key = "parent-$parentIndex-child-$childIndex",
@@ -606,6 +683,36 @@ private fun tinyGlideDemoItems(
                     },
                 ),
             )
+        }
+        val children = if (parentIndex == 1 && includeInlineCustomItem) {
+            val inlineSize = when (orientation) {
+                TinyGlideOrientation.HORIZONTAL -> DpSize(
+                    width = itemSize * 2.25f,
+                    height = itemSize * 0.78f,
+                )
+
+                TinyGlideOrientation.VERTICAL -> DpSize(
+                    width = itemSize * 0.78f,
+                    height = itemSize * 2.25f,
+                )
+            }
+            listOf(
+                tinyGlideItem(
+                    key = "inline-custom-slider",
+                    icon = illustratedIcon(resource, "Custom slider"),
+                    size = itemSize * 0.78f,
+                    subItemSize = inlineSize,
+                    spacing = childSpacing,
+                    backgroundColor = Color.Transparent,
+                    animation = TinyGlideAnimationConfig(
+                        childHoverScale = childHoverScale,
+                        childHoverDurationMillis = animationDurationMillis,
+                    ),
+                    decoration = TinyGlideItemDecoration(),
+                ),
+            ) + regularChildren
+        } else {
+            regularChildren
         }
         tinyGlideItem(
             key = "parent-$parentIndex",
@@ -666,6 +773,7 @@ private fun tinyGlideItem(
     spacing: Dp,
     backgroundColor: Color,
     subItems: List<TinyGlideItem> = emptyList(),
+    subItemSize: DpSize? = null,
     animation: TinyGlideAnimationConfig,
     decoration: TinyGlideItemDecoration,
 ): TinyGlideItem = TinyGlideItem(
@@ -679,6 +787,7 @@ private fun tinyGlideItem(
     backgroundColor = backgroundColor,
     selectedBackgroundColor = backgroundColor,
     subTinyGlideItems = subItems,
+    subItemSize = subItemSize,
     animation = animation,
     decoration = decoration,
 )

@@ -10,6 +10,7 @@ import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.TransformOrigin
 import org.mejdi14.tinyGlide.data.TinyGlideAnimationConfig
 import org.mejdi14.tinyGlide.enum.AnimationType
 
@@ -48,6 +49,14 @@ fun getEnterTransition(animation: TinyGlideAnimationConfig): EnterTransition {
 
 @Composable
 fun getExitTransition(animation: TinyGlideAnimationConfig): ExitTransition {
+    return getExitTransition(animation, TransformOrigin.Center)
+}
+
+@Composable
+internal fun getExitTransition(
+    animation: TinyGlideAnimationConfig,
+    transformOrigin: TransformOrigin,
+): ExitTransition {
     return when (animation.childAppearanceAnimation) {
         AnimationType.FADE -> fadeOut(
             animationSpec = tween(
@@ -71,6 +80,7 @@ fun getExitTransition(animation: TinyGlideAnimationConfig): ExitTransition {
 
         AnimationType.SCALE -> scaleOut(
             targetScale = 0f,
+            transformOrigin = transformOrigin,
             animationSpec = tween(
                 durationMillis = animation.childDisappearanceDurationMillis,
                 easing = animation.childAppearanceEasing,

@@ -5,6 +5,7 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import org.mejdi14.core.bottombar.data.BottomBarIcon
 import org.mejdi14.core.bottombar.data.BottomBarItem
@@ -30,6 +31,7 @@ data class TinyGlideItem(
     val hoverCancelDurationMillis: Long = 220,
     val itemSeparationSpace: Dp = 10.dp,
     val subTinyGlideItems: List<TinyGlideItem> = emptyList(),
+    val subItemSize: DpSize? = null,
     val parentAndSubVerticalSeparationSpace: Dp = 10.dp,
     val marginForScreenSizeChanges: Float = 10f,
     val onHover: BottomBarHoverListener<TinyGlideItem> = BottomBarHoverListener { _, _ -> },
@@ -37,9 +39,9 @@ data class TinyGlideItem(
     val key: String = "${icon.resource.hashCode()}:${icon.contentDescription.orEmpty()}",
     val decoration: TinyGlideItemDecoration = TinyGlideItemDecoration(),
     val animation: TinyGlideAnimationConfig = TinyGlideAnimationConfig(
-        parentHoverScale = onSelectItemSizeChangeFriction,
+        parentHoverScale = 1.3f,
         parentSelectedScale = onSelectItemSizeChangeFriction,
-        childHoverScale = onSelectItemSizeChangeFriction,
+        childHoverScale = 1.3f,
         parentHoverDurationMillis = onSelectItemSizeChangeDurationMillis,
         parentSelectionDurationMillis = onSelectItemSizeChangeDurationMillis,
         childHoverDurationMillis = onSelectItemSizeChangeDurationMillis,
