@@ -12,6 +12,7 @@ CMP Bottom Bar is a Compose Multiplatform library containing a shared bottom-bar
 | `aztopiaBottomBar` | Animated circular Aztopia style |
 | `expandableBottomBar` | Expandable bottom-bar experiment |
 | `gooeyBottomBar` | Gooey/blurred bottom-bar experiment |
+| `figmaBottomBar` | Compact grouped toolbar inspired by Figma |
 | `composeApp` | Multiplatform demo application |
 | `iosApp` | SwiftUI host for the iOS demo |
 
@@ -24,6 +25,7 @@ The development API keeps immutable item configuration separate from composable 
 - `BottomBarItem` contains only visuals shared by selectable items.
 - `BottomBarInteraction` defines whether an item is enabled and whether selection should select, toggle, or remain unchanged.
 - `BottomBarClickListener<T>` and `BottomBarHoverListener<T>` provide typed callbacks without unsafe casts or empty listener objects.
+- `BottomBarItemGroup<T>` keeps reusable group boundaries separate from style-specific divider rendering.
 - Selection indexes and selected state are owned by the rendering composable, not stored in item models.
 - Style-specific configuration, such as Basic bar additional items and hover text styling, lives in its corresponding style module.
 
@@ -59,6 +61,10 @@ implementation("io.github.mejdi14:cmp-bottombar-aztopia:0.4.3")
 ```
 
 `expandableBottomBar` and `gooeyBottomBar` are included as local experimental modules and are not currently configured for publication.
+
+## Figma attribution
+
+The `figmaBottomBar` style is independently implemented and inspired by the toolbar interface of [Figma](https://www.figma.com/). Figma is a trademark of Figma, Inc. This project is not affiliated with or endorsed by Figma.
 
 ## Build the project
 

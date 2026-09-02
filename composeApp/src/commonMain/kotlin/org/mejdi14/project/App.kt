@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import org.mejdi14.project.demo.AztopiaDemo
 import org.mejdi14.project.demo.BasicDemo
 import org.mejdi14.project.demo.ExpandableDemo
+import org.mejdi14.project.demo.FigmaDemo
 import org.mejdi14.project.demo.GooeyDemo
 import org.mejdi14.project.demo.TinyGlideDemo
 
@@ -252,6 +253,7 @@ private fun DemoDetail(
                 DemoDestination.Aztopia -> AztopiaDemo(Modifier.fillMaxSize())
                 DemoDestination.Expandable -> ExpandableDemo(Modifier.fillMaxSize())
                 DemoDestination.Gooey -> GooeyDemo(Modifier.fillMaxSize())
+                DemoDestination.Figma -> FigmaDemo(Modifier.fillMaxSize())
             }
         }
     }
@@ -269,7 +271,7 @@ private enum class DemoDestination(
     ),
     TinyGlide(
         title = "Tiny Glide",
-        description = "Expandable items with animated secondary actions.",
+        description = "A selectable bottom bar that expands into balanced rows.",
         hint = "Tune the motion, then hover or tap an item.",
     ),
     Aztopia(
@@ -286,6 +288,11 @@ private enum class DemoDestination(
         title = "Gooey",
         description = "A fluid blurred selection treatment.",
         hint = "Shape the effect, then select a label.",
+    ),
+    Figma(
+        title = "Figma Bottom Bar",
+        description = "A compact grouped toolbar inspired by Figma.",
+        hint = "Select a tool or mode, then try the light and dark palettes.",
     ),
 }
 

@@ -12,7 +12,7 @@ data class ExpandableBarConfig(
     val width: Dp = 300.dp,
     val rowHeight: Dp = 60.dp,
     val itemSize: Dp = 50.dp,
-    val rowCount: Int = 2,
+    val rowCount: Int = 1,
     val outerPadding: Dp = 5.dp,
     val containerColor: Color = Color.Black,
     val iconColor: Color = Color.White,
@@ -29,6 +29,9 @@ data class ExpandableBarConfig(
         require(itemSize > 0.dp) { "itemSize must be greater than zero" }
         require(rowCount > 0) { "rowCount must be greater than zero" }
         require(outerPadding >= 0.dp) { "outerPadding cannot be negative" }
+        require(width > outerPadding * 2) { "width must be greater than its horizontal padding" }
+        require(indicator.padding >= 0.dp) { "indicator padding cannot be negative" }
+        require(indicator.thickness > 0.dp) { "indicator thickness must be greater than zero" }
         require(indicator.padding < itemSize) { "indicator padding must be smaller than itemSize" }
     }
 }

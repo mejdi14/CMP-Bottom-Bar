@@ -17,14 +17,14 @@ import expand.mejdi14.expandable.bottombar.ExpandableBottomBar
 import org.mejdi14.core.bottombar.indicator.BottomBarIndicatorConfig
 import org.mejdi14.core.bottombar.indicator.BottomBarIndicatorPosition
 import org.mejdi14.core.bottombar.indicator.BottomBarIndicatorShape
-import org.mejdi14.project.data.basicDemoItems
+import org.mejdi14.project.data.expandableDemoItems
 
 @Composable
 fun ExpandableDemo(modifier: Modifier = Modifier) {
     var barWidth by remember { mutableStateOf(300f) }
     var rowHeight by remember { mutableStateOf(56f) }
     var itemSize by remember { mutableStateOf(46f) }
-    var rowCount by remember { mutableStateOf(2) }
+    var rowCount by remember { mutableStateOf(1) }
     var indicatorShape by remember { mutableStateOf(BottomBarIndicatorShape.LINE) }
     var indicatorPosition by remember { mutableStateOf(BottomBarIndicatorPosition.END) }
 
@@ -32,7 +32,9 @@ fun ExpandableDemo(modifier: Modifier = Modifier) {
         PlaygroundPanel(
             modifier = Modifier
                 .align(Alignment.Center)
-                .padding(bottom = 104.dp),
+                .padding(
+                    bottom = (rowHeight * minOf(rowCount, expandableDemoItems.size) + 32f).dp,
+                ),
         ) {
             PlaygroundSlider(
                 label = "Bar width",
@@ -79,7 +81,7 @@ fun ExpandableDemo(modifier: Modifier = Modifier) {
         }
 
         ExpandableBottomBar(
-            bottomBarItems = basicDemoItems.take(4),
+            bottomBarItems = expandableDemoItems,
             parentModifier = Modifier.align(Alignment.BottomCenter),
             onIconClick = {},
             config = ExpandableBarConfig(
