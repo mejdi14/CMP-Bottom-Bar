@@ -10,42 +10,81 @@ import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.TransformOrigin
+import org.mejdi14.tinyGlide.data.TinyGlideAnimationConfig
 import org.mejdi14.tinyGlide.enum.AnimationType
 
 @Composable
-fun getEnterTransition(animationType: AnimationType): EnterTransition {
-    return when (animationType) {
+fun getEnterTransition(animation: TinyGlideAnimationConfig): EnterTransition {
+    return when (animation.childAppearanceAnimation) {
         AnimationType.FADE -> fadeIn(
-            animationSpec = tween(durationMillis = 500)
+            animationSpec = tween(
+                durationMillis = animation.childAppearanceDurationMillis,
+                easing = animation.childAppearanceEasing,
+            ),
         )
 
         AnimationType.SLIDE -> slideInVertically(
-            initialOffsetY = { it },
-            animationSpec = tween(durationMillis = 500)
+            initialOffsetY = { it / 2 },
+            animationSpec = tween(
+                durationMillis = animation.childAppearanceDurationMillis,
+                easing = animation.childAppearanceEasing,
+            ),
+        ) + fadeIn(
+            animationSpec = tween(
+                durationMillis = animation.childAppearanceDurationMillis,
+                easing = animation.childAppearanceEasing,
+            ),
         )
 
         AnimationType.SCALE -> scaleIn(
-            initialScale = 0.2f,
-            animationSpec = tween(durationMillis = 300)
+            initialScale = 0f,
+            animationSpec = tween(
+                durationMillis = animation.childAppearanceDurationMillis,
+                easing = animation.childAppearanceEasing,
+            ),
         )
     }
 }
 
 @Composable
-fun getExitTransition(animationType: AnimationType): ExitTransition {
-    return when (animationType) {
+fun getExitTransition(animation: TinyGlideAnimationConfig): ExitTransition {
+    return getExitTransition(animation, TransformOrigin.Center)
+}
+
+@Composable
+internal fun getExitTransition(
+    animation: TinyGlideAnimationConfig,
+    transformOrigin: TransformOrigin,
+): ExitTransition {
+    return when (animation.childAppearanceAnimation) {
         AnimationType.FADE -> fadeOut(
-            animationSpec = tween(durationMillis = 500)
+            animationSpec = tween(
+                durationMillis = animation.childDisappearanceDurationMillis,
+                easing = animation.childAppearanceEasing,
+            ),
         )
 
         AnimationType.SLIDE -> slideOutVertically(
-            targetOffsetY = { it },
-            animationSpec = tween(durationMillis = 500)
+            targetOffsetY = { it / 2 },
+            animationSpec = tween(
+                durationMillis = animation.childDisappearanceDurationMillis,
+                easing = animation.childAppearanceEasing,
+            ),
+        ) + fadeOut(
+            animationSpec = tween(
+                durationMillis = animation.childDisappearanceDurationMillis,
+                easing = animation.childAppearanceEasing,
+            ),
         )
 
         AnimationType.SCALE -> scaleOut(
-            targetScale = 0.4f,
-            animationSpec = tween(durationMillis = 0)
+            targetScale = 0f,
+            transformOrigin = transformOrigin,
+            animationSpec = tween(
+                durationMillis = animation.childDisappearanceDurationMillis,
+                easing = animation.childAppearanceEasing,
+            ),
         )
     }
 }
